@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+	<!-- When pressed, use this -->
+    <item android:state_focused="false" android:state_pressed="true" 
+    android:drawable="@drawable/register_button_pushed"/>
+	<!-- When not selected, use this-->
+    <item android:drawable="@drawable/register_button" />
+</selector>

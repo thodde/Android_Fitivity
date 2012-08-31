@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RelativeLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_height="40dp"
+	android:paddingBottom="10dp"
+	android:background="@drawable/feed_cell_activity">
+	
+	
+		
+	<TextView
+		android:id="@+id/tv_distance"
+		android:layout_alignParentRight="true"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginRight="5dp"
+		android:layout_centerVertical="true"
+		android:text="10 km"
+		android:textSize="12sp"
+		android:textColor="#FFF"/>
+
+	<TextView 
+		android:id="@+id/tv_name"
+		android:layout_toLeftOf="@id/tv_distance"
+		android:layout_centerHorizontal="true"
+		android:layout_centerInParent="true"
+		android:layout_centerVertical="true"
+		android:layout_width="fill_parent" 
+		android:layout_height="wrap_content"
+		android:layout_marginRight="5dp"
+		android:layout_marginTop="10dp"
+		android:layout_marginLeft="15dp"
+		android:paddingLeft="25dp"
+		android:textSize="16sp" 
+		android:textColor="#FFF"
+		android:textStyle="bold"  
+		android:text="Ciwalk"/>
+		
+	<ImageView
+	android:id="@+id/tv_icon"
+	android:layout_alignParentLeft="true"
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:src="@drawable/location_cell_icon"
+        	android:layout_centerVertical="true" />
+	
+	
+	
+		
+</RelativeLayout>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="fill_parent"
+  android:layout_height="fill_parent"
+  android:orientation="vertical">
+  
+  <RelativeLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/relativeLayout2">
+  <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/fitivity_navigation_bar_backplate" />
+  
+  </RelativeLayout>
+  
+
+    <RelativeLayout android:paddingLeft="5dp" android:layout_height="wrap_content" android:id="@+id/relativeLayout1" android:layout_width="wrap_content" android:layout_below="@+id/relativeLayout2" android:layout_toRightOf="@+id/relativeLayout3" android:layout_marginLeft="20dp" android:layout_marginTop="45dp">
+        <ImageView android:layout_height="wrap_content" android:src="@drawable/feed_cell_profile_placeholder" android:layout_centerVertical="true" android:layout_width="wrap_content"></ImageView>
+        
+        <TextView android:gravity="center" android:layout_height="wrap_content" android:textStyle="bold" android:text="TextView" android:layout_width="190dp" android:id="@+id/txt_display_tab" android:textAppearance="?android:attr/textAppearanceLarge" android:layout_alignParentTop="true" android:layout_alignParentLeft="true" android:layout_marginTop="45dp" android:layout_marginLeft="115dp"></TextView>
+    </RelativeLayout>
+    
+    
+    <com.Fitivity.PullToRefreshListView
+    	android:cacheColorHint="#00000000"
+    	android:paddingTop="20dp"
+        android:id="@+id/groupList"
+        android:layout_width="fill_parent"
+         android:divider="@android:color/white"
+         android:dividerHeight="1dp"
+         android:smoothScrollbar="true"
+         android:layout_height="wrap_content"/>
+
+</LinearLayout>

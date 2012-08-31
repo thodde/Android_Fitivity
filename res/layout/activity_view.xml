@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:orientation="vertical"
+   android:layout_width="fill_parent"
+  android:layout_height="fill_parent">  
+  
+  <RelativeLayout android:layout_width="wrap_content" android:layout_height="wrap_content">
+  <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/fitivity_navigation_bar_backplate" />
+  </RelativeLayout>
+  
+  <RelativeLayout android:layout_width="wrap_content" android:layout_height="wrap_content"
+    android:paddingLeft="20dp"
+  			 android:paddingRight="20dp"
+  			 android:paddingBottom="10dp">
+  
+  <ImageView android:src="@drawable/choose_activity" 
+  			 android:layout_width="wrap_content" 
+  			 android:layout_height="wrap_content"		
+  			 android:id="@+id/add_activity"
+  			 />
+   
+   <TextView android:layout_width="wrap_content" 
+  			android:layout_height="wrap_content"
+  			android:textColor="#fff"
+  			android:textSize="30dp"
+  			android:layout_centerVertical="true"
+  			android:layout_centerHorizontal="true"
+  			android:id="@+id/activity_text"
+  			/>
+   
+  </RelativeLayout>
+  
+  <RelativeLayout android:layout_width="wrap_content" android:layout_height="wrap_content"
+    android:paddingLeft="20dp"
+  			 android:paddingRight="20dp"
+  			 android:paddingBottom="10dp">
+  
+  <ImageView android:src="@drawable/choose_location" 
+  			 android:layout_width="wrap_content" 
+  			 android:layout_height="wrap_content"		
+  			 android:id="@+id/add_location"
+  			 />
+  
+  <TextView android:layout_width="wrap_content" 
+  			android:layout_height="wrap_content"
+  			android:textColor="#fff"
+  			android:textSize="30dp"
+  			android:layout_centerVertical="true"
+  			android:layout_centerHorizontal="true"
+  			android:id="@+id/location_text"
+  			/>
+  
+  </RelativeLayout>
+    
+</LinearLayout>

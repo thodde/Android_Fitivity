@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TabHost
+	android:id="@android:id/tabhost"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	xmlns:android="http://schemas.android.com/apk/res/android">
+	
+	<RelativeLayout
+		android:background="@drawable/fitivity_application_backplate"
+		android:layout_width="match_parent"
+		android:id="@+id/linear_layout_1"
+		android:layout_height="match_parent">
+
+		<TabWidget
+		   android:background="@drawable/tab_bar_backplate"
+			android:layout_width="wrap_content"
+			android:layout_height="48dp"
+			android:id="@android:id/tabs"
+			android:layout_alignParentBottom="true"
+			android:tabStripEnabled="false"></TabWidget>
+
+		<FrameLayout
+			android:id="@android:id/tabcontent"
+android:layout_width="fill_parent"
+android:layout_height="fill_parent"
+android:layout_alignParentTop="true"
+android:layout_above="@android:id/tabs">
+		</FrameLayout>
+	</RelativeLayout>
+</TabHost>

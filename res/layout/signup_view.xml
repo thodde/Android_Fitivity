@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:orientation="vertical"
+  android:id="@+id/SignUpScreenLayout"
+  android:layout_width="fill_parent"
+  android:layout_height="fill_parent"
+  android:background="@drawable/fitivity_application_backplate">
+  
+  
+  <LinearLayout android:layout_width="wrap_content" android:layout_height="60sp">
+    </LinearLayout>
+	
+		<LinearLayout android:orientation="horizontal"
+			android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:padding="5dp"
+			android:layout_gravity="center">
+			
+   <EditText
+		android:id="@+id/signupemail"
+		android:singleLine="true"
+	    android:layout_width="250dp"
+	    android:layout_height="wrap_content"
+	    android:hint="email"
+	    android:background="@drawable/rounded_edittext"
+	    android:layout_weight="1"
+	    android:padding="5dp"
+	/>
+	<LinearLayout 
+		android:layout_width="10dp" 
+		android:layout_height="wrap_content"
+		android:layout_weight="1"/>
+	<ImageView android:id="@+id/signupemailicon" android:layout_width="wrap_content"
+		android:layout_height="wrap_content" 
+		android:background="@drawable/btn_check_buttonless_off"
+		  android:layout_gravity="center_vertical"
+		/>
+		</LinearLayout>
+	
+	    
+	  
+	<LinearLayout android:orientation="horizontal"
+			android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:padding="5dp"
+			android:layout_gravity="center">
+	<EditText
+		android:id="@+id/signupusername"
+		android:singleLine="true"
+	    android:layout_width="250dp"
+	    android:layout_height="wrap_content"
+	    android:hint="username"
+	    android:background="@drawable/rounded_edittext"
+	    android:layout_weight="1"
+	    android:padding="5dp"
+	/>
+	<LinearLayout 
+		android:layout_width="10dp" 
+		android:layout_height="wrap_content"
+		android:layout_weight="1"/>
+	<ImageView android:id="@+id/signupusernameicon" android:layout_width="wrap_content"
+		android:layout_height="wrap_content" 
+		android:background="@drawable/btn_check_buttonless_off"
+		  android:layout_gravity="center_vertical"
+		/>
+	</LinearLayout>
+	
+	    
+	    <LinearLayout android:orientation="horizontal"
+			android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:padding="5dp"
+			android:layout_gravity="center">
+	    
+	 <EditText
+		android:id="@+id/signuppassword"
+		android:password="true"
+		android:singleLine="true"
+	    android:layout_width="250dp"
+	    android:layout_height="wrap_content"
+	    android:hint="password"
+	    android:background="@drawable/rounded_edittext"
+	    android:layout_weight="1"
+	    android:padding="5dp"
+	/>
+	<LinearLayout 
+		android:layout_width="10dp" 
+		android:layout_height="wrap_content"
+		android:layout_weight="1"/>
+	<ImageView android:id="@+id/signuppasswordicon" android:layout_width="wrap_content"
+		android:layout_height="wrap_content" 
+		android:background="@drawable/btn_check_buttonless_off"
+		  android:layout_gravity="center_vertical"
+		/>
+	</LinearLayout>
+	
+	
+	    
+	    <LinearLayout android:orientation="horizontal"
+			android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:padding="5dp"
+			android:layout_gravity="center">
+	 <EditText
+		android:id="@+id/signupconfirm"
+		android:password="true"
+		android:singleLine="true"
+	    android:layout_width="250dp"
+	    android:layout_height="wrap_content"
+	    android:hint="re-enter password"
+	    android:background="@drawable/rounded_edittext"
+	    android:layout_weight="1"
+	    android:padding="5dp"
+	/>
+	<LinearLayout 
+		android:layout_width="10dp" 
+		android:layout_height="wrap_content"
+		android:layout_weight="1"/>
+	<ImageView android:id="@+id/signupconfirmicon" android:layout_width="wrap_content"
+		android:layout_height="wrap_content" 
+		android:background="@drawable/btn_check_buttonless_off"
+		  android:layout_gravity="center_vertical"
+		  
+		/>
+		</LinearLayout>
+	<LinearLayout android:orientation="vertical"
+			android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:layout_gravity="center"
+			android:paddingLeft="5dp"
+			android:paddingRight="5dp"
+			android:paddingTop="15dp">
+	<Button
+		android:id="@+id/signup_button"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:background="@drawable/signup_button"
+	/>
+	    </LinearLayout>
+    
+</LinearLayout>
