@@ -1,0 +1,7 @@
+package Fitivity.copy;
+
+public class Fitivity {
+
+	String activityCategory;
+	String activitySelectionScreenName;
+}
