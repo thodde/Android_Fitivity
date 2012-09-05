@@ -1,4 +1,4 @@
-package com.Fitivity;
+package com.fitivity;
 
 import android.content.Context;
 

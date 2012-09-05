@@ -1,11 +1,11 @@
-package com.Fitivity;
+package com.fitivity;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 
-import com.Fitivity.PullToRefreshListView.OnRefreshListener;
+import com.fitivity.PullToRefreshListView.OnRefreshListener;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;

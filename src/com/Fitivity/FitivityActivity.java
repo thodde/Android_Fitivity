@@ -1,5 +1,4 @@
-
-package com.Fitivity;
+package com.fitivity;
 
 public class FitivityActivity {
     private String name;

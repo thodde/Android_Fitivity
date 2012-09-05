@@ -1,6 +1,5 @@
 /***
  * 	Copyright (c) 2010-2011 WareNinja.com
- * 	Author: yg@wareninja.com
  * 	
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -15,7 +14,7 @@
  *  limitations under the License.
 */
 
-package com.Fitivity;
+package com.fitivity;
 
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
@@ -26,6 +25,7 @@ import android.util.Log;
 import com.wareninja.opensource.common.LOGGING;
 import com.wareninja.opensource.droidfu.cachefu.ImageCache;
 import com.wareninja.opensource.droidfu.cachefu.ObjectCache;
+import com.wareninja.opensource.genericstore.GenericStore;
 
 public class ApplicationFitivity extends android.app.Application {
 	private static String TAG="ApplicationFitivity";

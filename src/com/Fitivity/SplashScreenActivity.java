@@ -1,6 +1,4 @@
-package com.Fitivity;
-
-
+package com.fitivity;
 
 import com.parse.Parse;
 import com.parse.ParseUser;
@@ -37,7 +35,6 @@ private static final int SPLASH_DISPLAY_TIME = 2000;  /* 2 seconds */
             and close this splash activity after SPLASH_DISPLAY_TIME has
             elapsed. */
         new Handler().postDelayed(new Runnable() {
-                @Override
                 public void run() {
                	 
                	
@@ -60,7 +57,6 @@ private static final int SPLASH_DISPLAY_TIME = 2000;  /* 2 seconds */
             and close this splash activity after SPLASH_DISPLAY_TIME has
             elapsed. */
         new Handler().postDelayed(new Runnable() {
-                @Override
                 public void run() {
                	 
                	

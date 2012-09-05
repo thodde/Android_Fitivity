@@ -1,4 +1,4 @@
-package com.Fitivity;
+package com.fitivity;
 
 
 
@@ -7,7 +7,7 @@ import java.util.Date;
 import java.util.List;
 
 
-import com.Fitivity.PullToRefreshListView.OnRefreshListener;
+import com.fitivity.PullToRefreshListView.OnRefreshListener;
 import com.parse.FindCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
@@ -50,7 +50,6 @@ public class ProfileActivity extends Activity {
 		
 		
 		settings.setOnClickListener(new OnClickListener() {
-			@Override
 			public void onClick(View v) { 
 				Intent mainIntent = new Intent(ProfileActivity.this,
                         SettingsActivity.class);
@@ -65,7 +64,6 @@ public class ProfileActivity extends Activity {
 		
 		// Set a listener to be invoked when the list should be refreshed.
 		groupList.setOnRefreshListener(new OnRefreshListener() {
-            @Override
             public void onRefresh() {
             	findActivities();
             }

@@ -1,9 +1,9 @@
-package com.Fitivity;
+package com.fitivity;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.Fitivity.PullToRefreshListView.OnRefreshListener;
+import com.fitivity.PullToRefreshListView.OnRefreshListener;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -50,7 +50,6 @@ public class ProposedActivityActivity extends Activity {
 		comment = (Button) findViewById(R.id.commentButton);
 		
 		comment.setOnClickListener(new OnClickListener() {
-			@Override
 			public void onClick(View v) { 
 				
 				if (commentText.getText().toString() != "") {
@@ -63,7 +62,6 @@ public class ProposedActivityActivity extends Activity {
 		});
 		
 		commentText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-		    @Override
 		    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
 		        if (actionId == EditorInfo.IME_ACTION_DONE) {
 		        	
@@ -98,7 +96,6 @@ commentList = (PullToRefreshListView) findViewById(R.id.commentList);
 		
 		// Set a listener to be invoked when the list should be refreshed.
 		commentList.setOnRefreshListener(new OnRefreshListener() {
-            @Override
             public void onRefresh() {
             	findActivities();
             }

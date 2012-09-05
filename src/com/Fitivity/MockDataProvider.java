@@ -1,9 +1,7 @@
 
-package com.Fitivity;
+package com.fitivity;
 
 import java.util.Random;
-
-
 
 public class MockDataProvider {
     // A utility method that generates random Vehicles

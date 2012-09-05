@@ -1,10 +1,6 @@
-
-package com.Fitivity;
+package com.fitivity;
 
 import java.util.ArrayList;
-
-
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,7 +32,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
     /**
      * A general add method, that allows you to add a Vehicle to this list
      * 
-     * Depending on if the category opf the vehicle is present or not,
+     * Depending on if the category of the vehicle is present or not,
      * the corresponding item will either be added to an existing group if it 
      * exists, else the group will be created and then the item will be added
      * @param vehicle

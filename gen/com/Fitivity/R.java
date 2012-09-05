@@ -5,7 +5,7 @@
  * should not be modified by hand.
  */
 
-package com.Fitivity;
+package com.fitivity;
 
 public final class R {
     public static final class attr {

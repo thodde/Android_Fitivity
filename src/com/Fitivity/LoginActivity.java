@@ -1,6 +1,4 @@
-package com.Fitivity;
-
-
+package com.fitivity;
 
 import com.parse.Parse;
 import com.parse.ParseException;
@@ -49,7 +47,6 @@ public class LoginActivity extends Activity {
 		
 		// Set Click Listeners
 		btnLogin.setOnClickListener(new OnClickListener() {
-			@Override
 			public void onClick(View v) { 
 				// Check Login
 				Thread loginThread = new Thread() {
@@ -92,7 +89,6 @@ public class LoginActivity extends Activity {
 		});
 		
 		btnJoin.setOnClickListener(new OnClickListener() {
-			@Override
 			public void onClick(View v) { 
 				Intent mainIntent = new Intent(LoginActivity.this,
                         SignUpActivity.class);

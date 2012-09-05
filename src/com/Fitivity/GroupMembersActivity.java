@@ -1,9 +1,9 @@
-package com.Fitivity;
+package com.fitivity;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.Fitivity.PullToRefreshListView.OnRefreshListener;
+import com.fitivity.PullToRefreshListView.OnRefreshListener;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -35,15 +35,12 @@ public class GroupMembersActivity extends Activity {
 		
 		// Set a listener to be invoked when the list should be refreshed.
 		membersList.setOnRefreshListener(new OnRefreshListener() {
-            @Override
             public void onRefresh() {
             	findActivities();
             }
 		});
 		
 		findActivities();
-		
-		
 	}
 	
 	public void findActivities() {
@@ -55,8 +52,6 @@ public class GroupMembersActivity extends Activity {
     	    public void done(List<ParseObject> activityList, ParseException e) {
     	        if (e == null) {
     	            Log.d("groups", "Retrieved " + activityList.size() + " groups");
-    	            
-    	           
     	            
     	            ArrayList<ParseObject> activities = new ArrayList<ParseObject>();
     	            
@@ -94,36 +89,24 @@ public class GroupMembersActivity extends Activity {
 				ArrayList<ParseObject> items) {
 			super(context, textViewResourceId, items);
 			this.activities = items;
-
 		}
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			View v = convertView;
 			if (v == null) {
-				
 				LayoutInflater vi = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			
-				
 				v = vi.inflate(R.layout.feed_item_layout, null);
-
-				
 			}
 
 			ParseObject activity = activities.get(position);
 			ParseUser user = activity.getParseUser("user");
 			TextView description_text = (TextView) v.findViewById(R.id.description_text);
 			//TextView group_location_text = (TextView) v.findViewById(R.id.group_location_text);
-		
 			
 			description_text.setText(user.getUsername());
-					
-			
-
 
 			return v;
 		}
-
 	}
-
 }

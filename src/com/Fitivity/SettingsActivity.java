@@ -1,4 +1,4 @@
-package com.Fitivity;
+package com.fitivity;
 
 import com.parse.ParseUser;
 
@@ -23,7 +23,6 @@ public class SettingsActivity extends Activity {
 		logout = (Button) findViewById(R.id.sign_out_button);
 		
 		logout.setOnClickListener(new OnClickListener() {
-			@Override
 			public void onClick(View v) {
 				ParseUser.logOut();
 				Intent mainIntent = new Intent(SettingsActivity.this,

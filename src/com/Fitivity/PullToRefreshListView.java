@@ -1,5 +1,4 @@
-package com.Fitivity;
-
+package com.fitivity;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -273,7 +272,6 @@ public class PullToRefreshListView extends ListView implements OnScrollListener 
         child.measure(childWidthSpec, childHeightSpec);
     }
 
-    @Override
     public void onScroll(AbsListView view, int firstVisibleItem,
             int visibleItemCount, int totalItemCount) {
         // When the refresh view is completely visible, change the text to say
@@ -317,7 +315,6 @@ public class PullToRefreshListView extends ListView implements OnScrollListener 
         }
     }
 
-    @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
         mCurrentScrollState = scrollState;
 
@@ -384,7 +381,6 @@ public class PullToRefreshListView extends ListView implements OnScrollListener 
      */
     private class OnClickRefreshListener implements OnClickListener {
 
-        @Override
         public void onClick(View v) {
             if (mRefreshState != REFRESHING) {
                 prepareForRefresh();

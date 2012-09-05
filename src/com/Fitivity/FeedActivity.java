@@ -1,11 +1,11 @@
-package com.Fitivity;
+package com.fitivity;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.Fitivity.PullToRefreshListView.*;
+import com.fitivity.PullToRefreshListView.*;
 
 import com.parse.FindCallback;
 import com.parse.GetCallback;

@@ -1,4 +1,4 @@
-package com.Fitivity;
+package com.fitivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.*;
 import android.app.Activity;
 import android.os.Bundle;
+import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ExpandableListView.OnGroupClickListener;
@@ -32,7 +33,7 @@ public class ChooseFitivityActivity extends Activity{
         
         
         Parse.initialize(this, "MmUj6HxQcfLSOUs31lG7uNVx9sl5dZR6gv0FqGHq", "krpZsVM2UrU71NCxDbdAmbEMq1EXdpygkl251Wjl"); 
-        // Retrive the ExpandableListView from the layout
+        // Retrieve the ExpandableListView from the layout
       listView = (ExpandableListView) findViewById(R.id.listView);
         
         listView.setOnChildClickListener(new OnChildClickListener()

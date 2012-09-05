@@ -1,4 +1,4 @@
-package com.Fitivity;
+package com.fitivity;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -11,8 +11,5 @@ public class ActivitySelectedActivity extends Activity {
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chosen); 
-         
-        
     }
-
 }

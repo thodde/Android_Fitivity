@@ -1,4 +1,4 @@
-package com.Fitivity;
+package com.fitivity;
 
 import android.app.Activity;
 import android.content.Context;
@@ -219,21 +219,17 @@ public class MapViewActivity extends MapActivity implements LocationListener {
   }
 
   /** Sets the mostRecentLocation object to the current location of the device **/
-  @Override
   public void onLocationChanged(Location location) {
     mostRecentLocation = location;
   }
 
   /** The following methods are only necessary because WebMapActivity implements LocationListener **/ 
-  @Override
   public void onProviderDisabled(String provider) {
   }
 
-  @Override
   public void onProviderEnabled(String provider) {
   }
 
-  @Override
   public void onStatusChanged(String provider, int status, Bundle extras) {
   }
 

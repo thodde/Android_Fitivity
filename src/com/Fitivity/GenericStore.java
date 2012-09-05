@@ -15,7 +15,7 @@
  *  limitations under the License.
 */
 
-package com.Fitivity;
+package com.fitivity;
 
 import java.io.Serializable;
 import java.util.List;

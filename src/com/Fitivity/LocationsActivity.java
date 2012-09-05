@@ -1,4 +1,4 @@
-package com.Fitivity;
+package com.fitivity;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -39,21 +39,15 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
-
-
 public class LocationsActivity extends Activity implements LocationListener {
 	
 	//private FsqAuthListener mListener;
-
-	
 	private static final String API_URL = "https://maps.googleapis.com/maps/api/place/search/json?";
 	
 	LocationManager mlocManager;
 	String search = "";
 	String provider;
 	public static final String CLIENT_ID = "AIzaSyAFOF9KldMdOtaXo31MLxp9PiX2mxmWDQA";
-	
 	
 	private ListView mListView;
 	private NearbyAdapter mAdapter;
@@ -73,9 +67,7 @@ public class LocationsActivity extends Activity implements LocationListener {
 		filterText = (EditText) findViewById(R.id.search_box);
 		addLocation = (Button) findViewById(R.id.add_location);
 		
-		
 		addLocation.setOnClickListener(new OnClickListener() {
-			@Override
 			public void onClick(View v) { 
 				
 				Intent intent = new Intent();
@@ -89,7 +81,6 @@ public class LocationsActivity extends Activity implements LocationListener {
 		
 		filterText.addTextChangedListener(filterTextWatcher);
 		filterText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-		    @Override
 		    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
 		        if (actionId == EditorInfo.IME_ACTION_DONE) {
 		        	
@@ -101,8 +92,6 @@ public class LocationsActivity extends Activity implements LocationListener {
 		        }
 		        return false;
 		    }
-
-		
 		});
 		
 		mAdapter 		= new NearbyAdapter(this);
@@ -121,19 +110,14 @@ public class LocationsActivity extends Activity implements LocationListener {
     	mlocManager.requestLocationUpdates(provider, 0, 0,
     			this);
         
-       
-        
         /* Making the ListView clickable */
     	
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-			@Override
 			public void onItemClick(AdapterView<?> av, View v, int pos, long id) {
 				onListItemClick(v, pos, id);
 			}
 
 		});
-        
-        
         getLocation();
 	}
 	
@@ -167,10 +151,6 @@ public class LocationsActivity extends Activity implements LocationListener {
 		
 		setResult(Activity.RESULT_OK, resultIntent);
 		finish();
-
-		
-		
-
 	}
 	
 	
@@ -199,12 +179,7 @@ public class LocationsActivity extends Activity implements LocationListener {
 			int length			= venues.length();
 			
 			if (length > 0) {
-				
-		
-				
 				Location whereAmI = mlocManager.getLastKnownLocation(provider);
-				
-					
 					for (int j = 0; j < length; j++) {
 						//final double CONVERT = 0.000621371192;
 						
@@ -237,7 +212,8 @@ public class LocationsActivity extends Activity implements LocationListener {
 					}
 				}
 			
-		} catch (Exception ex) {
+		}
+		catch (Exception ex) {
 			throw ex;
 		}
 		
@@ -300,13 +276,10 @@ public class LocationsActivity extends Activity implements LocationListener {
 	   return sb.toString();
 	}
 
-
 	public void getLocation () {
 		 Criteria criteria = new Criteria();
 			criteria.setAccuracy(Criteria.ACCURACY_COARSE);
 			provider = mlocManager.getBestProvider(criteria, true);
-		
-		
 		
 		for (int i = 0; i < 25; i++ ) {
 			mlocManager.requestLocationUpdates(provider, 0, 0,
@@ -327,48 +300,36 @@ public class LocationsActivity extends Activity implements LocationListener {
 			return;
 		}
 		else {
-		double latitude = location.getLatitude();
-		double longitude = location.getLongitude();
-		
-		try {
-        	mNearbyList = getNearby(latitude, longitude);
-			mAdapter.setData(mNearbyList);
-			mListView.setAdapter(mAdapter);
-			mProgress.dismiss();
+			double latitude = location.getLatitude();
+			double longitude = location.getLongitude();
 			
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			try {
+	        	mNearbyList = getNearby(latitude, longitude);
+				mAdapter.setData(mNearbyList);
+				mListView.setAdapter(mAdapter);
+				mProgress.dismiss();
+				
+			} 
+			catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
-		}
-		
 		
 	}
-	
-	@Override
+
 	public void onLocationChanged(Location location) {
-		// TODO Auto-generated method stub
 		
 	}
 
-
-	@Override
 	public void onProviderDisabled(String provider) {
-		// TODO Auto-generated method stub
 		
 	}
 
-
-	@Override
 	public void onProviderEnabled(String provider) {
-		// TODO Auto-generated method stub
 		
 	}
 
-
-	@Override
 	public void onStatusChanged(String provider, int status, Bundle extras) {
-		// TODO Auto-generated method stub
-		
 	}
 }

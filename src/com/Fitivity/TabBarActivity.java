@@ -1,5 +1,4 @@
-package com.Fitivity;
-
+package com.fitivity;
 
 import android.app.Dialog;
 import android.app.TabActivity;
@@ -74,7 +73,6 @@ public class TabBarActivity extends TabActivity implements OnTabChangeListener {
         
     }
 
-	@Override
 	public void onTabChanged(String tabId) {
 		
 		

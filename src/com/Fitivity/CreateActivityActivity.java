@@ -1,9 +1,4 @@
-package com.Fitivity;
-
-
-
-
-
+package com.fitivity;
 
 import com.parse.GetCallback;
 import com.parse.ParseGeoPoint;
@@ -61,7 +56,7 @@ public class CreateActivityActivity extends Activity {
 		addActivity.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) { 
 				Intent mainIntent = new Intent(CreateActivityActivity.this,
-                        SampleActivity.class);
+                        SettingsActivity.class);
                 CreateActivityActivity.this.startActivityForResult(mainIntent, ACTIVITY_REQUEST);
                 
 			}
@@ -281,10 +276,7 @@ public class CreateActivityActivity extends Activity {
 							e1.printStackTrace();
 						}
 				      
-				      }
-				      
-				      
-				      
+				      }  
 				    }
 				    
 				    pd.dismiss();
@@ -309,16 +301,8 @@ public class CreateActivityActivity extends Activity {
 				    startActivity(intent);
 				    
 				  } 
-			  
-			  
-				});
-		  
-		  
-		  
-		  
-		  
+				});	  
 	  }
 	  
 	}
-
 }

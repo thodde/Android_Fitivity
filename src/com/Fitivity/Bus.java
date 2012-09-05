@@ -1,4 +1,4 @@
-package com.Fitivity;
+package com.fitivity;
 
 public class Bus extends FitivityActivity {
 

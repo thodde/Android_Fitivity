@@ -1,4 +1,4 @@
-package com.Fitivity;
+package com.fitivity;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -150,7 +150,6 @@ int after) {
 		
 		
 		btnSignup.setOnClickListener(new OnClickListener() {
-			@Override
 			public void onClick(View v) {
 				
 				Thread signupThread = new Thread() {
