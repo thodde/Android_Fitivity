@@ -1,5 +1,7 @@
 package com.fitivity;
 
+import com.fitivity.R;
+
 import android.app.Dialog;
 import android.app.TabActivity;
 import android.content.Intent;

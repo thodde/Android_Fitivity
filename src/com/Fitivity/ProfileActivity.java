@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.List;
 
 
+import com.fitivity.R;
 import com.fitivity.PullToRefreshListView.OnRefreshListener;
 import com.parse.FindCallback;
 import com.parse.Parse;

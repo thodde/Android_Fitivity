@@ -14,6 +14,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
+import com.fitivity.R;
+
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;

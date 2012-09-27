@@ -4,8 +4,8 @@
 	<classpathentry kind="src" path="gen"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
-	<classpathentry kind="lib" path="C:/Documents and Settings/Administrator/Desktop/Fitivity/generic-store-for-android/bin/generic-store-for-android.jar"/>
-	<classpathentry kind="lib" path="C:/Documents and Settings/Administrator/Desktop/Fitivity/Android_Fitivity/assets/Parse-1.0.2.jar"/>
-	<classpathentry kind="lib" path="C:/Program Files/Android/android-sdk/add-ons/addon-google_apis-google-16/libs/maps.jar"/>
+	<classpathentry kind="lib" path="assets/generic-store-for-android.jar"/>
+	<classpathentry kind="lib" path="assets/maps.jar"/>
+	<classpathentry kind="lib" path="assets/Parse-1.0.28.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

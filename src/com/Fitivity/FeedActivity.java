@@ -1,3 +1,11 @@
+/**
+ * Author: Trevor Hodde
+ * 
+ * This class controls the discover feed.
+ * 
+ * (c) fitivity 2012
+ */
+
 package com.fitivity;
 
 import java.util.ArrayList;
@@ -5,6 +13,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.fitivity.R;
 import com.fitivity.PullToRefreshListView.*;
 
 import com.parse.FindCallback;
@@ -29,20 +38,20 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 
 public class FeedActivity extends Activity {
 	
 	PullToRefreshListView refreshList;
+	Button sharingButton;
 	String information = "";
 	String description = "";
-	
-	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -59,18 +68,38 @@ public class FeedActivity extends Activity {
 				public void onItemClick(AdapterView<?> av, View v, int pos, long id) {
 					onListItemClick(v, pos, id);
 				}
-
 			});
 		 
 		 
-		// Set a listener to be invoked when the list should be refreshed.
+		 	// Set a listener to be invoked when the list should be refreshed.
 			refreshList.setOnRefreshListener(new OnRefreshListener() {
 	            public void onRefresh() {
 	            	findActivities();
 	            }
 			});
+			
+			//Set a listener on the sharing button so we can tell when its been clicked
+			sharingButton.setOnClickListener(new OnClickListener() {
+				public void onClick(View v) {
+					displayShareOptions();
+				}
+			});
 	        
 			findActivities();
+		}
+	
+		/**
+		 * This method allows the user to share the app with other users via SMS, Email, Facebook, or Twitter
+		 */
+		public void displayShareOptions() {
+			String shareStr = "Join our fitivity community to get active with myself and other people /" +
+					"interested in pick-up sports, fitness, running, or recreation. You can download /" +
+					"it for free in the Apple App Store or in Google Play.";
+			
+			Intent sharingIntent = new Intent(Intent.ACTION_SEND);
+			sharingIntent.setType("plain/text");
+			sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareStr);
+			startActivity(Intent.createChooser(sharingIntent,"Share using"));
 		}
 		
 		public void findActivities() {
@@ -92,16 +121,12 @@ public class FeedActivity extends Activity {
 	    	        if (e == null) {
 	    	            Log.d("score", "Retrieved " + activityList.size() + " activities");
 	    	            
-	    	           
-	    	            
 	    	            ArrayList<ParseObject> activities = new ArrayList<ParseObject>();
 	    	            
 	    	            for (int i =0; i < activityList.size(); i++ ) {
 	    	            	ParseObject activity = activityList.get(i);
-	    	            	
 	    	            	activities.add(activity);
 	    	            }
-	    	            
 	    	            
 	    	            if (activities.size() > 0) {
 	    					PlaceListAdapter adapter = new PlaceListAdapter(
@@ -111,7 +136,6 @@ public class FeedActivity extends Activity {
 	    					refreshList.onRefreshComplete();
 	    				}
 	    				else {
-	    					
 	    					ParseObject activity = new ParseObject("ActivityEvent");
 	    					//activity.FitivityFeedEntryItemActivityName = "No activities found";
 	    					activities.add(activity);
@@ -121,13 +145,12 @@ public class FeedActivity extends Activity {
 	    					refreshList.setAdapter(adapter);
 	    					refreshList.onRefreshComplete();
 	    				}
-	    	            
-	    	        } else {
+	    	        } 
+	    	        else {
 	    	            Log.d("score", "Error: " + e.getMessage());
 	    	        }
 	    	    }
 	    	});
-			
 		}
 		
 		protected void onListItemClick(View v, int pos, long id) {
@@ -135,8 +158,8 @@ public class FeedActivity extends Activity {
 			Intent intent = new Intent();
 			String status = object.getString("status");
 			String type = object.getString("type");
+			
 			if (status.contentEquals("COMMENT") || type.contentEquals("GROUP")) {
-				
 			    ParseObject proposed = object.getParseObject("proposedActivity");
 				intent.setClass(FeedActivity.this, ProposedActivityActivity.class);
 				Bundle bundle = new Bundle();
@@ -147,122 +170,101 @@ public class FeedActivity extends Activity {
 			
 			}
 			else {
-			
-			intent.setClass(FeedActivity.this, GroupActivity.class);
-			
-			ParseObject group = object.getParseObject("group");
-			
-			Bundle bundle = new Bundle();
-		    bundle.putString("activityText", group.getString("activity"));
-		    bundle.putString("locationText", group.getString("place"));
-		    bundle.putString("GroupId", group.getObjectId());
-		    ParseGeoPoint point = group.getParseGeoPoint("location");
-		    bundle.putDouble("latitude", point.getLatitude());
-		    bundle.putDouble("longitude", point.getLongitude());
-		    
-		    intent.putExtras(bundle);
-		    startActivity(intent);
+				intent.setClass(FeedActivity.this, GroupActivity.class);
+				
+				ParseObject group = object.getParseObject("group");
+				Bundle bundle = new Bundle();
+			    bundle.putString("activityText", group.getString("activity"));
+			    bundle.putString("locationText", group.getString("place"));
+			    bundle.putString("GroupId", group.getObjectId());
+			    ParseGeoPoint point = group.getParseGeoPoint("location");
+			    bundle.putDouble("latitude", point.getLatitude());
+			    bundle.putDouble("longitude", point.getLongitude());
+			    
+			    intent.putExtras(bundle);
+			    startActivity(intent);
 			}
 		}
 		
-		// Displays list of places to check into 
-		private class PlaceListAdapter extends ArrayAdapter<ParseObject> {
-			private ArrayList<ParseObject> activities;
+	// Displays list of places to check into 
+	private class PlaceListAdapter extends ArrayAdapter<ParseObject> {
+		private ArrayList<ParseObject> activities;
 
-			public PlaceListAdapter(Context context, int textViewResourceId,
-					ArrayList<ParseObject> items) {
-				super(context, textViewResourceId, items);
-				this.activities = items;
-
-			}
-
-			@Override
-			public View getView(final int position, View convertView, ViewGroup parent) {
-				View v = convertView;
-				if (v == null) {
-					
-					LayoutInflater vi = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-				
-					
-					v = vi.inflate(R.layout.feed_item_layout, null);
-	
-				}
-				
-				
-
-				ParseObject activity = activities.get(position);
-				
-				TextView description_text = (TextView) v.findViewById(R.id.description_text);
-				TextView group_location_text = (TextView) v.findViewById(R.id.group_location_text);
-				ImageView picture = (ImageView) v.findViewById(R.id.feed_cell_picture);
-				picture.setOnClickListener(new View.OnClickListener() {
-		            public void onClick(View view) {
-		            	ParseObject object = (ParseObject)refreshList.getItemAtPosition(position);
-		    			Intent intent = new Intent();
-						
-							ParseUser user = object.getParseUser("creator");
-							AlertDialog.Builder ab = new AlertDialog.Builder(FeedActivity.this);
-						    ab.setTitle("User")
-						    .setMessage(user.getUsername())
-						    .show();
-		            }
-		        });
-			
-				
-				ParseUser user = activity.getParseUser("creator");
-				
-				String type = activity.getString("type");	
-				String status = activity.getString("status");
-				
-				
-				
-				if (status.contentEquals("NEW") && type.contentEquals("NORMAL")) {
-					description = "" + user.getUsername() + " created a Group";
-					picture.setImageResource(R.drawable.feed_cell_profile_placeholder);
-				}
-				else if (status.contentEquals("OLD") && type.contentEquals("NORMAL")) {
-					description = "This group now has "	+ activity.getInt("number") + " members.";
-					picture.setImageResource(R.drawable.feed_cell_icon_image);
-				
-				}
-				
-				if (type.contentEquals("GROUP")) {
-					picture.setImageResource(R.drawable.feed_cell_profile_placeholder);
-					description = "" + user.getUsername() + " proposed a group activity";
-				}
-				
-				description_text.setText(description);
-				
-				
-				
-			 ParseObject group = activity.getParseObject("group");
-				 information = group.getString("activity") + " @ " + group.getString("place");
-				
-				group_location_text.setText(information);
-				
-				if (status.contentEquals("COMMENT")) {
-					
-					ParseObject comment = activity.getParseObject("comment");
-					String message = comment.getString("message");
-					description = "" + user.getUsername() + "made a comment";
-					description_text.setText(description);
-					group_location_text.setText(message);
-					
-				}
-				
-
-
-				return v;
-			}
-
+		public PlaceListAdapter(Context context, int textViewResourceId,
+				ArrayList<ParseObject> items) {
+			super(context, textViewResourceId, items);
+			this.activities = items;
 		}
-	
-		 @Override
-			public boolean onKeyDown(int keyCode, KeyEvent event) {
-			    if (keyCode == KeyEvent.KEYCODE_BACK) {
-			        moveTaskToBack(true);
-			        return true;
-			    }
-			    return super.onKeyDown(keyCode, event);
+
+		@Override
+		public View getView(final int position, View convertView, ViewGroup parent) {
+			View v = convertView;
+			if (v == null) {
+				LayoutInflater vi = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+				v = vi.inflate(R.layout.feed_item_layout, null);
 			}
+
+			ParseObject activity = activities.get(position);
+			
+			TextView description_text = (TextView) v.findViewById(R.id.description_text);
+			TextView group_location_text = (TextView) v.findViewById(R.id.group_location_text);
+			ImageView picture = (ImageView) v.findViewById(R.id.feed_cell_picture);
+			picture.setOnClickListener(new View.OnClickListener() {
+	            public void onClick(View view) {
+	            	ParseObject object = (ParseObject)refreshList.getItemAtPosition(position);
+	    			Intent intent = new Intent();
+						ParseUser user = object.getParseUser("creator");
+						AlertDialog.Builder ab = new AlertDialog.Builder(FeedActivity.this);
+					    ab.setTitle("User")
+					    .setMessage(user.getUsername())
+					    .show();
+	            }
+	        });
+			
+			ParseUser user = activity.getParseUser("creator");
+			
+			String type = activity.getString("type");	
+			String status = activity.getString("status");
+			
+			if (status.contentEquals("NEW") && type.contentEquals("NORMAL")) {
+				description = "" + user.getUsername() + " created a Group";
+				picture.setImageResource(R.drawable.feed_cell_profile_placeholder);
+			}
+			else if (status.contentEquals("OLD") && type.contentEquals("NORMAL")) {
+				description = "This group now has "	+ activity.getInt("number") + " members.";
+				picture.setImageResource(R.drawable.feed_cell_icon_image);
+			}
+			
+			if (type.contentEquals("GROUP")) {
+				picture.setImageResource(R.drawable.feed_cell_profile_placeholder);
+				description = "" + user.getUsername() + " proposed a group activity";
+			}
+			
+			description_text.setText(description);
+			
+			ParseObject group = activity.getParseObject("group");
+			information = group.getString("activity") + " @ " + group.getString("place");
+			
+			group_location_text.setText(information);
+			
+			if (status.contentEquals("COMMENT")) {
+				ParseObject comment = activity.getParseObject("comment");
+				String message = comment.getString("message");
+				description = "" + user.getUsername() + "made a comment";
+				description_text.setText(description);
+				group_location_text.setText(message);
+			}
+			
+			return v;
+		}
+	}
+	
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+	    if (keyCode == KeyEvent.KEYCODE_BACK) {
+	        moveTaskToBack(true);
+	        return true;
+	    }
+	    return super.onKeyDown(keyCode, event);
+	}
 }

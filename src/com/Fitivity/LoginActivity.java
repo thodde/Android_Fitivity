@@ -1,5 +1,6 @@
 package com.fitivity;
 
+import com.fitivity.R;
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseUser;

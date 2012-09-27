@@ -13,6 +13,8 @@ import android.widget.ImageView;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
+import com.fitivity.R;
+
 public class NearbyAdapter extends BaseAdapter {
 	private ArrayList<Place> mVenueList;
 	private LayoutInflater mInflater;

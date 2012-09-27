@@ -1,6 +1,9 @@
 package com.fitivity;
 
 import java.util.ArrayList;
+
+import com.fitivity.R;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;

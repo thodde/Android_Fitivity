@@ -3,6 +3,7 @@ package com.fitivity;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fitivity.R;
 import com.parse.FindCallback;
 import com.parse.Parse;
 import com.parse.ParseException;

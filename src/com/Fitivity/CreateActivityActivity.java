@@ -1,5 +1,6 @@
 package com.fitivity;
 
+import com.fitivity.R;
 import com.parse.GetCallback;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
