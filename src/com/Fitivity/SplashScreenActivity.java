@@ -1,6 +1,5 @@
 package com.fitivity;
 
-import com.fitivity.R;
 import com.parse.Parse;
 import com.parse.ParseUser;
 
@@ -24,58 +23,32 @@ private static final int SPLASH_DISPLAY_TIME = 2000;  /* 2 seconds */
         
         // Splash screen view
         setContentView(R.layout.splash_view);
-        
-        
-        
 
         ParseUser currentUser = ParseUser.getCurrentUser();
         if (currentUser != null) {
-          // do stuff with the user
+	        new Handler().postDelayed(new Runnable() {
+	                public void run() {
+	                        Intent mainIntent = new Intent(SplashScreenActivity.this,
+	                                TabBarActivity.class);
+	                        SplashScreenActivity.this.startActivity(mainIntent);
+	                       
+	                        SplashScreenActivity.this.finish();
+	                }
+	        }, SPLASH_DISPLAY_TIME);
         	
-        	/* Create a new handler with which to start the main activity
-            and close this splash activity after SPLASH_DISPLAY_TIME has
-            elapsed. */
-        new Handler().postDelayed(new Runnable() {
-                public void run() {
-               	 
-               	
-                       
-                        /* Create an intent that will start the main activity. */
-                        Intent mainIntent = new Intent(SplashScreenActivity.this,
-                                TabBarActivity.class);
-                        SplashScreenActivity.this.startActivity(mainIntent);
-                       
-                        /* Finish splash activity so user cant go back to it. */
-                        SplashScreenActivity.this.finish();
-                       
-                }
-        }, SPLASH_DISPLAY_TIME);
-        	
-        } else {
-          // show the signup or login screen
-        	
-        	/* Create a new handler with which to start the main activity
-            and close this splash activity after SPLASH_DISPLAY_TIME has
-            elapsed. */
-        new Handler().postDelayed(new Runnable() {
-                public void run() {
-               	 
-               	
-                       
-                        /* Create an intent that will start the main activity. */
-                        Intent mainIntent = new Intent(SplashScreenActivity.this,
-                                LoginActivity.class);
-                        SplashScreenActivity.this.startActivity(mainIntent);
-                       
-                        /* Finish splash activity so user cant go back to it. */
-                        SplashScreenActivity.this.finish();
-                       
-                }
-        }, SPLASH_DISPLAY_TIME);
-      }
-        	 
-        	 
-    
+        } 
+        else {
+            // show the login screen
+	        new Handler().postDelayed(new Runnable() {
+	                public void run() {
+	                        Intent mainIntent = new Intent(SplashScreenActivity.this,
+	                                LoginActivity.class);
+	                        SplashScreenActivity.this.startActivity(mainIntent);
+	                       
+	                        SplashScreenActivity.this.finish();
+	                }
+	        }, SPLASH_DISPLAY_TIME);
+        }
     }
     
     @Override

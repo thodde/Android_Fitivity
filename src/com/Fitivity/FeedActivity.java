@@ -13,7 +13,6 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.fitivity.R;
 import com.fitivity.PullToRefreshListView.*;
 
 import com.parse.FindCallback;
@@ -61,15 +60,16 @@ public class FeedActivity extends Activity {
 		
 		 Parse.initialize(this, "MmUj6HxQcfLSOUs31lG7uNVx9sl5dZR6gv0FqGHq", "krpZsVM2UrU71NCxDbdAmbEMq1EXdpygkl251Wjl"); 
 		 
-		 PushService.subscribe(this, "", FeedActivity.class);
-		 refreshList = (PullToRefreshListView) findViewById(R.id.refreshList);
+		 //PushService.subscribe(this, "Fitivity", FeedActivity.class);
 		 
+		 refreshList = (PullToRefreshListView) findViewById(R.id.refreshList);
+		 sharingButton = (Button) findViewById(R.id.shareButton);
+/*		 
 		 refreshList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 				public void onItemClick(AdapterView<?> av, View v, int pos, long id) {
 					onListItemClick(v, pos, id);
 				}
 			});
-		 
 		 
 		 	// Set a listener to be invoked when the list should be refreshed.
 			refreshList.setOnRefreshListener(new OnRefreshListener() {
@@ -85,7 +85,8 @@ public class FeedActivity extends Activity {
 				}
 			});
 	        
-			findActivities();
+			//findActivities();
+		*/
 		}
 	
 		/**
@@ -103,10 +104,9 @@ public class FeedActivity extends Activity {
 		}
 		
 		public void findActivities() {
-			
 			ParseGeoPoint point = new ParseGeoPoint(); 
 			ParseQuery innerQuery = new ParseQuery("Groups");
-			innerQuery.whereWithinMiles("location", point, 50);
+			innerQuery.whereWithinMiles("location", point, 25);
 			
 			ParseQuery query = new ParseQuery("ActivityEvent");
 			//query.whereMatchesQuery("group", innerQuery);

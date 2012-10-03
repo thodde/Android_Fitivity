@@ -19,15 +19,17 @@ package com.fitivity;
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
 
+import android.app.Application;
 import android.content.Context;
 import android.util.Log;
 
+import com.parse.Parse;
 import com.wareninja.opensource.common.LOGGING;
 import com.wareninja.opensource.droidfu.cachefu.ImageCache;
 import com.wareninja.opensource.droidfu.cachefu.ObjectCache;
 import com.wareninja.opensource.genericstore.GenericStore;
 
-public class ApplicationFitivity extends android.app.Application {
+public class ApplicationFitivity extends Application {
 	private static String TAG="ApplicationFitivity";
 	
 	public ApplicationFitivity() {
@@ -37,6 +39,8 @@ public class ApplicationFitivity extends android.app.Application {
 	@Override 
 	public void onCreate() {
 		super.onCreate();
+		
+		Parse.initialize(this, "MmUj6HxQcfLSOUs31lG7uNVx9sl5dZR6gv0FqGHq", "krpZsVM2UrU71NCxDbdAmbEMq1EXdpygkl251Wjl");
 		
 		// initialize CACHE once App is created, this does init/create only ONCE!
 		objectCache = getObjectCache();

@@ -37,14 +37,11 @@ public class LoginActivity extends Activity {
 		
 		setContentView(R.layout.login_view);
 		
-		
 		// Get the EditText and Button References
 		etUsername = (EditText) findViewById(R.id.username);
 		etPassword = (EditText) findViewById(R.id.password);
 		btnLogin = (Button) findViewById(R.id.login_button);
 		btnJoin = (Button) findViewById(R.id.signup_button);
-		
-		
 		
 		// Set Click Listeners
 		btnLogin.setOnClickListener(new OnClickListener() {
@@ -68,18 +65,14 @@ public class LoginActivity extends Activity {
 		                         LoginActivity.this.startActivity(mainIntent);
 		                         
 		                         LoginActivity.this.finish();
-								
-								
 							} else if (user == null) {
 								failHandler.sendMessage(failHandler.obtainMessage());
 							}
-							
 							
 						} catch (ParseException e) {
 							connectionHandler.sendMessage(connectionHandler.obtainMessage());
 						} 
 					}
-
 				};
 				
 				pd = ProgressDialog.show(LoginActivity.this, "", "Loading...", true,
@@ -94,12 +87,8 @@ public class LoginActivity extends Activity {
 				Intent mainIntent = new Intent(LoginActivity.this,
                         SignUpActivity.class);
                 LoginActivity.this.startActivity(mainIntent);
-				
-			
 			}
-			
 		});
-		
 	}
 	
 	private Handler progressHandler = new Handler() {
@@ -151,5 +140,4 @@ public class LoginActivity extends Activity {
 	    }
 	    return super.onKeyDown(keyCode, event);
 	}
-
 }

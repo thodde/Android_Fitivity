@@ -1,14 +1,10 @@
 package com.fitivity;
 
-import com.fitivity.R;
-
-import android.app.Dialog;
 import android.app.TabActivity;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -20,9 +16,8 @@ public class TabBarActivity extends TabActivity implements OnTabChangeListener {
     /** Called when the activity is first created. */
 	
 	TabHost tabHost;
-	Dialog dialog;
 	int previousTab;
-	
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,8 +29,8 @@ public class TabBarActivity extends TabActivity implements OnTabChangeListener {
         TabHost.TabSpec spec;
         Intent intent;
         Resources res = getResources(); // Resource object to get Drawables
-        
-     // Create an Intent to launch an Activity for the tab (to be reused)
+       
+        // Create an Intent to launch an Activity for the tab (to be reused)
         intent = new Intent().setClass(this, FeedActivity.class);
         spec = tabHost.newTabSpec("First").setIndicator("",
         		res.getDrawable(R.drawable.first_tab))
@@ -58,6 +53,7 @@ public class TabBarActivity extends TabActivity implements OnTabChangeListener {
 		{
         	tabHost.getTabWidget().getChildAt(i).setBackgroundColor(Color.TRANSPARENT);
 		}
+        
         tabHost.getTabWidget().setCurrentTab(0);
         tabHost.getTabWidget().getChildAt(0).setBackgroundColor(Color.TRANSPARENT);
         previousTab = 0;
@@ -70,32 +66,24 @@ public class TabBarActivity extends TabActivity implements OnTabChangeListener {
         tabHost.getTabWidget().getChildAt(0).getLayoutParams().height = 78;
         tabHost.getTabWidget().getChildAt(1).getLayoutParams().height = 78;
         tabHost.getTabWidget().getChildAt(2).getLayoutParams().height = 78;
-        
-        
-        
-    }
+     }
 
 	public void onTabChanged(String tabId) {
-		
-		
 		for(int i=0;i<tabHost.getTabWidget().getChildCount();i++)
 		{
 			tabHost.getTabWidget().getChildAt(i).setBackgroundColor(Color.TRANSPARENT);
 		}
 
-		
 		tabHost.getTabWidget().getChildAt(tabHost.getCurrentTab()).setBackgroundColor(Color.TRANSPARENT);
-
-	
 	    previousTab = tabHost.getCurrentTab();
 	}
 	
 	 @Override
-		public boolean onKeyDown(int keyCode, KeyEvent event) {
-		    if (keyCode == KeyEvent.KEYCODE_BACK) {
-		        moveTaskToBack(true);
-		        return true;
-		    }
-		    return super.onKeyDown(keyCode, event);
-		}
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+	    if (keyCode == KeyEvent.KEYCODE_BACK) {
+	        moveTaskToBack(true);
+	        return true;
+	    }
+	    return super.onKeyDown(keyCode, event);
+	}
 }

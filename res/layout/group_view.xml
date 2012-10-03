@@ -52,7 +52,7 @@
      
   </RelativeLayout>
   
-  <com.Fitivity.PullToRefreshListView
+  <com.fitivity.PullToRefreshListView
     	android:cacheColorHint="#00000000"
     	android:paddingTop="20dp"
         android:id="@+id/proposedActivityList"

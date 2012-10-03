@@ -65,15 +65,13 @@ public class SignUpActivity extends Activity {
             		imageView.setBackgroundResource(R.drawable.btn_check_buttonless_off);
             	}
         } 
-        public void beforeTextChanged(CharSequence s, int start, int count, 
-int after) { 
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) { 
                 //XXX do something 
         } 
         public void onTextChanged(CharSequence s, int start, int before, int count) { 
                 //XXX do something 
         } 
 }); 
-		
 		
 		etPassword.addTextChangedListener(new TextWatcher() { 
             public void afterTextChanged(Editable s) { 
@@ -89,16 +87,13 @@ int after) {
             		imageView.setBackgroundResource(R.drawable.btn_check_buttonless_off);
             	}
         } 
-        public void beforeTextChanged(CharSequence s, int start, int count, 
-int after) { 
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) { 
                
         } 
         public void onTextChanged(CharSequence s, int start, int before, int count) { 
                 
         } 
 }); 
-		
-		
 		
 		etUsername.addTextChangedListener(new TextWatcher() { 
             public void afterTextChanged(Editable s) { 
@@ -115,8 +110,7 @@ int after) {
             		imageView.setBackgroundResource(R.drawable.btn_check_buttonless_off);
             	}
         } 
-        public void beforeTextChanged(CharSequence s, int start, int count, 
-int after) { 
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) { 
                 //XXX do something 
         } 
         public void onTextChanged(CharSequence s, int start, int before, int count) { 
@@ -139,16 +133,13 @@ int after) {
             		imageView.setBackgroundResource(R.drawable.btn_check_buttonless_off);
             	}
         } 
-        public void beforeTextChanged(CharSequence s, int start, int count, 
-int after) { 
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) { 
                 //XXX do something 
         } 
         public void onTextChanged(CharSequence s, int start, int before, int count) { 
                 //XXX do something 
         } 
 });
-		
-		
 		
 		btnSignup.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
@@ -168,12 +159,10 @@ int after) {
 							if (password.length() < 6){
 								passwordfailHandler.sendMessage(passwordfailHandler.obtainMessage());
 								return;
-								
 							}
 							if (password.length() > 15){
 								passwordfail2Handler.sendMessage(passwordfail2Handler.obtainMessage());
 								return;
-								
 							}
 							if (username.length() < 6){
 								usernamefailHandler.sendMessage(usernamefailHandler.obtainMessage());
@@ -182,7 +171,6 @@ int after) {
 							if (username.length() > 15){
 								usernamefail2Handler.sendMessage(usernamefail2Handler.obtainMessage());
 								return;
-								
 							}
 							if (!confirm.equals(password)) {
 								confirmfailHandler.sendMessage(confirmfailHandler.obtainMessage());
@@ -197,12 +185,10 @@ int after) {
 							user.signUp();
 							progressHandler.sendEmptyMessage(0);
 							
-							
 							 /* Create an intent that will start the main activity. */
 	                         Intent mainIntent = new Intent(SignUpActivity.this,
 	                                 TabBarActivity.class);
 	                         SignUpActivity.this.startActivity(mainIntent);
-	                         
 	                        
 	                         /* Finish splash activity so user cant go back to it. */
 	                         SignUpActivity.this.finish();
@@ -210,20 +196,13 @@ int after) {
 						} catch (ParseException e) {
 							failHandler.sendMessage(failHandler.obtainMessage());
 						} 
-						
 					}
-					
 				};
 				
 				pd = ProgressDialog.show(SignUpActivity.this, "", "Loading...", true,
                         false);
 				signupThread.start();
-				
-				
-				
 			}
-			
-			
 		});
 	}
 	
@@ -302,10 +281,11 @@ int after) {
 		//Make the comparison case-insensitive.
 		Pattern pattern = Pattern.compile(expression,Pattern.CASE_INSENSITIVE);
 		Matcher matcher = pattern.matcher(inputStr);
+		
 		if(matcher.matches()){
-		isValid = true;
+			isValid = true;
 		}
+		
 		return isValid;
-		}
-
+	}
 }

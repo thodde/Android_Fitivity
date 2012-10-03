@@ -27,7 +27,7 @@
             android:layout_height="45dp" android:layout_width="fill_parent"
             android:id="@+id/Join"></Button>
   
-   <com.Fitivity.PullToRefreshListView
+   <com.fitivity.PullToRefreshListView
     	android:cacheColorHint="#00000000"
     	android:paddingTop="20dp"
         android:id="@+id/commentList"
