@@ -1,11 +1,8 @@
 package com.fitivity;
 
-
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
 
 import com.fitivity.R;
 import com.fitivity.PullToRefreshListView.OnRefreshListener;
@@ -19,6 +16,7 @@ import com.parse.ParseUser;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -34,6 +32,7 @@ import android.widget.TextView;
 public class ProfileActivity extends Activity {
 	
 	ImageView settings;
+	ImageView profilePic;
 	PullToRefreshListView groupList;
 	
 	@Override
@@ -45,10 +44,15 @@ public class ProfileActivity extends Activity {
 		Parse.initialize(this, "MmUj6HxQcfLSOUs31lG7uNVx9sl5dZR6gv0FqGHq", "krpZsVM2UrU71NCxDbdAmbEMq1EXdpygkl251Wjl");
 		
 		settings = (ImageView) findViewById(R.id.settings);
+		profilePic = (ImageView) findViewById(R.id.profilePicture);
 
 		TextView txtView = (TextView) findViewById(R.id.txt_display_tab);
 		txtView.setText(ParseUser.getCurrentUser().getUsername());
 		
+		//Going to be used for updating the Profile picture in the profile eventually
+		//SettingsActivity sa = new SettingsActivity();
+		//Bitmap bmp = sa.getProfilePicture();
+		//profilePic.setImageBitmap(bmp);
 		
 		settings.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) { 
@@ -56,13 +60,10 @@ public class ProfileActivity extends Activity {
                         SettingsActivity.class);
                 ProfileActivity.this.startActivity(mainIntent);
 			}
-			
 		});
-		
 		
 		groupList = (PullToRefreshListView) findViewById(R.id.groupList);
 	
-		
 		// Set a listener to be invoked when the list should be refreshed.
 		groupList.setOnRefreshListener(new OnRefreshListener() {
             public void onRefresh() {
@@ -83,17 +84,13 @@ public class ProfileActivity extends Activity {
     	        if (e == null) {
     	            Log.d("groups", "Retrieved " + activityList.size() + " groups");
     	            
-    	           
-    	            
     	            ArrayList<ParseObject> activities = new ArrayList<ParseObject>();
     	            
     	            for (int i =0; i < activityList.size(); i++ ) {
     	            	ParseObject activity = activityList.get(i);
     	            	
     	            	activities.add(activity);
-    	            	
     	            }
-    	            
     	            
     	            if (activities.size() > 0) {
     					PlaceListAdapter adapter = new PlaceListAdapter(
@@ -103,19 +100,15 @@ public class ProfileActivity extends Activity {
     					groupList.onRefreshComplete();
     				}
     				else {
-    					
-    					
     					groupList.onRefreshComplete();
     				}
-    	            
-    	        } else {
+    	        }
+    	        else {
     	            Log.d("score", "Error: " + e.getMessage());
     	        }
     	    }
     	});
-		
 	}
-	
 	
 	private class PlaceListAdapter extends ArrayAdapter<ParseObject> {
 		private ArrayList<ParseObject> activities;
@@ -124,22 +117,15 @@ public class ProfileActivity extends Activity {
 				ArrayList<ParseObject> items) {
 			super(context, textViewResourceId, items);
 			this.activities = items;
-
 		}
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			View v = convertView;
 			if (v == null) {
-				
 				LayoutInflater vi = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			
-				
 				v = vi.inflate(R.layout.feed_item_layout, null);
-
-				
 			}
-			
 
 			ParseObject activity = activities.get(position);
 			
@@ -174,10 +160,8 @@ public class ProfileActivity extends Activity {
 			description_text.setText(type);
 			group_location_text.setText(place);			
 			
-
 			return v;
 		}
-
 	}
 
 	@Override

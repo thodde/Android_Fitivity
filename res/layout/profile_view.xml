@@ -1,43 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
 
-<LinearLayout
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  android:layout_width="fill_parent"
-  android:layout_height="fill_parent"
-  android:orientation="vertical">
-  
-  <RelativeLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/relativeLayout2">
-  <ImageView
+    <RelativeLayout
+        android:id="@+id/relativeLayout2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/fitivity_navigation_bar_backplate" />
+
+        <ImageView
+            android:id="@+id/settings"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:paddingRight="15dp"
+            android:src="@drawable/settings_button" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/fitivity_navigation_bar_backplate" />
-  <ImageView android:src="@drawable/settings_button" 
-  			 android:layout_width="40dp" 
-  			 android:layout_height="40dp"
-  			 android:layout_alignParentRight="true"
-  			 android:layout_centerVertical="true"
-  			 android:paddingRight="15dp"
-  			 android:id="@+id/settings"
-  			 />
-  </RelativeLayout>
-  
+        android:layout_below="@+id/relativeLayout2"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="45dp"
+        android:layout_toRightOf="@+id/relativeLayout3"
+        android:paddingLeft="5dp" >
 
-    <RelativeLayout android:paddingLeft="5dp" android:layout_height="wrap_content" android:id="@+id/relativeLayout1" android:layout_width="wrap_content" android:layout_below="@+id/relativeLayout2" android:layout_toRightOf="@+id/relativeLayout3" android:layout_marginLeft="20dp" android:layout_marginTop="45dp">
-        <ImageView android:layout_height="wrap_content" android:src="@drawable/feed_cell_profile_placeholder" android:layout_centerVertical="true" android:layout_width="wrap_content"></ImageView>
-        
-        <TextView android:gravity="center" android:layout_height="wrap_content" android:textStyle="bold" android:text="TextView" android:layout_width="190dp" android:id="@+id/txt_display_tab" android:textAppearance="?android:attr/textAppearanceLarge" android:layout_alignParentTop="true" android:layout_alignParentLeft="true" android:layout_marginTop="45dp" android:layout_marginLeft="115dp"></TextView>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:src="@drawable/feed_cell_profile_placeholder" 
+        	android:id="@+id/profilePicture"
+	        android:scaleType="centerInside">
+	    </ImageView>
+
+        <TextView
+            android:id="@+id/txt_display_tab"
+            android:layout_width="190dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="115dp"
+            android:layout_marginTop="45dp"
+            android:gravity="center"
+            android:text="TextView"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textStyle="bold" >
+        </TextView>
     </RelativeLayout>
-    
-    
+
     <com.fitivity.PullToRefreshListView
-    	android:cacheColorHint="#00000000"
-    	android:paddingTop="20dp"
         android:id="@+id/groupList"
         android:layout_width="fill_parent"
-         android:divider="@android:color/white"
-         android:dividerHeight="1dp"
-         android:smoothScrollbar="true"
-         android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:cacheColorHint="#00000000"
+        android:divider="@android:color/white"
+        android:dividerHeight="1dp"
+        android:paddingTop="20dp"
+        android:smoothScrollbar="true" />
 
 </LinearLayout>
-

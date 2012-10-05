@@ -1,9 +1,9 @@
 package com.fitivity;
 
-import com.fitivity.R;
 import com.parse.GetCallback;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
+import com.parse.ParsePush;
 import com.parse.ParseQuery;
 import com.parse.ParseException;
 import com.parse.ParseUser;
@@ -24,9 +24,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-
 public class CreateActivityActivity extends Activity {
-	
 	Dialog dialog;
 	ImageView addActivity;
 	TextView activityText;
@@ -42,7 +40,6 @@ public class CreateActivityActivity extends Activity {
 	 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_view);
 		
@@ -52,16 +49,13 @@ public class CreateActivityActivity extends Activity {
 		activityText = (TextView) findViewById(R.id.activity_text);
 		locationText = (TextView) findViewById(R.id.location_text);
 		
-		
 		// Set Click Listeners
 		addActivity.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) { 
 				Intent mainIntent = new Intent(CreateActivityActivity.this,
-                        SettingsActivity.class);
+                        ChooseFitivityActivity.class);
                 CreateActivityActivity.this.startActivityForResult(mainIntent, ACTIVITY_REQUEST);
-                
 			}
-			
 		});
 		
 		addLocation.setOnClickListener(new OnClickListener() {
@@ -69,13 +63,8 @@ public class CreateActivityActivity extends Activity {
 				Intent mainIntent = new Intent(CreateActivityActivity.this,
                         LocationsActivity.class);
                 CreateActivityActivity.this.startActivityForResult(mainIntent, LOCATION_REQUEST);
-                
 			}
-			
 		});
-		
-		
-		
 	}
 	
 	@Override
@@ -110,13 +99,11 @@ public class CreateActivityActivity extends Activity {
 	    	  else {
 	    		  activityText.setText(activityActivity.getName());
 	    	  }
-	    	 
 	      } 
 	      break; 
 	    }
 	    case (LOCATION_REQUEST) : { 
 		      if (resultCode == Activity.RESULT_OK) { 
-		    	  
 		    	  activityLocation = new Place();
 		    	  
 		    	  activityLocation.name = data.getStringExtra("name");
@@ -143,13 +130,10 @@ public class CreateActivityActivity extends Activity {
 		      // TODO Update your TextView.
 		      }
 		      break;
-	    }
+	      }
 	  }
 	  
 	  if (activitySelected == true && locationSelected == true) {
-		  
-		 
-		  
 		  ParseQuery query = new ParseQuery("Groups");
 		  
 		  final ParseGeoPoint point = new ParseGeoPoint(activityLocation.location.getLatitude(), activityLocation.location.getLongitude());
@@ -157,127 +141,121 @@ public class CreateActivityActivity extends Activity {
 		  query.whereWithinMiles("location", point, 0.1);
 		  //query.whereEqualTo("location", point);
 		  query.whereEqualTo("place", activityLocation.name);
-		  
-		  
 		  query.whereEqualTo("activity", activityActivity.getName());
 		
-		  
 		  query.getFirstInBackground(new GetCallback() {
 			  ProgressDialog pd = ProgressDialog.show(CreateActivityActivity.this, "Saving...", "Creating activity", true, false);
 			  public void done(ParseObject object, ParseException e) {
 				    if (object == null) {
-				      Log.d("score", "The getFirst request failed.");
-				      
+				    	Log.d("score", "The getFirst request failed.");
 					
-					/* Create the group */
-					ParseObject group = new ParseObject("Groups");
-					group.put("activity", activityActivity.getName());
-					group.put("location", point);
-					group.put("place", activityLocation.name);
-					
-					
-					
-					
-					
-					/* Create the event */
-					ParseObject event = new ParseObject("ActivityEvent");
-					event.put("creator", ParseUser.getCurrentUser());
-					event.put("group", group);
-					event.put("type", "NORMAL");
-					event.put("status", "NEW");
-					event.put("number", 1);
-					
-				    try {
-						event.save();
+						/* Create the group */
+						ParseObject group = new ParseObject("Groups");
+						group.put("activity", activityActivity.getName());
+						group.put("location", point);
+						group.put("place", activityLocation.name);
 						
-						/*Create the group member */
-						ParseObject member = new ParseObject("GroupMembers");
-						member.put("user", ParseUser.getCurrentUser());
-						member.put("activity", activityActivity.getName());
-						member.put("location", point);
-						member.put("place", activityLocation.name);
-						member.save();
+						/* Create the event */
+						ParseObject event = new ParseObject("ActivityEvent");
+						event.put("creator", ParseUser.getCurrentUser());
+						event.put("group", group);
+						event.put("type", "NORMAL");
+						event.put("status", "NEW");
+						event.put("number", 1);
 						
-						ParseQuery query = new ParseQuery("Groups");
-					      //query.whereEqualTo("group", object);
-					      
-					      query.whereWithinMiles("location", point, 0.1);
-						  //query.whereEqualTo("location", point);
-						  query.whereEqualTo("place", activityLocation.name);
-						  
-						  
-						  query.whereEqualTo("activity", activityActivity.getName());
-					      
-					      
-					      try {
-					    	  ParseObject obj = query.getFirst();
-					    	  String channel = "Fitivity" + obj.getObjectId();
-					    	  PushService.subscribe(getApplicationContext(), channel, GroupActivity.class);
-							} catch (ParseException e1) {
-								// TODO Auto-generated catch block
-								e1.printStackTrace();
-							}
+					    ParsePush push = new ParsePush();
+					    push.setPushToIOS(true);
+					    push.setMessage(ParseUser.getCurrentUser() + " created a new Activity!");
+					    push.sendInBackground();
 						
-					} catch (ParseException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-						return;
-					}
-				      
-				    } else {
-				      Log.d("score", "Retrieved the object.");
-				      
-				      ParseQuery memberQuery = new ParseQuery("GroupMembers");
-				      memberQuery.whereWithinMiles("location", point, 0.1);
-				      memberQuery.whereEqualTo("place", activityLocation.name);
-				      memberQuery.whereEqualTo("activity", activityActivity.getName());
-				      memberQuery.whereEqualTo("user", ParseUser.getCurrentUser());
-				      
-				      ParseObject membership = null;
-				      
-				      try {
-				    	  membership = memberQuery.getFirst();
-				      }
-				      catch(ParseException e1) {
-				    	
-				      }
-				      if (membership == null) {
-				      ParseQuery query = new ParseQuery("Groups");
-				      //query.whereEqualTo("group", object);
-				      
-				      query.whereWithinMiles("location", point, 0.1);
-					  //query.whereEqualTo("location", point);
-					  query.whereEqualTo("place", activityLocation.name);
-					  
-					  
-					  query.whereEqualTo("activity", activityActivity.getName());
-				      
-					  ParseQuery q = new ParseQuery("ActivityEvent");
-					  q.whereMatchesQuery("group", query);
-				      
-				      try {
-				    	  ParseObject event = q.getFirst();
-				    	  event.increment("number");
-				    	  event.put("status", "OLD");
-				    	  event.save();
-				    	  
-				    	  /*Create the group member */
+					    try {
+							event.save();
+							
+							/*Create the group member */
 							ParseObject member = new ParseObject("GroupMembers");
 							member.put("user", ParseUser.getCurrentUser());
 							member.put("activity", activityActivity.getName());
 							member.put("location", point);
 							member.put("place", activityLocation.name);
 							member.save();
-				    	  
-				    	  ParseObject obj = event.getParseObject("group");
-				    	  String channel = "Fitivity" + obj.getObjectId();
-				    	  PushService.subscribe(getApplicationContext(), channel, GroupActivity.class);
-						} catch (ParseException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
+							
+							ParseQuery query = new ParseQuery("Groups");
+						    //query.whereEqualTo("group", object);
+						      
+						    query.whereWithinMiles("location", point, 0.1);
+							//query.whereEqualTo("location", point);
+							query.whereEqualTo("place", activityLocation.name);
+							  
+							query.whereEqualTo("activity", activityActivity.getName());
+						      
+						    try {
+						    	ParseObject obj = query.getFirst();
+						    	String channel = "Fitivity" + obj.getObjectId();
+						    	PushService.subscribe(getApplicationContext(), channel, GroupActivity.class);
+							}
+						    catch (ParseException e1) {
+						    	e1.printStackTrace();
+							}
+							
 						}
-				      
-				      }  
+					    catch (ParseException e1) {
+							e1.printStackTrace();
+							return;
+						}
+				    }
+				    else {
+				    	Log.d("score", "Retrieved the object.");
+					      
+					    ParseQuery memberQuery = new ParseQuery("GroupMembers");
+					    memberQuery.whereWithinMiles("location", point, 0.1);
+					    memberQuery.whereEqualTo("place", activityLocation.name);
+					    memberQuery.whereEqualTo("activity", activityActivity.getName());
+					    memberQuery.whereEqualTo("user", ParseUser.getCurrentUser());
+					      
+					    ParseObject membership = null;
+					      
+					    try {
+					    	membership = memberQuery.getFirst();
+					    }
+					    catch(ParseException e1) {
+					    	
+					    }
+					      
+					    if (membership == null) {
+						    ParseQuery query = new ParseQuery("Groups");
+						    //query.whereEqualTo("group", object);
+						      
+						    query.whereWithinMiles("location", point, 0.1);
+						    //query.whereEqualTo("location", point);
+							query.whereEqualTo("place", activityLocation.name);
+							  
+							query.whereEqualTo("activity", activityActivity.getName());
+						      
+							ParseQuery q = new ParseQuery("ActivityEvent");
+							q.whereMatchesQuery("group", query);
+						      
+							try {
+								ParseObject event = q.getFirst();
+						    	event.increment("number");
+						    	event.put("status", "OLD");
+						    	event.save();
+						    	  
+						    	/*Create the group member */
+								ParseObject member = new ParseObject("GroupMembers");
+								member.put("user", ParseUser.getCurrentUser());
+								member.put("activity", activityActivity.getName());
+								member.put("location", point);
+								member.put("place", activityLocation.name);
+								member.save();
+						    	  
+						    	ParseObject obj = event.getParseObject("group");
+						    	String channel = "Fitivity" + obj.getObjectId();
+						    	PushService.subscribe(getApplicationContext(), channel, GroupActivity.class);
+							}
+						    catch (ParseException e1) {
+								e1.printStackTrace();
+						    }
+						}  
 				    }
 				    
 				    pd.dismiss();
@@ -300,10 +278,8 @@ public class CreateActivityActivity extends Activity {
 				    
 				    intent.putExtras(bundle);
 				    startActivity(intent);
-				    
 				  } 
-				});	  
-	  }
-	  
+			});	  
+	    }
 	}
 }

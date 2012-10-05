@@ -52,11 +52,15 @@
             android:screenOrientation="portrait">
         </activity>
         <activity android:name="LocationsActivity"
-        		  
         		   android:theme="@android:style/Theme.NoTitleBar"
                   android:screenOrientation="portrait">
         </activity>
+        
         <activity android:name="ChooseFitivityActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
          <activity android:name="SampleActivity"
          android:screenOrientation="portrait"
@@ -86,6 +90,7 @@
   				</intent-filter>
 		</receiver>
     </application>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.SEND_SMS" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />

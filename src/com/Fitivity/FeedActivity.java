@@ -9,8 +9,6 @@
 package com.fitivity;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
 
 import com.fitivity.PullToRefreshListView.*;
@@ -27,8 +25,12 @@ import com.parse.PushService;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -42,29 +44,29 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 public class FeedActivity extends Activity {
-	
+	private final int cellTypeGroup   = 0;
 	PullToRefreshListView refreshList;
-	Button sharingButton;
+	ImageButton sharingButton;
 	String information = "";
 	String description = "";
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.feed_view);	
 		
 		 Parse.initialize(this, "MmUj6HxQcfLSOUs31lG7uNVx9sl5dZR6gv0FqGHq", "krpZsVM2UrU71NCxDbdAmbEMq1EXdpygkl251Wjl"); 
 		 
-		 //PushService.subscribe(this, "Fitivity", FeedActivity.class);
+		 PushService.subscribe(this, "Fitivity", FeedActivity.class);
 		 
 		 refreshList = (PullToRefreshListView) findViewById(R.id.refreshList);
-		 sharingButton = (Button) findViewById(R.id.shareButton);
-/*		 
+		 sharingButton = (ImageButton) findViewById(R.id.shareButton);
+		 
 		 refreshList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 				public void onItemClick(AdapterView<?> av, View v, int pos, long id) {
 					onListItemClick(v, pos, id);
@@ -85,16 +87,15 @@ public class FeedActivity extends Activity {
 				}
 			});
 	        
-			//findActivities();
-		*/
+			findActivities();
 		}
 	
 		/**
 		 * This method allows the user to share the app with other users via SMS, Email, Facebook, or Twitter
 		 */
 		public void displayShareOptions() {
-			String shareStr = "Join our fitivity community to get active with myself and other people /" +
-					"interested in pick-up sports, fitness, running, or recreation. You can download /" +
+			String shareStr = "Join our fitivity community to get active with myself and other people " +
+					"interested in pick-up sports, fitness, running, or recreation. You can download " +
 					"it for free in the Apple App Store or in Google Play.";
 			
 			Intent sharingIntent = new Intent(Intent.ACTION_SEND);
@@ -109,7 +110,6 @@ public class FeedActivity extends Activity {
 			innerQuery.whereWithinMiles("location", point, 25);
 			
 			ParseQuery query = new ParseQuery("ActivityEvent");
-			//query.whereMatchesQuery("group", innerQuery);
 	    	query.setLimit(50);
 	    	query.orderByDescending("updatedAt");
 	    	query.include("creator");
@@ -123,7 +123,7 @@ public class FeedActivity extends Activity {
 	    	            
 	    	            ArrayList<ParseObject> activities = new ArrayList<ParseObject>();
 	    	            
-	    	            for (int i =0; i < activityList.size(); i++ ) {
+	    	            for (int i = 0; i < activityList.size(); i++ ) {
 	    	            	ParseObject activity = activityList.get(i);
 	    	            	activities.add(activity);
 	    	            }
@@ -137,7 +137,6 @@ public class FeedActivity extends Activity {
 	    				}
 	    				else {
 	    					ParseObject activity = new ParseObject("ActivityEvent");
-	    					//activity.FitivityFeedEntryItemActivityName = "No activities found";
 	    					activities.add(activity);
 	    					PlaceListAdapter adapter = new PlaceListAdapter(
 	    							FeedActivity.this, R.layout.feed_view,
@@ -156,10 +155,9 @@ public class FeedActivity extends Activity {
 		protected void onListItemClick(View v, int pos, long id) {
 			ParseObject object = (ParseObject)refreshList.getItemAtPosition(pos);
 			Intent intent = new Intent();
-			String status = object.getString("status");
-			String type = object.getString("type");
+			int type = object.getInt("postType");
 			
-			if (status.contentEquals("COMMENT") || type.contentEquals("GROUP")) {
+			if (type == cellTypeGroup) {
 			    ParseObject proposed = object.getParseObject("proposedActivity");
 				intent.setClass(FeedActivity.this, ProposedActivityActivity.class);
 				Bundle bundle = new Bundle();
@@ -167,7 +165,6 @@ public class FeedActivity extends Activity {
 				
 				intent.putExtras(bundle);
 			    startActivity(intent);
-			
 			}
 			else {
 				intent.setClass(FeedActivity.this, GroupActivity.class);
@@ -186,12 +183,15 @@ public class FeedActivity extends Activity {
 			}
 		}
 		
-	// Displays list of places to check into 
 	private class PlaceListAdapter extends ArrayAdapter<ParseObject> {
 		private ArrayList<ParseObject> activities;
+		private final int cellTypeGroup   = 0;
+		private final int cellTypePA      = 1;
+		private final int cellTypeComment = 2;
+		private int numberOfMembers = 1;
 
 		public PlaceListAdapter(Context context, int textViewResourceId,
-				ArrayList<ParseObject> items) {
+			ArrayList<ParseObject> items) {
 			super(context, textViewResourceId, items);
 			this.activities = items;
 		}
@@ -213,47 +213,49 @@ public class FeedActivity extends Activity {
 	            public void onClick(View view) {
 	            	ParseObject object = (ParseObject)refreshList.getItemAtPosition(position);
 	    			Intent intent = new Intent();
-						ParseUser user = object.getParseUser("creator");
-						AlertDialog.Builder ab = new AlertDialog.Builder(FeedActivity.this);
-					    ab.setTitle("User")
-					    .setMessage(user.getUsername())
-					    .show();
+					ParseUser user = object.getParseUser("creator");
+					AlertDialog.Builder ab = new AlertDialog.Builder(FeedActivity.this);
+				    ab.setTitle("User")
+				    .setMessage(user.getUsername())
+				    .show();
 	            }
 	        });
 			
 			ParseUser user = activity.getParseUser("creator");
+			int type = activity.getInt("postType");
 			
-			String type = activity.getString("type");	
-			String status = activity.getString("status");
-			
-			if (status.contentEquals("NEW") && type.contentEquals("NORMAL")) {
-				description = "" + user.getUsername() + " created a Group";
-				picture.setImageResource(R.drawable.feed_cell_profile_placeholder);
+			if(type == cellTypeGroup) {
+				numberOfMembers = activity.getInt("number");
+				
+				if (numberOfMembers > 1) {
+					description = "This group now has "	+ numberOfMembers + " members.";
+					picture.setImageResource(R.drawable.feed_cell_icon_image);
+				}
+				else {
+					description = "" + user.getUsername() + " created a Group";
+					picture.setImageResource(R.drawable.feed_cell_profile_placeholder);
+				}
 			}
-			else if (status.contentEquals("OLD") && type.contentEquals("NORMAL")) {
-				description = "This group now has "	+ activity.getInt("number") + " members.";
-				picture.setImageResource(R.drawable.feed_cell_icon_image);
-			}
 			
-			if (type.contentEquals("GROUP")) {
-				picture.setImageResource(R.drawable.feed_cell_profile_placeholder);
+			if(type == cellTypePA) {
+				picture.setImageResource(R.drawable.activity_icon_large);
 				description = "" + user.getUsername() + " proposed a group activity";
 			}
-			
+				
 			description_text.setText(description);
 			
 			ParseObject group = activity.getParseObject("group");
 			information = group.getString("activity") + " @ " + group.getString("place");
 			
-			group_location_text.setText(information);
-			
-			if (status.contentEquals("COMMENT")) {
+			if(type == cellTypeComment) {
 				ParseObject comment = activity.getParseObject("comment");
 				String message = comment.getString("message");
 				description = "" + user.getUsername() + "made a comment";
 				description_text.setText(description);
 				group_location_text.setText(message);
 			}
+			
+			group_location_text.setText(information);
 			
 			return v;
 		}

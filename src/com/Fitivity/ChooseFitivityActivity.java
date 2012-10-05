@@ -1,188 +1,101 @@
 package com.fitivity;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-
-import com.fitivity.R;
-import com.parse.FindCallback;
-import com.parse.Parse;
-import com.parse.ParseException;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
-
-import android.util.Log;
-import android.view.*;
-import android.app.Activity;
+import android.app.ExpandableListActivity;
 import android.os.Bundle;
-import android.widget.ExpandableListAdapter;
+import android.view.View;
 import android.widget.ExpandableListView;
-import android.widget.ExpandableListView.OnChildClickListener;
-import android.widget.ExpandableListView.OnGroupClickListener;
-import android.widget.Toast;
+import android.widget.SimpleExpandableListAdapter;
 
-public class ChooseFitivityActivity extends Activity{
+public class ChooseFitivityActivity extends ExpandableListActivity {
+   
+	private final int TOTAL_CATEGORIES = 4;
 	
-	private ExpandableListAdapter adapter;
-	public  ExpandableListView listView;
-    public  ArrayList<ArrayList<Fitivity>> categories;
-    /** Called when the activity is first created. */
-    @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.choose_layout);
+	@SuppressWarnings("unchecked")
+	public void onCreate(Bundle savedInstanceState) {
+    	try{
+    		 super.onCreate(savedInstanceState);
+    		 setContentView(R.layout.main);
         
-        
-        Parse.initialize(this, "MmUj6HxQcfLSOUs31lG7uNVx9sl5dZR6gv0FqGHq", "krpZsVM2UrU71NCxDbdAmbEMq1EXdpygkl251Wjl"); 
-        // Retrieve the ExpandableListView from the layout
-      listView = (ExpandableListView) findViewById(R.id.listView);
-        
-        listView.setOnChildClickListener(new OnChildClickListener()
-        {
-            
-            public boolean onChildClick(ExpandableListView arg0, View arg1, int arg2, int arg3, long arg4)
-            {
-                Toast.makeText(getBaseContext(), "Child clicked", Toast.LENGTH_LONG).show();
-                return false;
-            }
-        });
-        
-        listView.setOnGroupClickListener(new OnGroupClickListener()
-        {
-            
-            public boolean onGroupClick(ExpandableListView arg0, View arg1, int arg2, long arg3)
-            {
-                Toast.makeText(getBaseContext(), "Group clicked", Toast.LENGTH_LONG).show();
-                return false;
-            }
-        });
-        
-     // Initialize the adapter with blank groups and children
-	        // We will be adding children on a thread, and then update the ListView
-	        //adapter = new ExpandableListAdapter(this, new ArrayList<String>(), new ArrayList<ArrayList<Fitivity>>());
-	        
-        categories = new ArrayList<ArrayList<Fitivity>>();
-
-       try {
-		getActivities();
-		
-		 //adapter = new ExpandableListAdapter(this, new ArrayList<String>(),
-		         //categories);
-
-		 // Set this blank adapter to the list view
-		 listView.setAdapter(adapter);
-	} catch (ParseException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
-       
-    // Initialize the adapter with blank groups and children
-       // We will be adding children on a thread, and then update the ListView
-       
-
-      
+             SimpleExpandableListAdapter expListAdapter = new SimpleExpandableListAdapter(
+					this,
+					createGroupList(), 				// Creating group List.
+					R.layout.group_row,				// Group item layout XML.			
+					new String[] { "Group Item" },	// the key of group item.
+					new int[] { R.id.row_name },	// ID of each group item.-Data under the key goes into this TextView.					
+					createChildList(),				// childData describes second-level entries.
+					R.layout.child_row,				// Layout for sub-level entries(second level).
+					new String[] {"Sub Item"},		// Keys in childData maps to display.
+					new int[] { R.id.grp_child}		// Data under the keys above go into these TextViews.
+				);
+			setListAdapter( expListAdapter );		// setting the adapter in the list.
+    	}
+    	catch(Exception e){
+    		System.out.println("Errrr +++ " + e.getMessage());
+    	}
+    }
+    
+	/* Creating the Hashmap for the row */
+	@SuppressWarnings("unchecked")
+	private List createGroupList() {
+	  	  ArrayList result = new ArrayList();
+	  	  for( int i = 0 ; i < TOTAL_CATEGORIES ; ++i ) { // TOTAL_CATEGORIES groups........
+	  		  HashMap m = new HashMap();
+	  		
+	  		  if(i == 0) {
+	  			  m.put( "Conditioning", "Conditioning"); // the key and it's value.
+	  		  }
+	  		  else if(i == 1) {
+	  			  m.put( "Sports", "Sports"); // the key and it's value.
+	  		  }
+	  		  else if(i == 2) {
+	  			  m.put( "Running", "Running"); // the key and it's value.
+	  		  }
+	  		  else if(i == 3) {
+	  			  m.put( "Recreation", "Recreation"); // the key and it's value.
+	  		  }
+	  		  result.add( m );
+	  	  }
+	  	  return (List)result;
+    }
+    
+	/* creating the HashMap for the children */
+    @SuppressWarnings("unchecked")
+	private List createChildList() {
+    	ArrayList result = new ArrayList();
+    	for( int i = 0 ; i < TOTAL_CATEGORIES ; ++i ) { // this TOTAL_CATEGORIES is the number of groups(Here it's TOTAL_CATEGORIES)
+    	  /* each group need each HashMap-Here for each group we have 3 subgroups */
+    	  ArrayList secList = new ArrayList(); 
+    	  for( int n = 0 ; n < 3 ; n++ ) {
+    	    HashMap child = new HashMap();
+    		child.put( "Sub Item", "Sub Item " + n );    	    
+    		secList.add( child );
+    	  }
+    	 result.add( secList );
+    	}    	 
+    	return result;
+    }
+    
+    public void onContentChanged() {
+    	System.out.println("onContentChanged");
+	    super.onContentChanged();	      
+    }
+    
+    /* This function is called on each child click */
+    public boolean onChildClick( ExpandableListView parent, View v, int groupPosition,int childPosition,long id) {
+    	System.out.println("Inside onChildClick at groupPosition = " + groupPosition +" Child clicked at position " + childPosition);
+    	return true;
     }
 
-   public void getActivities () throws ParseException
-   {
-	   ParseQuery query = new ParseQuery("Activity");
-	   
-	   List<ParseObject> activityList = query.find();
-	   
-	   ArrayList<Fitivity> running = new ArrayList<Fitivity>();
-       ArrayList<Fitivity> sports = new ArrayList<Fitivity>();
-       ArrayList<Fitivity> conditioning = new ArrayList<Fitivity>();
-          
-           
-       
-          for (int i = 0; i < activityList.size() - 1 ; i++) {
-          	ParseObject element = activityList.get(i);
-          	Fitivity fitivity = new Fitivity();
-          	fitivity.activityCategory = element.getString("category");
-       	fitivity.activitySelectionScreenName = element.getString("name");
-          	
-       	
-          	if (fitivity.activityCategory.equalsIgnoreCase("Sports") ) {
-          		
-          		
-          		sports.add(fitivity);
-          		
-          	}
-          	
-          	if (fitivity.activityCategory.equalsIgnoreCase("Running") ) {
-          		running.add(fitivity);
-          		
-          	}
-          	
-          	if (fitivity.activityCategory.equalsIgnoreCase("Conditioning")) {
-          		conditioning.add(fitivity);
-          	}
-          	
-          	
-          }
-          
-   categories.add(running);
-   categories.add(sports);
-   categories.add(conditioning);
-       
- 
-   /*
-   	query.findInBackground(new FindCallback() {
-   	    public void done(List<ParseObject> activityList, ParseException e) {
-   	        if (e == null) {
-   	            Log.d("score", "Retrieved " + activityList.size() + " activities");
-   	            
-   	            ArrayList<Fitivity> running = new ArrayList<Fitivity>();
-	            ArrayList<Fitivity> sports = new ArrayList<Fitivity>();
-	            ArrayList<Fitivity> conditioning = new ArrayList<Fitivity>();
-   	            
-   	             
-   	         
-   	            for (int i = 0; i < activityList.size() - 1 ; i++) {
-   	            	ParseObject element = activityList.get(i);
-   	            	Fitivity fitivity = new Fitivity();
-   	            	fitivity.activityCategory = element.getString("activityCategory");
-	            	fitivity.activitySelectionScreenName = element.getString("activitySelectionScreenName");
-   	            	
-	            	
-   	            	if (fitivity.activityCategory.equalsIgnoreCase("Sports") ) {
-   	            		
-   	            		
-   	            		sports.add(fitivity);
-   	            		
-   	            	}
-   	            	
-   	            	if (fitivity.activityCategory.equalsIgnoreCase("Running") ) {
-   	            		running.add(fitivity);
-   	            		
-   	            	}
-   	            	
-   	            	if (fitivity.activityCategory.equalsIgnoreCase("Conditioning")) {
-   	            		conditioning.add(fitivity);
-   	            	}
-   	            	
-   	            	
-   	            }
-   	            
-   	       categories.add(running);
-     	   categories.add(sports);
-     	   categories.add(conditioning);
-   	         
-     	 
-
-          // Set this blank adapter to the list view
-          listView.setAdapter(adapter);
-   	         
-   	         
-   	          
-   	            
-   	        } else {
-   	            Log.d("score", "Error: " + e.getMessage());
-   	        }
-   	    }
-   	});
-   	*/
-   }
-
-  
+    /* This function is called on expansion of the group */
+    public void onGroupExpand(int groupPosition) {
+    	try {
+    		 System.out.println("Group exapanding Listener => groupPosition = " + groupPosition);
+    	}
+    	catch(Exception e) {
+    		System.out.println(" groupPosition Errrr +++ " + e.getMessage());
+    	}
+    }  
 }

@@ -7,6 +7,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/fitivity_navigation_bar_backplate" />
-	<ExpandableListView android:id="@+id/listView"
-		android:layout_width="fill_parent" android:layout_height="fill_parent" android:scrollbars="none" android:cacheColorHint="#00000000"></ExpandableListView>
+	<ExpandableListView android:id="@+id/android:list"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:scrollbars="none"
+		android:cacheColorHint="#00000000">
+	</ExpandableListView>
 </LinearLayout>

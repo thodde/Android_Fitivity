@@ -12,21 +12,35 @@
         android:contentDescription="Navigation Bar"
         android:src="@drawable/fitivity_navigation_bar_backplate"
         tools:ignore="HardcodedText" />
-
-    <Button
+
+    <ImageButton
         android:id="@+id/shareButton"
         android:layout_width="96dp"
-        android:layout_height="wrap_content"
-        android:src="@drawable/icon"
+        android:layout_height="96dp"
+        android:layout_alignBottom="@+id/pull_to_refresh_image"
+        android:src="@drawable/b_share_large"
         android:text="Share"
+        tools:ignore="HardcodedText" />
+
+    <ImageButton
+        android:id="@+id/sortButton"
+        android:layout_width="96dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/pull_to_refresh_image"
+        android:layout_alignParentRight="true"
+        android:src="@drawable/b_sort_large"
+        android:text="Sort"
         tools:ignore="HardcodedText" />
 
     <com.fitivity.PullToRefreshListView
         android:id="@+id/refreshList"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/pull_to_refresh_image"
         android:divider="@android:color/white"
         android:dividerHeight="1dp"
-        android:smoothScrollbar="true" />
+        android:smoothScrollbar="true" >
+    </com.fitivity.PullToRefreshListView>
 
 </RelativeLayout>
