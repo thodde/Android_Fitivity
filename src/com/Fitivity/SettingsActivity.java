@@ -1,14 +1,11 @@
 package com.fitivity;
 
-import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
-import com.parse.GetCallback;
-import com.parse.GetDataCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFile;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.PushService;
 import com.parse.RequestPasswordResetCallback;
@@ -16,12 +13,10 @@ import com.parse.RequestPasswordResetCallback;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.AssetManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -31,7 +26,6 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ToggleButton;
 
 public class SettingsActivity extends Activity {
@@ -46,8 +40,6 @@ public class SettingsActivity extends Activity {
 	final int ACTIVITY_SELECT_IMAGE = 100;
 	boolean resetOk;
 	Bitmap myImage;
-	Bitmap bmp;
-	ParseObject largeImage;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -120,45 +112,32 @@ public class SettingsActivity extends Activity {
 		email.setText(strEmail);
 		username.setText(strUsername);
 
-		ParseObject img = new ParseObject("image");
-		ParseFile file = (ParseFile) img.get("ProfilePicture");
-		
-		if(file != null) {
-			file.getDataInBackground(new GetDataCallback() {
-				public void done(byte[] data, ParseException e) {
-					if (e == null) {
-						// data[] will be your image
-						Bitmap bmp = BitmapFactory.decodeByteArray(data, 0, data.length);
-						profilePicture.setImageBitmap(bmp);
-					}
-					else {
-						// something went wrong
-					}
-				}
-			});
+		Bitmap bmp = getProfilePicture();
+		if(bmp != null) {
+            profilePicture.setImageBitmap(bmp);
 		}
 		pushNotificationButton.setChecked(hasPushNotifications);
 	}
 	
 	public Bitmap getProfilePicture() {
-		ParseObject img = new ParseObject("image");
-		ParseFile file = (ParseFile) img.get("ProfilePicture");
+		user = ParseUser.getCurrentUser();
+		//ParseFile file = (ParseFile) user.get("image");
+		String path = (String) user.get("image").toString();
 		
-		if(file != null) {
-			file.getDataInBackground(new GetDataCallback() {
-				public void done(byte[] data, ParseException e) {
-					if (e == null) {
-						// data[] will be your image
-						bmp = BitmapFactory.decodeByteArray(data, 0, data.length);
-						profilePicture.setImageBitmap(bmp);
-					}
-					else {
-						// something went wrong
-					}
-				}
-			});
+		if(path != null) {
+			try {
+				//String path = file.toString();
+				AssetManager mngr = getAssets();
+				// Create an input stream to read from the asset folder
+		        InputStream ins = mngr.open(path);
+		        // Convert the input stream into a bitmap
+		        myImage = BitmapFactory.decodeStream(ins);
+			}
+			catch(IOException e) {
+				e.printStackTrace();
+			}
 		}
-		return bmp;
+		return myImage;
 	}
 	
 	@Override
@@ -175,22 +154,9 @@ public class SettingsActivity extends Activity {
 		super.onRestoreInstanceState(savedInstanceState);
 	    hasPushNotifications = savedInstanceState.getBoolean("PushNotifications");
 	    pushNotificationButton.setChecked(hasPushNotifications);
-	    ParseObject img = new ParseObject("image");
-		ParseFile file = (ParseFile) img.get("ProfilePicture");
-		
-		if(file != null) {
-			file.getDataInBackground(new GetDataCallback() {
-				public void done(byte[] data, ParseException e) {
-					if (e == null) {
-						// object will be your image
-						Bitmap bmp = BitmapFactory.decodeByteArray(data, 0, data.length);
-						profilePicture.setImageBitmap(bmp);
-					}
-					else {
-						// something went wrong
-					}
-				}
-			});
+	    Bitmap bmp = getProfilePicture();
+		if(bmp != null) {
+            profilePicture.setImageBitmap(bmp);
 		}
 	}
 	
@@ -213,15 +179,9 @@ public class SettingsActivity extends Activity {
 	            Bitmap yourSelectedImage = BitmapFactory.decodeFile(filePath);
 	            profilePicture.setImageBitmap(yourSelectedImage);
 	            
-	            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-	            boolean success = yourSelectedImage.compress(Bitmap.CompressFormat.PNG, 100, stream);
-	            if(success) {
-	            	byte[] byteArray = stream.toByteArray();
-	            	ParseFile file = new ParseFile("ProfilePicture.png", byteArray);
-		            file.saveInBackground();
-		            largeImage = new ParseObject("image");
-		            largeImage.put("ProfilePicture", file);
-	            }
+	            user = ParseUser.getCurrentUser();
+	            user.put("image", filePath);
+	            user.saveInBackground();
 	        }
 	    }
 	}

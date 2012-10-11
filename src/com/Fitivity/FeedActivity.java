@@ -248,11 +248,11 @@ public class FeedActivity extends Activity {
 			information = group.getString("activity") + " @ " + group.getString("place");
 			
 			if(type == cellTypeComment) {
-				ParseObject comment = activity.getParseObject("comment");
-				String message = comment.getString("message");
-				description = "" + user.getUsername() + "made a comment";
-				description_text.setText(description);
-				group_location_text.setText(message);
+				//ParseObject comment = activity.getParseObject("comment");
+				//String message = comment.getString("message");
+				//description = "" + user.getUsername() + "made a comment";
+				//description_text.setText(description);
+				//group_location_text.setText(message);
 			}
 			
 			group_location_text.setText(information);
