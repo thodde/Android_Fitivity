@@ -1,5 +1,6 @@
 package com.fitivity;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -17,6 +18,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -50,7 +52,17 @@ public class ProfileActivity extends Activity {
 		txtView.setText(ParseUser.getCurrentUser().getUsername());
 		
 		//Going to be used for updating the Profile picture in the profile eventually
-		//SettingsActivity sa = new SettingsActivity();
+		//ParseUser user = ParseUser.getCurrentUser();
+		//String path = (String) user.get("image").toString();
+		
+		//if(path != null) {
+	//		profilePic.setImageURI(Uri.fromFile(new File(path)));
+	//	}
+	//	else {
+			//TODO: FIX
+	//		profilePic.setImageResource(R.drawable.feed_cell_profile_placeholder);
+	//	}
+		
 		//Bitmap bmp = sa.getProfilePicture();
 		//profilePic.setImageBitmap(bmp);
 		

@@ -1,11 +1,13 @@
 package com.fitivity;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseObject;
 import com.parse.ParseUser;
 import com.parse.PushService;
 import com.parse.RequestPasswordResetCallback;
@@ -20,6 +22,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -112,32 +115,21 @@ public class SettingsActivity extends Activity {
 		email.setText(strEmail);
 		username.setText(strUsername);
 
-		Bitmap bmp = getProfilePicture();
-		if(bmp != null) {
-            profilePicture.setImageBitmap(bmp);
-		}
+		getProfilePicture();
 		pushNotificationButton.setChecked(hasPushNotifications);
 	}
 	
-	public Bitmap getProfilePicture() {
+	public void getProfilePicture() {
 		user = ParseUser.getCurrentUser();
-		//ParseFile file = (ParseFile) user.get("image");
 		String path = (String) user.get("image").toString();
 		
 		if(path != null) {
-			try {
-				//String path = file.toString();
-				AssetManager mngr = getAssets();
-				// Create an input stream to read from the asset folder
-		        InputStream ins = mngr.open(path);
-		        // Convert the input stream into a bitmap
-		        myImage = BitmapFactory.decodeStream(ins);
-			}
-			catch(IOException e) {
-				e.printStackTrace();
-			}
+			profilePicture.setImageURI(Uri.fromFile(new File(path)));
 		}
-		return myImage;
+		else {
+			//TODO: FIX
+			profilePicture.setImageResource(R.drawable.feed_cell_profile_placeholder);
+		}
 	}
 	
 	@Override
@@ -154,10 +146,7 @@ public class SettingsActivity extends Activity {
 		super.onRestoreInstanceState(savedInstanceState);
 	    hasPushNotifications = savedInstanceState.getBoolean("PushNotifications");
 	    pushNotificationButton.setChecked(hasPushNotifications);
-	    Bitmap bmp = getProfilePicture();
-		if(bmp != null) {
-            profilePicture.setImageBitmap(bmp);
-		}
+	    getProfilePicture();
 	}
 	
 	protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
