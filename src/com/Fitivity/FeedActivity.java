@@ -8,6 +8,7 @@
 
 package com.fitivity;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,16 +26,10 @@ import com.parse.PushService;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
-import android.os.AsyncTask;
+import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -233,7 +228,14 @@ public class FeedActivity extends Activity {
 				}
 				else {
 					description = "" + user.getUsername() + " created a Group";
-					picture.setImageResource(R.drawable.feed_cell_profile_placeholder);
+					String path = (String) user.get("image").toString();
+					
+					if(path != null) {
+						picture.setImageURI(Uri.fromFile(new File(path)));
+					}
+					else {
+						picture.setImageResource(R.drawable.feed_cell_profile_placeholder);
+					}
 				}
 			}
 			

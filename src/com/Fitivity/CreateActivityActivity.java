@@ -20,7 +20,6 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -52,16 +51,14 @@ public class CreateActivityActivity extends Activity {
 		// Set Click Listeners
 		addActivity.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) { 
-				Intent mainIntent = new Intent(CreateActivityActivity.this,
-                        ChooseFitivityActivity.class);
+				Intent mainIntent = new Intent(CreateActivityActivity.this, ChooseFitivityActivity.class);
                 CreateActivityActivity.this.startActivityForResult(mainIntent, ACTIVITY_REQUEST);
 			}
 		});
 		
 		addLocation.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) { 
-				Intent mainIntent = new Intent(CreateActivityActivity.this,
-                        LocationsActivity.class);
+				Intent mainIntent = new Intent(CreateActivityActivity.this, LocationsActivity.class);
                 CreateActivityActivity.this.startActivityForResult(mainIntent, LOCATION_REQUEST);
 			}
 		});
@@ -82,10 +79,14 @@ public class CreateActivityActivity extends Activity {
 	  switch(requestCode) { 
 	    case (ACTIVITY_REQUEST) : { 
 	      if (resultCode == Activity.RESULT_OK) { 
-	    	  
-	    	 activityActivity = new FitivityActivity(data.getStringExtra("activity"));
-	    	 activityActivity.setCategory(data.getStringExtra("category"));
-	    	  
+	    	 String activity = data.getStringExtra("activity");
+	    	 
+	    	 //Trim the extra crap off of the activity name
+	    	 if(activity.contains("subcategory=")) {
+	    		 activity = activity.substring(13, (activity.length()-1));
+	    	 }
+	    	 
+	    	 activityActivity = new FitivityActivity(activity);
 	    	 activitySelected = true;
 	    	 
 	    	 addActivity.setImageResource(R.drawable.choose_backplate);

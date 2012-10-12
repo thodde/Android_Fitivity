@@ -73,11 +73,8 @@ public class LocationsActivity extends Activity implements LocationListener {
 			public void onClick(View v) { 
 				
 				Intent intent = new Intent();
-				
 				intent.setClass(LocationsActivity.this, MapViewActivity.class);
 			    startActivity(intent);
-				
-				
 			}
 		});
 		

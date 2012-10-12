@@ -36,6 +36,7 @@ public class ProfileActivity extends Activity {
 	ImageView settings;
 	ImageView profilePic;
 	PullToRefreshListView groupList;
+	final int PROFILE_PICTURE_REQUEST = 123;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +71,7 @@ public class ProfileActivity extends Activity {
 			public void onClick(View v) { 
 				Intent mainIntent = new Intent(ProfileActivity.this,
                         SettingsActivity.class);
-                ProfileActivity.this.startActivity(mainIntent);
+                ProfileActivity.this.startActivityForResult(mainIntent, PROFILE_PICTURE_REQUEST);
 			}
 		});
 		
@@ -86,8 +87,20 @@ public class ProfileActivity extends Activity {
 		findActivities();
 	}
 	
+	@Override 
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {     
+	  super.onActivityResult(requestCode, resultCode, data); 
+	  switch(requestCode) { 
+	    case (PROFILE_PICTURE_REQUEST) : {
+	      if (resultCode == Activity.RESULT_OK) { 
+	    	 String filePath = data.getStringExtra("profilePicturePath");
+	    	 profilePic.setImageURI(Uri.fromFile(new File(filePath)));
+	      }
+	    }
+	  }
+	}
+	
 	public void findActivities() {
-		
 		ParseQuery query = new ParseQuery("GroupMembers");
 		//query.include("group");
 		query.whereEqualTo("user", ParseUser.getCurrentUser());

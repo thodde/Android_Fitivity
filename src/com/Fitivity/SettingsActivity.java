@@ -149,6 +149,15 @@ public class SettingsActivity extends Activity {
 	    getProfilePicture();
 	}
 	
+	@Override
+	public void onBackPressed() {
+		String path = (String) user.get("image").toString();
+	    Intent returnIntent = new Intent();
+	    returnIntent.putExtra("profilePicturePath", path);
+	    setResult(RESULT_OK, returnIntent);
+		finish();
+	}
+	
 	protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
 	    super.onActivityResult(requestCode, resultCode, imageReturnedIntent); 
 
