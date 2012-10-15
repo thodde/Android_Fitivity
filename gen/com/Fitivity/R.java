@@ -137,7 +137,7 @@ public final class R {
         public static final int ptr_id_textwrapper=0x7f06003c;
         public static final int pull_to_refresh_image=0x7f060012;
         public static final int pushNotificationButton=0x7f060041;
-        public static final int refreshList=0x7f060015;
+        public static final int refreshList=0x7f060014;
         public static final int relativeLayout1=0x7f06000c;
         public static final int relativeLayout2=0x7f060028;
         public static final int relativeLayout3=0x7f06002e;
@@ -158,7 +158,7 @@ public final class R {
         public static final int signuppasswordicon=0x7f06004f;
         public static final int signupusername=0x7f06004c;
         public static final int signupusernameicon=0x7f06004d;
-        public static final int sortButton=0x7f060014;
+        public static final int sortButton=0x7f060015;
         public static final int textView1=0x7f060044;
         public static final int textView2=0x7f060045;
         public static final int toggleButton1=0x7f060043;
