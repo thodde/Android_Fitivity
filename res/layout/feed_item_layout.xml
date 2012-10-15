@@ -14,7 +14,16 @@
 		android:layout_height="fill_parent"
 		android:layout_centerVertical="true" android:id="@+id/relativeLayout1"
 		android:paddingLeft="5dp">
-  		<ImageView android:id="@+id/feed_cell_picture" android:paddingLeft="2dp" android:layout_height="wrap_content" android:src="@drawable/feed_cell_profile_placeholder" android:layout_width="wrap_content" android:layout_centerVertical="true" android:layout_centerHorizontal="true"></ImageView>
+  		<ImageView 
+  		    android:id="@+id/feed_cell_picture" 
+  		    android:paddingLeft="2dp" 
+  		    android:layout_width="80dp"
+        	android:layout_height="80dp"
+  		    android:scaleType="centerInside"
+  		    android:src="@drawable/feed_cell_profile_placeholder"
+  		    android:layout_centerVertical="true" 
+  		    android:layout_centerHorizontal="true">
+  		</ImageView>
   	</RelativeLayout>
   </RelativeLayout>
   <LinearLayout android:orientation="vertical"

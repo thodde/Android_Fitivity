@@ -8,16 +8,16 @@
 
 package com.fitivity;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.fitivity.PullToRefreshListView.*;
 
 import com.parse.FindCallback;
-import com.parse.GetCallback;
+import com.parse.GetDataCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -28,7 +28,8 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -38,7 +39,6 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -49,6 +49,7 @@ public class FeedActivity extends Activity {
 	ImageButton sharingButton;
 	String information = "";
 	String description = "";
+	ImageView picture;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -156,7 +157,7 @@ public class FeedActivity extends Activity {
 			    ParseObject proposed = object.getParseObject("proposedActivity");
 				intent.setClass(FeedActivity.this, ProposedActivityActivity.class);
 				Bundle bundle = new Bundle();
-				bundle.putString("ProposedActivityId", proposed.getObjectId());
+				//bundle.putString("ProposedActivityId", proposed.getObjectId());
 				
 				intent.putExtras(bundle);
 			    startActivity(intent);
@@ -203,7 +204,7 @@ public class FeedActivity extends Activity {
 			
 			TextView description_text = (TextView) v.findViewById(R.id.description_text);
 			TextView group_location_text = (TextView) v.findViewById(R.id.group_location_text);
-			ImageView picture = (ImageView) v.findViewById(R.id.feed_cell_picture);
+			picture = (ImageView) v.findViewById(R.id.feed_cell_picture);
 			picture.setOnClickListener(new View.OnClickListener() {
 	            public void onClick(View view) {
 	            	ParseObject object = (ParseObject)refreshList.getItemAtPosition(position);
@@ -228,13 +229,23 @@ public class FeedActivity extends Activity {
 				}
 				else {
 					description = "" + user.getUsername() + " created a Group";
-					String path = (String) user.get("image").toString();
-					
-					if(path != null) {
-						picture.setImageURI(Uri.fromFile(new File(path)));
+					try {
+						ParseFile profileData = (ParseFile) user.get("image");
+						profileData.getDataInBackground(new GetDataCallback() {
+						  public void done(byte[] data, ParseException e) {
+						    if (e == null) {
+						      // data has the bytes for the profilePicture
+						      Bitmap bitmap = BitmapFactory.decodeByteArray(data , 0, data.length);
+						      picture.setImageBitmap(bitmap);
+						    } else {
+						      // something went wrong
+						    	picture.setImageResource(R.drawable.feed_cell_profile_placeholder);
+						    }
+						  }
+						});
 					}
-					else {
-						picture.setImageResource(R.drawable.feed_cell_profile_placeholder);
+					catch(NullPointerException e) {
+						e.printStackTrace();
 					}
 				}
 			}

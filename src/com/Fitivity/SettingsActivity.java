@@ -3,7 +3,9 @@ package com.fitivity;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.ByteBuffer;
 
+import com.parse.GetDataCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -120,16 +122,29 @@ public class SettingsActivity extends Activity {
 	}
 	
 	public void getProfilePicture() {
-		user = ParseUser.getCurrentUser();
-		String path = (String) user.get("image").toString();
+		ParseFile profileData = (ParseFile) user.get("image");
+		profileData.getDataInBackground(new GetDataCallback() {
+		  public void done(byte[] data, ParseException e) {
+		    if (e == null) {
+		      // data has the bytes for the profilePicture
+		      Bitmap bitmap = BitmapFactory.decodeByteArray(data , 0, data.length);
+		      profilePicture.setImageBitmap(bitmap);
+		    } else {
+		      // something went wrong
+		    	profilePicture.setImageResource(R.drawable.feed_cell_profile_placeholder);
+		    }
+		  }
+		});
+		//user = ParseUser.getCurrentUser();
+		//String path = (String) user.get("image").toString();
 		
-		if(path != null) {
-			profilePicture.setImageURI(Uri.fromFile(new File(path)));
-		}
-		else {
+		//if(path != null) {
+		//	profilePicture.setImageURI(Uri.fromFile(new File(path)));
+		//}
+		//else {
 			//TODO: FIX
-			profilePicture.setImageResource(R.drawable.feed_cell_profile_placeholder);
-		}
+			//profilePicture.setImageResource(R.drawable.feed_cell_profile_placeholder);
+		//}
 	}
 	
 	@Override
@@ -151,10 +166,10 @@ public class SettingsActivity extends Activity {
 	
 	@Override
 	public void onBackPressed() {
-		String path = (String) user.get("image").toString();
-	    Intent returnIntent = new Intent();
-	    returnIntent.putExtra("profilePicturePath", path);
-	    setResult(RESULT_OK, returnIntent);
+		//String path = (String) user.get("image").toString();
+	    //Intent returnIntent = new Intent();
+	    //returnIntent.putExtra("profilePicturePath", path);
+	    //setResult(RESULT_OK, returnIntent);
 		finish();
 	}
 	
@@ -177,9 +192,16 @@ public class SettingsActivity extends Activity {
 	            Bitmap yourSelectedImage = BitmapFactory.decodeFile(filePath);
 	            profilePicture.setImageBitmap(yourSelectedImage);
 	            
+	            int bytes = yourSelectedImage.getWidth()*yourSelectedImage.getHeight()*4;
+	            ByteBuffer buffer = ByteBuffer.allocate(bytes); //Create a new buffer
+	            yourSelectedImage.copyPixelsToBuffer(buffer); //Move the byte data to the buffer
+	            byte[] array = buffer.array();
+	            ParseFile file = new ParseFile("profilePicture.bmp", array);
+	            file.saveInBackground();
+	            
 	            user = ParseUser.getCurrentUser();
-	            user.put("image", filePath);
-	            user.saveInBackground();
+	            user.put("image", file);
+	            user.saveEventually();
 	        }
 	    }
 	}

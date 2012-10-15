@@ -1,6 +1,5 @@
 package com.fitivity;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -8,8 +7,10 @@ import java.util.List;
 import com.fitivity.R;
 import com.fitivity.PullToRefreshListView.OnRefreshListener;
 import com.parse.FindCallback;
+import com.parse.GetDataCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
@@ -18,7 +19,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.net.Uri;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -28,7 +29,6 @@ import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 public class ProfileActivity extends Activity {
@@ -36,11 +36,9 @@ public class ProfileActivity extends Activity {
 	ImageView settings;
 	ImageView profilePic;
 	PullToRefreshListView groupList;
-	final int PROFILE_PICTURE_REQUEST = 123;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.profile_view);
 		
@@ -53,25 +51,26 @@ public class ProfileActivity extends Activity {
 		txtView.setText(ParseUser.getCurrentUser().getUsername());
 		
 		//Going to be used for updating the Profile picture in the profile eventually
-		//ParseUser user = ParseUser.getCurrentUser();
-		//String path = (String) user.get("image").toString();
-		
-		//if(path != null) {
-	//		profilePic.setImageURI(Uri.fromFile(new File(path)));
-	//	}
-	//	else {
-			//TODO: FIX
-	//		profilePic.setImageResource(R.drawable.feed_cell_profile_placeholder);
-	//	}
-		
-		//Bitmap bmp = sa.getProfilePicture();
-		//profilePic.setImageBitmap(bmp);
+		ParseUser user = ParseUser.getCurrentUser();
+		ParseFile profileData = (ParseFile) user.get("image");
+		profileData.getDataInBackground(new GetDataCallback() {
+		  public void done(byte[] data, ParseException e) {
+		    if (e == null) {
+		      // data has the bytes for the profilePicture
+		      Bitmap bitmap = BitmapFactory.decodeByteArray(data , 0, data.length);
+		      profilePic.setImageBitmap(bitmap);
+		    } else {
+		      // something went wrong
+		    	profilePic.setImageResource(R.drawable.feed_cell_profile_placeholder);
+		    }
+		  }
+		});
 		
 		settings.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) { 
 				Intent mainIntent = new Intent(ProfileActivity.this,
                         SettingsActivity.class);
-                ProfileActivity.this.startActivityForResult(mainIntent, PROFILE_PICTURE_REQUEST);
+                ProfileActivity.this.startActivity(mainIntent);
 			}
 		});
 		
@@ -85,19 +84,6 @@ public class ProfileActivity extends Activity {
 		});
 		
 		findActivities();
-	}
-	
-	@Override 
-	public void onActivityResult(int requestCode, int resultCode, Intent data) {     
-	  super.onActivityResult(requestCode, resultCode, data); 
-	  switch(requestCode) { 
-	    case (PROFILE_PICTURE_REQUEST) : {
-	      if (resultCode == Activity.RESULT_OK) { 
-	    	 String filePath = data.getStringExtra("profilePicturePath");
-	    	 profilePic.setImageURI(Uri.fromFile(new File(filePath)));
-	      }
-	    }
-	  }
 	}
 	
 	public void findActivities() {
