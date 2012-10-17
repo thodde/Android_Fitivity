@@ -1,22 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  android:orientation="vertical"
-  android:layout_width="match_parent"
-  android:layout_height="match_parent"
-  android:background="@drawable/fitivity_application_backplate">
-  
-   <LinearLayout android:layout_width="wrap_content" android:layout_height="60sp">
-    </LinearLayout>
-    
-  <ImageView android:src="@drawable/fitivity_logo" 
-  			 android:layout_width="200dp" 
-  			 android:layout_height="120dp"
-  			 android:layout_gravity="center"
-  			 />
-  <LinearLayout 
-		android:layout_width="wrap_content" 
-		android:layout_height="5sp"/>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_sign_up_large"
+    android:orientation="vertical" >
+
+  <LinearLayout
+      android:layout_width="wrap_content"
+      android:layout_height="5sp"
+      android:layout_marginTop="175dp"
+      android:paddingTop="50dp" />
+
 	<EditText
 		android:id="@+id/username"
 		android:singleLine="true"
@@ -44,29 +38,49 @@
 	<LinearLayout 
 		android:layout_width="wrap_content" 
 		android:layout_height="20sp"/>
+
 	<LinearLayout
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_gravity="center">
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_gravity="center"
+	    android:layout_marginTop="25dp" >
+
 	<Button
-		android:id="@+id/signup_button"
+	    android:id="@+id/signup_button"
 	    android:layout_width="120dp"
 	    android:layout_height="33dp"
-	    android:background="@drawable/signup_button"
 	    android:layout_weight="1"
-	/>
+	    android:background="@drawable/b_sign_up_login_large" />
+
 	<LinearLayout 
 		android:layout_width="10dp" 
 		android:layout_height="wrap_content"
 		android:layout_weight="1"/>
+
 	<Button
-		android:id="@+id/login_button"
+	    android:id="@+id/login_button"
 	    android:layout_width="120dp"
 	    android:layout_height="33dp"
-	    android:background="@drawable/login_button"
 	    android:layout_weight="1"
-	    
-	/>
+	    android:background="@drawable/b_sign_in_login_large" />
+
+	</LinearLayout>
+
+	<LinearLayout
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_gravity="center_horizontal"
+	    android:layout_marginTop="30dp"
+	    android:minHeight="32dp" >
+
+		<Button
+		    android:id="@+id/facebook_signup_button"
+		    android:layout_width="fill_parent"
+		    android:layout_height="33dp"
+		    android:background="@drawable/b_facebook_login_large"
+		    android:minHeight="32dp"
+		    android:minWidth="210dp" />
+
 	</LinearLayout>
     
 </LinearLayout>

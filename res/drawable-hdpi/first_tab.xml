@@ -3,10 +3,10 @@
    <!-- When pressed, use this -->
     <item android:state_focused="false"
     	  android:state_pressed="true" 
-    	  android:drawable="@drawable/feed_tab_normal_pushed"/>
+    	  android:drawable="@drawable/b_feed_down_large"/>
     <!-- When selected, use this -->
-    <item android:drawable="@drawable/feed_tab_selected"
+    <item android:drawable="@drawable/b_feed_active_large"
           android:state_selected="true" />
     <!-- When not selected, use this-->
-    <item android:drawable="@drawable/feed_tab_normal" />
+    <item android:drawable="@drawable/b_feed_inactive_large" />
 </selector>
