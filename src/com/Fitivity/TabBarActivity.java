@@ -65,7 +65,7 @@ public class TabBarActivity extends TabActivity implements OnTabChangeListener {
 		tabHost.getTabWidget().getChildAt(2).getLayoutParams().width = 159;
 
 		tabHost.getTabWidget().getChildAt(0).getLayoutParams().height = 60;
-		tabHost.getTabWidget().getChildAt(1).getLayoutParams().height = 78;
+		tabHost.getTabWidget().getChildAt(1).getLayoutParams().height = 60;
 		tabHost.getTabWidget().getChildAt(2).getLayoutParams().height = 60;
 	}
 
