@@ -232,7 +232,7 @@ public class FeedActivity extends Activity {
 				if (numberOfMembers > 1) {
 					description = "This group now has " + numberOfMembers
 							+ " members.";
-					picture.setImageResource(R.drawable.feed_cell_icon_image);
+					picture.setImageResource(R.drawable.group_icon_large);
 				} else {
 					description = "" + user.getUsername() + " created a Group";
 					try {
