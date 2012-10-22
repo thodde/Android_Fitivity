@@ -59,7 +59,6 @@ public class LocationsActivity extends Activity implements LocationListener {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.locations_layout);
@@ -110,7 +109,6 @@ public class LocationsActivity extends Activity implements LocationListener {
 		mlocManager.requestLocationUpdates(provider, 0, 0, this);
 
 		/* Making the ListView clickable */
-
 		mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			public void onItemClick(AdapterView<?> av, View v, int pos, long id) {
 				onListItemClick(v, pos, id);
@@ -162,8 +160,6 @@ public class LocationsActivity extends Activity implements LocationListener {
 			URL url = new URL(API_URL + "location=" + ll
 					+ "&radius=5000&types=campground|gym|park&name=" + search
 					+ "&sensor=true&key=" + CLIENT_ID);
-
-			// Log.d(TAG, "Opening URL " + url.toString());
 
 			HttpURLConnection urlConnection = (HttpURLConnection) url
 					.openConnection();
@@ -305,7 +301,6 @@ public class LocationsActivity extends Activity implements LocationListener {
 				mProgress.dismiss();
 
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}

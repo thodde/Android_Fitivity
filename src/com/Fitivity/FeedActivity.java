@@ -9,6 +9,7 @@
 package com.fitivity;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.fitivity.PullToRefreshListView.*;
@@ -43,6 +44,11 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+/**
+ * This class creates and populates the Discover Feed
+ * by pulling the proper user data from Parse and
+ * creating cells for each activity.
+ */
 public class FeedActivity extends Activity {
 	private final int cellTypeGroup = 0;
 	PullToRefreshListView refreshList;
@@ -50,27 +56,31 @@ public class FeedActivity extends Activity {
 	String information = "";
 	String description = "";
 	ImageView picture;
+	ImageView todayLabel;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.feed_view);
 
+		//initialize the connection to parse
 		Parse.initialize(this, "MmUj6HxQcfLSOUs31lG7uNVx9sl5dZR6gv0FqGHq",
 				"krpZsVM2UrU71NCxDbdAmbEMq1EXdpygkl251Wjl");
 
+		//subscribe the device to push notifications
 		PushService.subscribe(this, "Fitivity", FeedActivity.class);
 
+		//grab handles to the needed controls
 		refreshList = (PullToRefreshListView) findViewById(R.id.refreshList);
 		sharingButton = (ImageButton) findViewById(R.id.shareButton);
+		todayLabel = (ImageView) findViewById(R.id.cell_indicator);
 
-		refreshList
-				.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-					public void onItemClick(AdapterView<?> av, View v, int pos,
-							long id) {
-						onListItemClick(v, pos, id);
-					}
-				});
+		//set listener to the pull to refresh handler
+		refreshList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+			public void onItemClick(AdapterView<?> av, View v, int pos, long id) {
+				onListItemClick(v, pos, id);
+			}
+		});
 
 		// Set a listener to be invoked when the list should be refreshed.
 		refreshList.setOnRefreshListener(new OnRefreshListener() {
@@ -87,6 +97,7 @@ public class FeedActivity extends Activity {
 			}
 		});
 
+		//grab activities from Parse
 		findActivities();
 	}
 
@@ -105,11 +116,17 @@ public class FeedActivity extends Activity {
 		startActivity(Intent.createChooser(sharingIntent, "Share using"));
 	}
 
+	/**
+	 * Grab activities from the parse database and populate the cells in the 
+	 * feed with all the important data (username, location, activity, group, etc.)
+	 */
 	public void findActivities() {
+		//Only grab items within 25 miles of the current location
 		ParseGeoPoint point = new ParseGeoPoint();
 		ParseQuery innerQuery = new ParseQuery("Groups");
 		innerQuery.whereWithinMiles("location", point, 25);
 
+		//Populate the cells with activities
 		ParseQuery query = new ParseQuery("ActivityEvent");
 		query.setLimit(50);
 		query.orderByDescending("updatedAt");
@@ -120,11 +137,9 @@ public class FeedActivity extends Activity {
 		query.findInBackground(new FindCallback() {
 			public void done(List<ParseObject> activityList, ParseException e) {
 				if (e == null) {
-					Log.d("score", "Retrieved " + activityList.size()
-							+ " activities");
+					Log.d("score", "Retrieved " + activityList.size() + " activities");
 
 					ArrayList<ParseObject> activities = new ArrayList<ParseObject>();
-
 					for (int i = 0; i < activityList.size(); i++) {
 						ParseObject activity = activityList.get(i);
 						activities.add(activity);
@@ -136,7 +151,8 @@ public class FeedActivity extends Activity {
 								activities);
 						refreshList.setAdapter(adapter);
 						refreshList.onRefreshComplete();
-					} else {
+					} 
+					else {
 						ParseObject activity = new ParseObject("ActivityEvent");
 						activities.add(activity);
 						PlaceListAdapter adapter = new PlaceListAdapter(
@@ -145,7 +161,8 @@ public class FeedActivity extends Activity {
 						refreshList.setAdapter(adapter);
 						refreshList.onRefreshComplete();
 					}
-				} else {
+				}
+				else {
 					Log.d("score", "Error: " + e.getMessage());
 				}
 			}
@@ -165,7 +182,8 @@ public class FeedActivity extends Activity {
 
 			intent.putExtras(bundle);
 			startActivity(intent);
-		} else {
+		}
+		else {
 			intent.setClass(FeedActivity.this, GroupActivity.class);
 
 			ParseObject group = object.getParseObject("group");
@@ -233,7 +251,8 @@ public class FeedActivity extends Activity {
 					description = "This group now has " + numberOfMembers
 							+ " members.";
 					picture.setImageResource(R.drawable.group_icon_large);
-				} else {
+				}
+				else {
 					description = "" + user.getUsername() + " created a Group";
 					try {
 						ParseFile profileData = (ParseFile) user.get("image");
@@ -245,7 +264,8 @@ public class FeedActivity extends Activity {
 											.decodeByteArray(data, 0,
 													data.length);
 									picture.setImageBitmap(bitmap);
-								} else {
+								}
+								else {
 									// something went wrong
 									picture.setImageResource(R.drawable.feed_cell_profile_placeholder);
 								}
@@ -259,8 +279,7 @@ public class FeedActivity extends Activity {
 
 			if (type == cellTypePA) {
 				picture.setImageResource(R.drawable.activity_icon_large);
-				description = "" + user.getUsername()
-						+ " proposed a group activity";
+				description = "" + user.getUsername() + " proposed a group activity";
 			}
 
 			description_text.setText(description);
@@ -278,7 +297,24 @@ public class FeedActivity extends Activity {
 			}
 
 			group_location_text.setText(information);
-
+			
+			//store the current date and time
+		    Date date = new Date();
+		    String[] dateResult = date.toString().split("\\s");
+		    
+		    //store the date and time that the activity was created
+		    Date parseDate = activity.getDate("createdAt");
+		    String[] createdAtResult = parseDate.toString().split("\\s"); 
+		    
+		    //TODO: TEST THIS DATE STUFF
+		    //make sure the day, month, and year are all the same
+			if((dateResult[2].equals(createdAtResult[1])) && (dateResult[1].equals(createdAtResult[2]))) {
+				todayLabel.setVisibility(ImageView.VISIBLE);
+			}
+			else {
+				todayLabel.setVisibility(ImageView.GONE);
+			}
+			
 			return v;
 		}
 	}

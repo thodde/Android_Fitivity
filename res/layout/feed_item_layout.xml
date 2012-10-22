@@ -64,7 +64,8 @@
   android:layout_marginLeft="10dp"
   android:layout_width="wrap_content"
   android:layout_height="fill_parent"
-  android:layout_alignParentRight="true">   <ImageView
+  android:layout_alignParentRight="true">   
+  	<ImageView
             android:id="@+id/cell_indicator"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

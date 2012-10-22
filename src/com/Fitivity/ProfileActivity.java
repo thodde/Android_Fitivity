@@ -11,6 +11,7 @@ import com.parse.GetDataCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
@@ -27,12 +28,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 public class ProfileActivity extends Activity {
 
+	private final int cellTypeGroup = 0;
 	ImageView settings;
 	ImageView profilePic;
 	PullToRefreshListView groupList;
@@ -47,6 +50,7 @@ public class ProfileActivity extends Activity {
 
 		settings = (ImageView) findViewById(R.id.settings);
 		profilePic = (ImageView) findViewById(R.id.profilePicture);
+		groupList = (PullToRefreshListView) findViewById(R.id.pull_to_refresh_image);
 
 		TextView txtView = (TextView) findViewById(R.id.txt_display_tab);
 		txtView.setText(ParseUser.getCurrentUser().getUsername());
@@ -86,6 +90,13 @@ public class ProfileActivity extends Activity {
 				findActivities();
 			}
 		});
+		
+		//set listener to the pull to refresh handler
+		groupList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+			public void onItemClick(AdapterView<?> av, View v, int pos, long id) {
+				onListItemClick(v, pos, id);
+			}
+		});
 
 		findActivities();
 	}
@@ -97,8 +108,7 @@ public class ProfileActivity extends Activity {
 		query.findInBackground(new FindCallback() {
 			public void done(List<ParseObject> activityList, ParseException e) {
 				if (e == null) {
-					Log.d("groups", "Retrieved " + activityList.size()
-							+ " groups");
+					Log.d("groups", "Retrieved " + activityList.size() + " groups");
 
 					ArrayList<ParseObject> activities = new ArrayList<ParseObject>();
 
@@ -114,10 +124,12 @@ public class ProfileActivity extends Activity {
 								activities);
 						groupList.setAdapter(adapter);
 						groupList.onRefreshComplete();
-					} else {
+					}
+					else {
 						groupList.onRefreshComplete();
 					}
-				} else {
+				}
+				else {
 					Log.d("score", "Error: " + e.getMessage());
 				}
 			}
@@ -181,6 +193,35 @@ public class ProfileActivity extends Activity {
 			group_location_text.setText(place);
 
 			return v;
+		}
+	}
+	
+	protected void onListItemClick(View v, int pos, long id) {
+		ParseObject object = (ParseObject) groupList.getItemAtPosition(pos);
+		Intent intent = new Intent();
+		int type = object.getInt("postType");
+
+		if (type == cellTypeGroup) {
+			ParseObject proposed = object.getParseObject("proposedActivity");
+			intent.setClass(ProfileActivity.this, ProposedActivityActivity.class);
+			Bundle bundle = new Bundle();
+			bundle.putString("ProposedActivityId", proposed.getObjectId());
+			intent.putExtras(bundle);
+			startActivity(intent);
+		}
+		else {
+			intent.setClass(ProfileActivity.this, GroupActivity.class);
+
+			ParseObject group = object.getParseObject("group");
+			Bundle bundle = new Bundle();
+			bundle.putString("activityText", group.getString("activity"));
+			bundle.putString("locationText", group.getString("place"));
+			bundle.putString("GroupId", group.getObjectId());
+			ParseGeoPoint point = group.getParseGeoPoint("location");
+			bundle.putDouble("latitude", point.getLatitude());
+			bundle.putDouble("longitude", point.getLongitude());
+			intent.putExtras(bundle);
+			startActivity(intent);
 		}
 	}
 
