@@ -47,6 +47,8 @@
         
         <activity android:name="ProfileActivity">
         </activity>
+        <activity android:name="GenericProfileActivity">
+        </activity>
         <activity android:name="SettingsActivity"
         	android:theme="@android:style/Theme.NoTitleBar"
             android:screenOrientation="portrait">
@@ -57,10 +59,7 @@
         </activity>
         
         <activity android:name="ChooseFitivityActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            
         </activity>
          <activity android:name="SampleActivity"
          android:screenOrientation="portrait"

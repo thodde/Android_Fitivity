@@ -1,30 +1,23 @@
 package com.fitivity;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 import java.nio.ByteBuffer;
 
 import com.parse.GetDataCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFile;
-import com.parse.ParseObject;
 import com.parse.ParseUser;
-import com.parse.PushService;
 import com.parse.RequestPasswordResetCallback;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.AssetManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -139,21 +132,10 @@ public class SettingsActivity extends Activity {
 					profilePicture.setImageBitmap(bitmap);
 				} else {
 					// something went wrong
-					profilePicture
-							.setImageResource(R.drawable.feed_cell_profile_placeholder);
+					profilePicture.setImageResource(R.drawable.feed_cell_profile_placeholder);
 				}
 			}
 		});
-		// user = ParseUser.getCurrentUser();
-		// String path = (String) user.get("image").toString();
-
-		// if(path != null) {
-		// profilePicture.setImageURI(Uri.fromFile(new File(path)));
-		// }
-		// else {
-		// TODO: FIX
-		// profilePicture.setImageResource(R.drawable.feed_cell_profile_placeholder);
-		// }
 	}
 
 	@Override
@@ -173,15 +155,6 @@ public class SettingsActivity extends Activity {
 				.getBoolean("PushNotifications");
 		pushNotificationButton.setChecked(hasPushNotifications);
 		getProfilePicture();
-	}
-
-	@Override
-	public void onBackPressed() {
-		// String path = (String) user.get("image").toString();
-		// Intent returnIntent = new Intent();
-		// returnIntent.putExtra("profilePicturePath", path);
-		// setResult(RESULT_OK, returnIntent);
-		finish();
 	}
 
 	protected void onActivityResult(int requestCode, int resultCode,

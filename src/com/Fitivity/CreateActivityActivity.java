@@ -51,19 +51,15 @@ public class CreateActivityActivity extends Activity {
 		// Set Click Listeners
 		addActivity.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				Intent mainIntent = new Intent(CreateActivityActivity.this,
-						ChooseFitivityActivity.class);
-				CreateActivityActivity.this.startActivityForResult(mainIntent,
-						ACTIVITY_REQUEST);
+				Intent mainIntent = new Intent(CreateActivityActivity.this, ChooseFitivityActivity.class);
+				CreateActivityActivity.this.startActivityForResult(mainIntent, ACTIVITY_REQUEST);
 			}
 		});
 
 		addLocation.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				Intent mainIntent = new Intent(CreateActivityActivity.this,
-						LocationsActivity.class);
-				CreateActivityActivity.this.startActivityForResult(mainIntent,
-						LOCATION_REQUEST);
+				Intent mainIntent = new Intent(CreateActivityActivity.this, LocationsActivity.class);
+				CreateActivityActivity.this.startActivityForResult(mainIntent, LOCATION_REQUEST);
 			}
 		});
 	}
@@ -130,8 +126,6 @@ public class CreateActivityActivity extends Activity {
 				} else {
 					locationText.setText(activityLocation.name);
 				}
-
-				// TODO Update your TextView.
 			}
 			break;
 		}
@@ -145,7 +139,6 @@ public class CreateActivityActivity extends Activity {
 					activityLocation.location.getLongitude());
 
 			query.whereWithinMiles("location", point, 0.1);
-			// query.whereEqualTo("location", point);
 			query.whereEqualTo("place", activityLocation.name);
 			query.whereEqualTo("activity", activityActivity.getName());
 
@@ -156,8 +149,6 @@ public class CreateActivityActivity extends Activity {
 
 				public void done(ParseObject object, ParseException e) {
 					if (object == null) {
-						Log.d("score", "The getFirst request failed.");
-
 						/* Create the group */
 						ParseObject group = new ParseObject("Groups");
 						group.put("activity", activityActivity.getName());
@@ -171,11 +162,11 @@ public class CreateActivityActivity extends Activity {
 						event.put("type", "NORMAL");
 						event.put("status", "NEW");
 						event.put("number", 1);
+						event.put("postType", 0);
 
 						ParsePush push = new ParsePush();
 						push.setPushToIOS(true);
-						push.setMessage(ParseUser.getCurrentUser()
-								+ " created a new Activity!");
+						push.setMessage(ParseUser.getCurrentUser() + " created a new Activity!");
 						push.sendInBackground();
 
 						try {
@@ -190,14 +181,9 @@ public class CreateActivityActivity extends Activity {
 							member.save();
 
 							ParseQuery query = new ParseQuery("Groups");
-							// query.whereEqualTo("group", object);
-
 							query.whereWithinMiles("location", point, 0.1);
-							// query.whereEqualTo("location", point);
 							query.whereEqualTo("place", activityLocation.name);
-
-							query.whereEqualTo("activity",
-									activityActivity.getName());
+							query.whereEqualTo("activity", activityActivity.getName());
 
 							try {
 								ParseObject obj = query.getFirst();
@@ -212,7 +198,8 @@ public class CreateActivityActivity extends Activity {
 							e1.printStackTrace();
 							return;
 						}
-					} else {
+					}
+					else {
 						Log.d("score", "Retrieved the object.");
 
 						ParseQuery memberQuery = new ParseQuery("GroupMembers");
@@ -234,14 +221,9 @@ public class CreateActivityActivity extends Activity {
 
 						if (membership == null) {
 							ParseQuery query = new ParseQuery("Groups");
-							// query.whereEqualTo("group", object);
-
 							query.whereWithinMiles("location", point, 0.1);
-							// query.whereEqualTo("location", point);
 							query.whereEqualTo("place", activityLocation.name);
-
-							query.whereEqualTo("activity",
-									activityActivity.getName());
+							query.whereEqualTo("activity", activityActivity.getName());
 
 							ParseQuery q = new ParseQuery("ActivityEvent");
 							q.whereMatchesQuery("group", query);
@@ -256,8 +238,7 @@ public class CreateActivityActivity extends Activity {
 								ParseObject member = new ParseObject(
 										"GroupMembers");
 								member.put("user", ParseUser.getCurrentUser());
-								member.put("activity",
-										activityActivity.getName());
+								member.put("activity", activityActivity.getName());
 								member.put("location", point);
 								member.put("place", activityLocation.name);
 								member.save();
@@ -275,18 +256,13 @@ public class CreateActivityActivity extends Activity {
 					pd.dismiss();
 
 					Intent intent = new Intent();
-					intent.setClass(CreateActivityActivity.this,
-							GroupActivity.class);
+					intent.setClass(CreateActivityActivity.this, GroupActivity.class);
 
 					Bundle bundle = new Bundle();
-					bundle.putString("activityText", activityText.getText()
-							.toString());
-					bundle.putString("locationText", locationText.getText()
-							.toString());
-					bundle.putDouble("latitude",
-							activityLocation.location.getLatitude());
-					bundle.putDouble("longitude",
-							activityLocation.location.getLongitude());
+					bundle.putString("activityText", activityText.getText().toString());
+					bundle.putString("locationText", locationText.getText().toString());
+					bundle.putDouble("latitude", activityLocation.location.getLatitude());
+					bundle.putDouble("longitude", activityLocation.location.getLongitude());
 
 					activityText.setText("");
 					locationText.setText("");

@@ -40,7 +40,8 @@
         android:scaleType="centerCrop"
         android:src="@drawable/b_sort_large"
         android:text="Sort"
-        tools:ignore="HardcodedText" /><ImageButton
+        tools:ignore="HardcodedText" />
+    <ImageButton
         android:id="@+id/shareButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

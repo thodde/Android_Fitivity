@@ -8,7 +8,9 @@
 
 package com.fitivity;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -26,7 +28,6 @@ import com.parse.ParseUser;
 import com.parse.PushService;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -50,7 +51,9 @@ import android.widget.TextView;
  * creating cells for each activity.
  */
 public class FeedActivity extends Activity {
-	private final int cellTypeGroup = 0;
+	public final int cellTypeGroup = 0;
+	public final int cellTypePA = 1;
+	public final int cellTypeComment = 2;
 	PullToRefreshListView refreshList;
 	ImageButton sharingButton;
 	String information = "";
@@ -89,8 +92,7 @@ public class FeedActivity extends Activity {
 			}
 		});
 
-		// Set a listener on the sharing button so we can tell when its been
-		// clicked
+		// Set a listener on the sharing button so we can tell when its been clicked
 		sharingButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				displayShareOptions();
@@ -100,7 +102,7 @@ public class FeedActivity extends Activity {
 		//grab activities from Parse
 		findActivities();
 	}
-
+	
 	/**
 	 * This method allows the user to share the app with other users via SMS,
 	 * Email, Facebook, or Twitter
@@ -137,8 +139,6 @@ public class FeedActivity extends Activity {
 		query.findInBackground(new FindCallback() {
 			public void done(List<ParseObject> activityList, ParseException e) {
 				if (e == null) {
-					Log.d("score", "Retrieved " + activityList.size() + " activities");
-
 					ArrayList<ParseObject> activities = new ArrayList<ParseObject>();
 					for (int i = 0; i < activityList.size(); i++) {
 						ParseObject activity = activityList.get(i);
@@ -170,52 +170,35 @@ public class FeedActivity extends Activity {
 	}
 
 	protected void onListItemClick(View v, int pos, long id) {
-		ParseObject object = (ParseObject) refreshList.getItemAtPosition(pos);
+		ParseObject object = (ParseObject) refreshList.getItemAtPosition(pos+1);
 		Intent intent = new Intent();
 		int type = object.getInt("postType");
+		Bundle bundle = new Bundle();
+		intent.setClass(FeedActivity.this, GroupActivity.class);
+		
+		ParseObject group = object.getParseObject("group");
+		bundle.putString("activityText", group.getString("activity"));
+		bundle.putString("locationText", group.getString("place"));
+		bundle.putString("GroupId", group.getObjectId());
+		ParseGeoPoint point = group.getParseGeoPoint("location");
+		bundle.putDouble("latitude", point.getLatitude());
+		bundle.putDouble("longitude", point.getLongitude());
 
-		if (type == cellTypeGroup) {
-			ParseObject proposed = object.getParseObject("proposedActivity");
-			intent.setClass(FeedActivity.this, ProposedActivityActivity.class);
-			Bundle bundle = new Bundle();
-			// bundle.putString("ProposedActivityId", proposed.getObjectId());
-
-			intent.putExtras(bundle);
-			startActivity(intent);
-		}
-		else {
-			intent.setClass(FeedActivity.this, GroupActivity.class);
-
-			ParseObject group = object.getParseObject("group");
-			Bundle bundle = new Bundle();
-			bundle.putString("activityText", group.getString("activity"));
-			bundle.putString("locationText", group.getString("place"));
-			bundle.putString("GroupId", group.getObjectId());
-			ParseGeoPoint point = group.getParseGeoPoint("location");
-			bundle.putDouble("latitude", point.getLatitude());
-			bundle.putDouble("longitude", point.getLongitude());
-
-			intent.putExtras(bundle);
-			startActivity(intent);
-		}
+		intent.putExtras(bundle);
+		startActivity(intent);
 	}
 
 	private class PlaceListAdapter extends ArrayAdapter<ParseObject> {
 		private ArrayList<ParseObject> activities;
-		private final int cellTypeGroup = 0;
-		private final int cellTypePA = 1;
-		private final int cellTypeComment = 2;
 		private int numberOfMembers = 1;
 
-		public PlaceListAdapter(Context context, int textViewResourceId,
-				ArrayList<ParseObject> items) {
+		public PlaceListAdapter(Context context, int textViewResourceId, ArrayList<ParseObject> items) {
 			super(context, textViewResourceId, items);
 			this.activities = items;
 		}
 
 		@Override
-		public View getView(final int position, View convertView,
-				ViewGroup parent) {
+		public View getView(final int position, View convertView, ViewGroup parent) {
 			View v = convertView;
 			if (v == null) {
 				LayoutInflater vi = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -224,32 +207,34 @@ public class FeedActivity extends Activity {
 
 			ParseObject activity = activities.get(position);
 
-			TextView description_text = (TextView) v
-					.findViewById(R.id.description_text);
-			TextView group_location_text = (TextView) v
-					.findViewById(R.id.group_location_text);
+			todayLabel = (ImageView) findViewById(R.id.cell_indicator);
+			
+			TextView description_text = (TextView) v.findViewById(R.id.description_text);
+			TextView group_location_text = (TextView) v.findViewById(R.id.group_location_text);
 			picture = (ImageView) v.findViewById(R.id.feed_cell_picture);
 			picture.setOnClickListener(new View.OnClickListener() {
 				public void onClick(View view) {
-					ParseObject object = (ParseObject) refreshList
-							.getItemAtPosition(position);
-					Intent intent = new Intent();
+					ParseObject object = (ParseObject) refreshList.getItemAtPosition(position+1);
 					ParseUser user = object.getParseUser("creator");
-					AlertDialog.Builder ab = new AlertDialog.Builder(
-							FeedActivity.this);
-					ab.setTitle("User").setMessage(user.getUsername()).show();
+					visitProfile(user);
 				}
 			});
 
 			ParseUser user = activity.getParseUser("creator");
 			int type = activity.getInt("postType");
+			ParseObject pa = activity.getParseObject("proposedActivity");
+			
+			//Catch glitch in parse storage for now
+			//make sure that proposed activities are picked up
+			if(pa != null && type == 0) {
+				type = 1;
+			}
 
 			if (type == cellTypeGroup) {
 				numberOfMembers = activity.getInt("number");
 
 				if (numberOfMembers > 1) {
-					description = "This group now has " + numberOfMembers
-							+ " members.";
+					description = "This group now has " + numberOfMembers + " members.";
 					picture.setImageResource(R.drawable.group_icon_large);
 				}
 				else {
@@ -260,9 +245,7 @@ public class FeedActivity extends Activity {
 							public void done(byte[] data, ParseException e) {
 								if (e == null) {
 									// data has the bytes for the profilePicture
-									Bitmap bitmap = BitmapFactory
-											.decodeByteArray(data, 0,
-													data.length);
+									Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
 									picture.setImageBitmap(bitmap);
 								}
 								else {
@@ -271,13 +254,13 @@ public class FeedActivity extends Activity {
 								}
 							}
 						});
-					} catch (NullPointerException e) {
+					}
+					catch (NullPointerException e) {
 						e.printStackTrace();
 					}
 				}
 			}
-
-			if (type == cellTypePA) {
+			else if(type == cellTypePA) {
 				picture.setImageResource(R.drawable.activity_icon_large);
 				description = "" + user.getUsername() + " proposed a group activity";
 			}
@@ -299,24 +282,96 @@ public class FeedActivity extends Activity {
 			group_location_text.setText(information);
 			
 			//store the current date and time
-		    Date date = new Date();
-		    String[] dateResult = date.toString().split("\\s");
+			Calendar currentDate = Calendar.getInstance();
+			String weekday = getDayOfWeek(Calendar.DAY_OF_WEEK);
+			String month = getMonthOfYear(Calendar.MONTH);
+			String dateToday = "" + (weekday + ", " + (Calendar.DAY_OF_MONTH) + " " + month + " " + (Calendar.YEAR) + " " + (Calendar.HOUR_OF_DAY) + ":" + (Calendar.MINUTE) + ":" + (Calendar.SECOND));
 		    
 		    //store the date and time that the activity was created
 		    Date parseDate = activity.getDate("createdAt");
-		    String[] createdAtResult = parseDate.toString().split("\\s"); 
 		    
 		    //TODO: TEST THIS DATE STUFF
 		    //make sure the day, month, and year are all the same
-			if((dateResult[2].equals(createdAtResult[1])) && (dateResult[1].equals(createdAtResult[2]))) {
-				todayLabel.setVisibility(ImageView.VISIBLE);
-			}
-			else {
-				todayLabel.setVisibility(ImageView.GONE);
-			}
+			//if (parseDate.toString().equals(dateToday)) {
+				//set today label to visible
+			//	todayLabel.setVisibility(ImageView.VISIBLE);
+			//}
 			
 			return v;
 		}
+	}
+	
+	private String getDayOfWeek(int day) {
+		String strDay;
+		
+		switch(day) {
+		case 0:
+			strDay = "Sun";
+		case 1:
+			strDay = "Mon";
+		case 2:
+			strDay = "Tue";
+		case 3:
+			strDay = "Wed";
+		case 4:
+			strDay = "Thu";
+		case 5:
+			strDay = "Fri";
+		case 6:
+			strDay = "Sat";
+		default: 
+			strDay = "";
+		}
+		
+		return strDay;
+	}
+	
+	private String getMonthOfYear(int month) {
+		String strMonth;
+		
+		switch(month) {
+		case 0:
+			strMonth = "Jan";
+		case 1:
+			strMonth = "Feb";
+		case 2:
+			strMonth = "Mar";
+		case 3:
+			strMonth = "Apr";
+		case 4:
+			strMonth = "May";
+		case 5:
+			strMonth = "Jun";
+		case 6:
+			strMonth = "Jul";
+		case 7:
+			strMonth = "Aug";
+		case 8:
+			strMonth = "Sep";
+		case 9:
+			strMonth = "Oct";
+		case 10:
+			strMonth = "Nov";
+		case 11:
+			strMonth = "Dec";
+		default: 
+			strMonth = "";
+		}
+		
+		return strMonth;
+	}
+	
+	public void visitProfile(ParseUser user) {
+		Intent intent = new Intent();
+		intent.setClass(FeedActivity.this, GenericProfileActivity.class);
+		
+		Bundle bundle = new Bundle();
+		bundle.putString("user", user.getUsername());
+		bundle.putString("userID", user.getObjectId());
+
+		intent.putExtras(bundle);
+		
+		startActivity(intent);
 	}
 
 	@Override
