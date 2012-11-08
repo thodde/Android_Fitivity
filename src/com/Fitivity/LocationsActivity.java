@@ -13,7 +13,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
-import com.fitivity.R;
+import com.parse.Parse;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -60,16 +60,18 @@ public class LocationsActivity extends Activity implements LocationListener {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
 		setContentView(R.layout.locations_layout);
 
+		//initialize the connection to parse
+		Parse.initialize(this, "MmUj6HxQcfLSOUs31lG7uNVx9sl5dZR6gv0FqGHq", "krpZsVM2UrU71NCxDbdAmbEMq1EXdpygkl251Wjl");
+		
 		mListView = (ListView) findViewById(R.id.lv_places);
 		filterText = (EditText) findViewById(R.id.search_box);
 		addLocation = (Button) findViewById(R.id.add_location);
 
+		//This button allows the user to add a location
 		addLocation.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-
 				Intent intent = new Intent();
 				intent.setClass(LocationsActivity.this, MapViewActivity.class);
 				startActivity(intent);
@@ -77,8 +79,7 @@ public class LocationsActivity extends Activity implements LocationListener {
 		});
 
 		filterText.addTextChangedListener(filterTextWatcher);
-		filterText
-				.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+		filterText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
 					public boolean onEditorAction(TextView v, int actionId,
 							KeyEvent event) {
 						if (actionId == EditorInfo.IME_ACTION_DONE) {

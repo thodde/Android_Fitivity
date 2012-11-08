@@ -11,6 +11,7 @@ import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.parse.PushService;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -63,7 +64,31 @@ public class GroupActivity extends Activity {
 			@Override
 			public void onClick(View arg0) {
 				//TODO: ADD USER TO GROUP, DISPLAY MESSAGE SAYING THEY JOINED
-				// AND SET TEXT OF BUTTON TO SAY UNJOIN
+				if(joinButton.getText().equals("Join")) {
+					try {
+						ParseQuery query = new ParseQuery("Groups");
+						query.whereEqualTo("place", getIntent().getStringExtra("locationText"));
+						query.whereEqualTo("activity",getIntent().getStringExtra("activityText"));
+
+						ParseGeoPoint point = new ParseGeoPoint(
+								getIntent().getDoubleExtra("latitude", 0),
+								getIntent().getDoubleExtra("longitude", 0));
+
+						query.whereWithinMiles("location", point, 0.1);
+						ParseObject group = query.getFirst();
+						/* Create the group member */
+						ParseObject member = new ParseObject("GroupMembers");
+						member.put("user", ParseUser.getCurrentUser());
+						member.put("group", group);
+						member.save();
+					} catch (ParseException e1) {
+						e1.printStackTrace();
+					}
+					joinButton.setText("Unjoin");
+				}
+				else {
+					joinButton.setText("Join");
+				}
 			}
 		});
 		

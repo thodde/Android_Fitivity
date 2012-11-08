@@ -1,34 +1,29 @@
 package com.fitivity;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.pm.ActivityInfo;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.location.Criteria;
 import android.os.Bundle;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import java.util.ArrayList;
 import java.util.List;
 import android.graphics.Canvas;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
-import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
-import com.fitivity.R;
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.ItemizedOverlay;
 import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapView;
 import com.google.android.maps.MyLocationOverlay;
 import com.google.android.maps.OverlayItem;
+import com.parse.Parse;
 
 public class MapViewActivity extends MapActivity implements LocationListener {
 
@@ -40,12 +35,14 @@ public class MapViewActivity extends MapActivity implements LocationListener {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.map_view);
+		
+		//initialize the connection to parse
+		Parse.initialize(this, "MmUj6HxQcfLSOUs31lG7uNVx9sl5dZR6gv0FqGHq", "krpZsVM2UrU71NCxDbdAmbEMq1EXdpygkl251Wjl");
+		
 		getLocation();
 		map = (MapView) findViewById(R.id.map);
 
-		map.getController().setCenter(
-				getPoint(mostRecentLocation.getLatitude(),
-						mostRecentLocation.getLongitude()));
+		map.getController().setCenter(getPoint(mostRecentLocation.getLatitude(), mostRecentLocation.getLongitude()));
 		map.getController().setZoom(17);
 		map.setBuiltInZoomControls(true);
 

@@ -1,7 +1,5 @@
 package com.fitivity;
 
-import com.fitivity.R;
-
 import android.app.Activity;
 import android.os.Bundle;
 

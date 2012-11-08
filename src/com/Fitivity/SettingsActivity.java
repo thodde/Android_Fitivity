@@ -8,6 +8,7 @@ import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
 import com.parse.RequestPasswordResetCallback;
+import com.parse.SaveCallback;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -123,19 +124,26 @@ public class SettingsActivity extends Activity {
 
 	public void getProfilePicture() {
 		ParseFile profileData = (ParseFile) user.get("image");
-		profileData.getDataInBackground(new GetDataCallback() {
-			public void done(byte[] data, ParseException e) {
-				if (e == null) {
-					// data has the bytes for the profilePicture
-					Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0,
-							data.length);
-					profilePicture.setImageBitmap(bitmap);
-				} else {
-					// something went wrong
-					profilePicture.setImageResource(R.drawable.feed_cell_profile_placeholder);
+		
+		//if there is no image yet
+		if(profileData == null) {
+			// something went wrong
+			profilePicture.setImageResource(R.drawable.feed_cell_profile_placeholder);
+		}
+		else {
+			profileData.getDataInBackground(new GetDataCallback() {
+				public void done(byte[] data, ParseException e) {
+					if (e == null) {
+						// data has the bytes for the profilePicture
+						Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
+						profilePicture.setImageBitmap(bitmap);
+					} else {
+						// something went wrong
+						profilePicture.setImageResource(R.drawable.feed_cell_profile_placeholder);
+					}
 				}
-			}
-		});
+			});
+		}
 	}
 
 	@Override
@@ -186,16 +194,27 @@ public class SettingsActivity extends Activity {
 																// data to the
 																// buffer
 				byte[] array = buffer.array();
-				ParseFile file = new ParseFile("profilePicture.bmp", array);
-				file.saveInBackground();
-
-				user = ParseUser.getCurrentUser();
-				user.put("image", file);
-				user.saveEventually();
+				final ParseFile file = new ParseFile("file", array);
+				file.saveInBackground(
+					new SaveCallback() {
+					  public void done(ParseException e) {
+						    // Handle success or failure here ...
+						  updateUser(file);
+					  }
+					});
 			}
 		}
 	}
-
+	
+	public void updateUser(ParseFile file) {
+		user = ParseUser.getCurrentUser();
+		user.put("image", file);
+		user.saveInBackground(new SaveCallback() {
+			public void done(ParseException e) {
+			}
+		});
+	}
+	
 	public boolean requestPasswordReset() {
 		ParseUser.requestPasswordResetInBackground(user.getEmail(),
 				new RequestPasswordResetCallback() {

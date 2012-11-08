@@ -59,19 +59,27 @@ public class ProfileActivity extends Activity {
 		user = ParseUser.getCurrentUser();
 		
 		ParseFile profileData = (ParseFile) user.get("image");
-		profileData.getDataInBackground(new GetDataCallback() {
-			public void done(byte[] data, ParseException e) {
-				if (e == null) {
-					// data has the bytes for the profilePicture
-					Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
-					profilePic.setImageBitmap(bitmap);
+		//if there is no image yet...
+		if(profileData == null) {
+			//something went wrong
+			profilePic.setImageResource(R.drawable.feed_cell_profile_placeholder);
+		}
+		else {		
+			//if there is an image, grab it
+			profileData.getDataInBackground(new GetDataCallback() {
+				public void done(byte[] data, ParseException e) {
+					if (e == null) {
+						// data has the bytes for the profilePicture
+						Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
+						profilePic.setImageBitmap(bitmap);
+					}
+					else {
+						// something went wrong
+						profilePic.setImageResource(R.drawable.feed_cell_profile_placeholder);
+					}
 				}
-				else {
-					// something went wrong
-					profilePic.setImageResource(R.drawable.feed_cell_profile_placeholder);
-				}
-			}
-		});
+			});
+		}
 
 		settings.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {

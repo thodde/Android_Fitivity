@@ -164,10 +164,12 @@ public class CreateActivityActivity extends Activity {
 						event.put("number", 1);
 						event.put("postType", 0);
 
+						/* Save this for later
 						ParsePush push = new ParsePush();
 						push.setPushToIOS(true);
 						push.setMessage(ParseUser.getCurrentUser() + " created a new Activity!");
 						push.sendInBackground();
+						*/
 
 						try {
 							event.save();
