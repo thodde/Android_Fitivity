@@ -42,7 +42,6 @@ import android.widget.Toast;
 
 public class LocationsActivity extends Activity implements LocationListener {
 
-	// private FsqAuthListener mListener;
 	private static final String API_URL = "https://maps.googleapis.com/maps/api/place/search/json?";
 
 	LocationManager mlocManager;

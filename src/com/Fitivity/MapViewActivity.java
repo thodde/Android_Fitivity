@@ -28,8 +28,8 @@ import com.parse.Parse;
 public class MapViewActivity extends MapActivity implements LocationListener {
 
 	private Location mostRecentLocation;
-	private MapView map = null;
-	private MyLocationOverlay me = null;
+	private MapView map;
+	private MyLocationOverlay me;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -40,7 +40,7 @@ public class MapViewActivity extends MapActivity implements LocationListener {
 		Parse.initialize(this, "MmUj6HxQcfLSOUs31lG7uNVx9sl5dZR6gv0FqGHq", "krpZsVM2UrU71NCxDbdAmbEMq1EXdpygkl251Wjl");
 		
 		getLocation();
-		map = (MapView) findViewById(R.id.map);
+		map = (MapView)findViewById(R.id.map);
 
 		map.getController().setCenter(getPoint(mostRecentLocation.getLatitude(), mostRecentLocation.getLongitude()));
 		map.getController().setZoom(17);
@@ -73,7 +73,7 @@ public class MapViewActivity extends MapActivity implements LocationListener {
 
 	@Override
 	protected boolean isRouteDisplayed() {
-		return (false);
+		return false;
 	}
 
 	@Override
@@ -106,7 +106,6 @@ public class MapViewActivity extends MapActivity implements LocationListener {
 		public SitesOverlay(Drawable marker) {
 			super(marker);
 			this.marker = marker;
-
 			dragImage = (ImageView) findViewById(R.id.drag);
 			xDragImageOffset = dragImage.getDrawable().getIntrinsicWidth() / 2;
 			yDragImageOffset = dragImage.getDrawable().getIntrinsicHeight();
@@ -188,11 +187,9 @@ public class MapViewActivity extends MapActivity implements LocationListener {
 		}
 
 		private void setDragImagePosition(int x, int y) {
-			RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) dragImage
-					.getLayoutParams();
+			RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) dragImage.getLayoutParams();
 
-			lp.setMargins(x - xDragImageOffset - xDragTouchOffset, y
-					- yDragImageOffset - yDragTouchOffset, 0, 0);
+			lp.setMargins(x - xDragImageOffset - xDragTouchOffset, y - yDragImageOffset - yDragTouchOffset, 0, 0);
 			dragImage.setLayoutParams(lp);
 		}
 	}

@@ -8,6 +8,7 @@
 
 package com.fitivity;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -76,7 +77,7 @@ public class FeedActivity extends Activity {
 		refreshList = (PullToRefreshListView) findViewById(R.id.refreshList);
 		sharingButton = (ImageButton) findViewById(R.id.shareButton);
 		todayLabel = (ImageView) findViewById(R.id.cell_indicator);
-
+		
 		//set listener to the pull to refresh handler
 		refreshList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			public void onItemClick(AdapterView<?> av, View v, int pos, long id) {
@@ -173,15 +174,26 @@ public class FeedActivity extends Activity {
 		Intent intent = new Intent();
 		int type = object.getInt("postType");
 		Bundle bundle = new Bundle();
-		intent.setClass(FeedActivity.this, GroupActivity.class);
 		
-		ParseObject group = object.getParseObject("group");
-		bundle.putString("activityText", group.getString("activity"));
-		bundle.putString("locationText", group.getString("place"));
-		bundle.putString("GroupId", group.getObjectId());
-		ParseGeoPoint point = group.getParseGeoPoint("location");
-		bundle.putDouble("latitude", point.getLatitude());
-		bundle.putDouble("longitude", point.getLongitude());
+		if(type == 0) {
+			intent.setClass(FeedActivity.this, GroupActivity.class);
+			
+			ParseObject group = object.getParseObject("group");
+			bundle.putString("activityText", group.getString("activity"));
+			bundle.putString("locationText", group.getString("place"));
+			bundle.putString("GroupId", group.getObjectId());
+			ParseGeoPoint point = group.getParseGeoPoint("location");
+			bundle.putDouble("latitude", point.getLatitude());
+			bundle.putDouble("longitude", point.getLongitude());
+		}
+		else if(type == 1) {
+			intent.setClass(FeedActivity.this, ProposedActivityActivity.class);
+			
+			ParseObject activityID = object.getParseObject("proposedActivity");
+			//bundle.putString("activityText", activityID.getString("group"));
+			bundle.putString("message", activityID.getString("activityMessage"));
+			bundle.putString("ActivityId", activityID.getObjectId());
+		}
 
 		intent.putExtras(bundle);
 		startActivity(intent);
@@ -206,8 +218,7 @@ public class FeedActivity extends Activity {
 
 			ParseObject activity = activities.get(position);
 
-			todayLabel = (ImageView) findViewById(R.id.cell_indicator);
-			
+			ImageView todayLabel = (ImageView) v.findViewById(R.id.cell_indicator);
 			TextView description_text = (TextView) v.findViewById(R.id.description_text);
 			TextView group_location_text = (TextView) v.findViewById(R.id.group_location_text);
 			picture = (ImageView) v.findViewById(R.id.feed_cell_picture);
@@ -280,90 +291,76 @@ public class FeedActivity extends Activity {
 
 			group_location_text.setText(information);
 			
-			//store the current date and time
-			Calendar currentDate = Calendar.getInstance();
-			String weekday = getDayOfWeek(Calendar.DAY_OF_WEEK);
-			String month = getMonthOfYear(Calendar.MONTH);
-			String dateToday = "" + (weekday + ", " + (Calendar.DAY_OF_MONTH) + " " + month + " " + (Calendar.YEAR) + " " + (Calendar.HOUR_OF_DAY) + ":" + (Calendar.MINUTE) + ":" + (Calendar.SECOND));
+			//get a calendar object
+			final Calendar c = Calendar.getInstance();
+			//get the day of the week is string format
+			int day = c.get(Calendar.DAY_OF_WEEK);
+			String weekday = getCurrentDayOfWeek(day);
+			//set up a formatter for the month and convert month to string format
+			SimpleDateFormat dateFormat = new SimpleDateFormat("MMM");
+			String monthOfYear = dateFormat.format(c.getTime());
+			//get the day of the month
+			int dayOfMonth = c.get(Calendar.DAY_OF_MONTH);
+			//put it all together to make a String comparable to the date pulled from Parse
+			String dateToday = "" + weekday + " " + monthOfYear + " " + dayOfMonth;
 		    
 		    //store the date and time that the activity was created
-		    Date parseDate = activity.getDate("createdAt");
+		    Date parseDate = activity.getCreatedAt();
+		    String strParseDate = parseDate.toString().substring(0, Math.min(parseDate.toString().length(), 10));
 		    
-		    //TODO: TEST THIS DATE STUFF
-		    //make sure the day, month, and year are all the same
-			//if (parseDate.toString().equals(dateToday)) {
+		    //if the dates are equal, display the today label
+			if (strParseDate.equals(dateToday)) {
 				//set today label to visible
-			//	todayLabel.setVisibility(ImageView.VISIBLE);
-			//}
+				todayLabel.setVisibility(View.VISIBLE);
+			}
+			else {
+				todayLabel.setVisibility(View.INVISIBLE);
+			}
 			
 			return v;
 		}
 	}
 	
-	private String getDayOfWeek(int day) {
-		String strDay;
+	/**
+	 * Simple way to convert the current day of week
+	 * to a String instead of a number 1 - 7
+	 * @param day int between 1 and 7
+	 * @return String day of the week, ex. Wed
+	 */
+	public String getCurrentDayOfWeek(int day) {
+		String strDay = "Sun";
 		
 		switch(day) {
-		case 0:
-			strDay = "Sun";
 		case 1:
-			strDay = "Mon";
+			strDay = "Sun";
 		case 2:
-			strDay = "Tue";
+			strDay = "Mon";
 		case 3:
-			strDay = "Wed";
+			strDay = "Tue";
 		case 4:
-			strDay = "Thu";
+			strDay = "Wed";
 		case 5:
-			strDay = "Fri";
+			strDay = "Thu";
 		case 6:
+			strDay = "Fri";
+		case 7:
 			strDay = "Sat";
-		default: 
-			strDay = "";
 		}
 		
 		return strDay;
 	}
 	
-	private String getMonthOfYear(int month) {
-		String strMonth;
-		
-		switch(month) {
-		case 0:
-			strMonth = "Jan";
-		case 1:
-			strMonth = "Feb";
-		case 2:
-			strMonth = "Mar";
-		case 3:
-			strMonth = "Apr";
-		case 4:
-			strMonth = "May";
-		case 5:
-			strMonth = "Jun";
-		case 6:
-			strMonth = "Jul";
-		case 7:
-			strMonth = "Aug";
-		case 8:
-			strMonth = "Sep";
-		case 9:
-			strMonth = "Oct";
-		case 10:
-			strMonth = "Nov";
-		case 11:
-			strMonth = "Dec";
-		default: 
-			strMonth = "";
-		}
-		
-		return strMonth;
-	}
-	
+	/**
+	 * If we choose to view a users profile from the discover feed,
+	 * we need a reference to the users name and ID so we can
+	 * pull their page later
+	 * @param user ParseUser
+	 */
 	public void visitProfile(ParseUser user) {
 		Intent intent = new Intent();
 		intent.setClass(FeedActivity.this, GenericProfileActivity.class);
 		
+		//stick the needed info into the bundle for later
 		Bundle bundle = new Bundle();
 		bundle.putString("user", user.getUsername());
 		bundle.putString("userID", user.getObjectId());

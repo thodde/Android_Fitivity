@@ -1,11 +1,8 @@
 package com.fitivity;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fitivity.R;
 import com.fitivity.PullToRefreshListView.OnRefreshListener;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
@@ -18,7 +15,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;

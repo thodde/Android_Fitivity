@@ -186,7 +186,7 @@ public class ProfileActivity extends Activity {
 					indicator.setImageResource(R.drawable.feed_cell_arrow);
 				}
 			}
-
+			
 			TextView description_text = (TextView) v.findViewById(R.id.description_text);
 			TextView group_location_text = (TextView) v.findViewById(R.id.group_location_text);
 			ImageView picture = (ImageView) v.findViewById(R.id.feed_cell_picture);

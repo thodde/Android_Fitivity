@@ -4,9 +4,5 @@
 	<classpathentry kind="src" path="gen"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
-	<classpathentry exported="true" kind="lib" path="assets/generic-store-for-android.jar"/>
-	<classpathentry exported="true" kind="lib" path="assets/maps.jar"/>
-	<classpathentry exported="true" kind="lib" path="assets/Parse-1.0.28.jar"/>
-	<classpathentry kind="lib" path="assets/android-support-4.0.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

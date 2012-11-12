@@ -69,7 +69,6 @@ public class GenericStore {
 		editor.commit();
 	}
 
-	// ---
 	public static boolean saveObject(int type, String objKey,
 			Serializable objData, Context context) {
 
@@ -140,8 +139,6 @@ public class GenericStore {
 				Context.MODE_PRIVATE).edit();
 		editor.remove(objKey);
 
-		// if(LOGGING.DEBUG)Log.d(TAG, "removedObject| objKey:"+objKey);
-
 		return editor.commit();
 	}
 
@@ -168,8 +165,6 @@ public class GenericStore {
 		return savedSession.contains(customKey);
 	}
 
-	// ---
-
 	public static boolean setCustomData(int type, String key, Object value,
 			Context context) {
 		if (TYPE_MEMDISKCACHE == type)
@@ -194,20 +189,6 @@ public class GenericStore {
 			editor.putFloat(key, (Float) value);
 		else if (value instanceof Long)
 			editor.putLong(key, (Long) value);
-
-		/*
-		 * final boolean booleanObj = false; final int intObj = -1; final String
-		 * stringObj = ""; final float floatObj = 1F; final long longObj = 1L;
-		 * 
-		 * if (value.getClass().isInstance(booleanObj)) editor.putBoolean(key,
-		 * (Boolean)value); else if (value.getClass().isInstance(intObj))
-		 * editor.putInt(key, (Integer)value); else if
-		 * (value.getClass().isInstance(stringObj)) editor.putString(key,
-		 * (String)value); else if (value.getClass().isInstance(floatObj))
-		 * editor.putFloat(key, (Float)value); else if
-		 * (value.getClass().isInstance(longObj)) editor.putLong(key,
-		 * (Long)value);
-		 */
 
 		return editor.commit();
 	}
@@ -270,11 +251,7 @@ public class GenericStore {
 		return (savedSession.getLong(key, defValue));
 	}
 
-	// ------
-	// -- <optional> you can use this to track&clear pre-defined set of data
-	// from cache
 	public static final String CUSTOMPREFIXES_INCACHE = "CUSTOMPREFIXES_INCACHE";// object:
-																					// UsersInCache
 
 	public static void checkAddCustomPrefix(String prefix, Context context) {
 
@@ -357,5 +334,4 @@ public class GenericStore {
 						+ " doesNOT exist, no action needed");
 		}
 	}
-
 }
