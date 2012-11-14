@@ -1,7 +1,10 @@
 package com.fitivity;
 
 import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.URL;
+import java.nio.ByteBuffer;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -11,14 +14,18 @@ import com.parse.LogInCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
+import com.parse.ParseFile;
 import com.parse.ParseUser;
-import com.parse.ParseFacebookUtils.Permissions.User;
+import com.parse.SaveCallback;
 import com.parse.facebook.FacebookError;
 import com.parse.facebook.Util;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -31,6 +38,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+@SuppressLint("HandlerLeak")
 public class LoginActivity extends Activity {
 
 	private EditText etUsername;
@@ -40,14 +48,20 @@ public class LoginActivity extends Activity {
 	private Button btnFacebook;
 	private ProgressDialog pd;
 	ParseUser user;
+	final String facebookAppID = "119218824889348";
+	ParseFile file;
+	String response;
+    String name = "";
+    String strID = "";
+    String userEmail = "";
+    URL url;
 
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		Parse.initialize(this, "MmUj6HxQcfLSOUs31lG7uNVx9sl5dZR6gv0FqGHq",
-				"krpZsVM2UrU71NCxDbdAmbEMq1EXdpygkl251Wjl");
+		Parse.initialize(this, "MmUj6HxQcfLSOUs31lG7uNVx9sl5dZR6gv0FqGHq", "krpZsVM2UrU71NCxDbdAmbEMq1EXdpygkl251Wjl");
 
 		setContentView(R.layout.login_view);
 
@@ -126,42 +140,63 @@ public class LoginActivity extends Activity {
 		ParseFacebookUtils.logIn(this, new LogInCallback() {
 			  @Override
 			  public void done(ParseUser user, ParseException err) {
-			    if (user == null) {
-			      Log.i("MyApp", "Uh oh. The user cancelled the Facebook login.");
-			    }
-			    else if (user.isNew()) {
-			      Log.i("MyApp", "User signed up and logged in through Facebook!");
-			      Intent mainIntent = new Intent(
-							LoginActivity.this,
-							TabBarActivity.class);
-					LoginActivity.this.startActivity(mainIntent);
-					
-					getCredentials();
-					
-					LoginActivity.this.finish();
-			    }
-			    else {
-			      Log.i("MyApp", "User logged in through Facebook!");
-					Intent mainIntent = new Intent(
-							LoginActivity.this,
-							TabBarActivity.class);
-					LoginActivity.this.startActivity(mainIntent);
-					
-					getCredentials();
-					
-					LoginActivity.this.finish();
-			    }
+				    if (user == null) {
+				      Log.i("Fitivity", "The user cancelled the Facebook login.");
+				    }
+				    else if (user.isNew()) {
+				    	Log.i("Fitivity", "User signed up and logged in through Facebook!");
+				    	getCredentials();
+				    	Intent mainIntent = new Intent(LoginActivity.this, TabBarActivity.class);
+						LoginActivity.this.startActivity(mainIntent);
+						LoginActivity.this.finish();
+				    }
+				    else {
+				        Log.i("Fitivity", "User logged in through Facebook!");
+				        getCredentials();
+				        Intent mainIntent = new Intent(LoginActivity.this, TabBarActivity.class);
+						LoginActivity.this.startActivity(mainIntent);
+						LoginActivity.this.finish();
+				  }
 			  }
-			});
+		});
 	}
 	
 	public void getCredentials() {
-        String response;
-        String name = "";
+        //grab the current users full name from facebook and store it
+        //in Parse as their username
         try {
             response = ParseFacebookUtils.getFacebook().request("me");
             JSONObject json = Util.parseJson(response);
-            name = json.getString("first_name");
+            name = json.getString("username");
+            strID = json.getString("id");
+            userEmail = json.getString("email");
+            
+            //get the profile picture
+            url = new URL("http://graph.facebook.com/" + strID + "/picture?type=large");
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setDoInput(true);
+            connection.connect();
+            Bitmap mIcon1 = BitmapFactory.decodeStream(connection.getInputStream());
+
+            int bytes = mIcon1.getWidth()*mIcon1.getHeight()*4;
+			ByteBuffer buffer = ByteBuffer.allocate(bytes); 
+			mIcon1.copyPixelsToBuffer(buffer); 
+			byte[] array = buffer.array();
+			file = new ParseFile("file", array);
+			file.saveInBackground(new SaveCallback() {
+				public void done(ParseException e) {
+					//TODO: Put all these items in an intent and pass them to the discover feed,
+					//there, we can update them and save them
+					//set the users username, email and ID number
+			        user = ParseUser.getCurrentUser();
+			        user.setUsername(name);
+			        strID = "Facebook: " + strID;
+			        user.put("authData", strID);
+			        user.setEmail(userEmail);
+			        user.put("image", file);
+			        user.saveEventually();
+				}
+			});
         } 
         catch (MalformedURLException e) {
             e.printStackTrace();
@@ -175,10 +210,6 @@ public class LoginActivity extends Activity {
         catch (JSONException e) {
             e.printStackTrace();
         }
-
-        user = ParseUser.getCurrentUser();
-        user.setUsername(name);
-        user.saveInBackground();
     }
 	
 	private Handler progressHandler = new Handler() {

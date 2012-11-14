@@ -45,9 +45,13 @@ public class LocationsActivity extends Activity implements LocationListener {
 	private static final String API_URL = "https://maps.googleapis.com/maps/api/place/search/json?";
 
 	LocationManager mlocManager;
+	double currentLatitude;
+	double currentLongitude;
+	String locationName;
 	String search = "";
 	String provider;
-	public static final String CLIENT_ID = "AIzaSyAFOF9KldMdOtaXo31MLxp9PiX2mxmWDQA";
+	// My Google Maps API key: 0cFaOS5j44okdaIchN0i43JThF60jiSIUoRi_dw
+	public static final String CLIENT_ID = "0cFaOS5j44okdaIchN0i43JThF60jiSIUoRi_dw";
 
 	private ListView mListView;
 	private NearbyAdapter mAdapter;
@@ -55,6 +59,7 @@ public class LocationsActivity extends Activity implements LocationListener {
 	private ProgressDialog mProgress;
 	private EditText filterText;
 	private Button addLocation;
+	int requestCode = 123;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +78,7 @@ public class LocationsActivity extends Activity implements LocationListener {
 			public void onClick(View v) {
 				Intent intent = new Intent();
 				intent.setClass(LocationsActivity.this, MapViewActivity.class);
-				startActivity(intent);
+				startActivityForResult(intent, requestCode);
 			}
 		});
 
@@ -117,6 +122,25 @@ public class LocationsActivity extends Activity implements LocationListener {
 		});
 		getLocation();
 	}
+	
+	@Override
+	protected void onActivityResult (int requestCode, int resultCode, Intent data) {
+	  if(resultCode == 123) {
+		  //grab data from MapViewActivity
+		  locationName = data.getStringExtra("locationName");
+		  currentLatitude = data.getDoubleExtra("latitude", currentLatitude);
+		  currentLongitude = data.getDoubleExtra("longitude", currentLongitude);
+		  
+		  //pass data to CreateActivityActivity
+		  Intent resultIntent = new Intent();
+		  resultIntent.putExtra("locationName", locationName);
+		  resultIntent.putExtra("latitude", currentLatitude);
+		  resultIntent.putExtra("longitude", currentLongitude);
+		  setResult(Activity.RESULT_OK, resultIntent);
+		  
+		  finish();
+	  }
+	}
 
 	private TextWatcher filterTextWatcher = new TextWatcher() {
 
@@ -137,7 +161,6 @@ public class LocationsActivity extends Activity implements LocationListener {
 
 	/* This method starts new activity and passes along Crowd object from list */
 	protected void onListItemClick(View v, int pos, long id) {
-		// TODO figure out log
 		Place p = (Place) mListView.getItemAtPosition(pos);
 
 		Intent resultIntent = new Intent();
@@ -161,8 +184,7 @@ public class LocationsActivity extends Activity implements LocationListener {
 					+ "&radius=5000&types=campground|gym|park&name=" + search
 					+ "&sensor=true&key=" + CLIENT_ID);
 
-			HttpURLConnection urlConnection = (HttpURLConnection) url
-					.openConnection();
+			HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
 
 			urlConnection.setRequestMethod("GET");
 			urlConnection.setDoInput(true);
@@ -171,8 +193,7 @@ public class LocationsActivity extends Activity implements LocationListener {
 			urlConnection.connect();
 
 			String response = streamToString(urlConnection.getInputStream());
-			JSONObject jsonObj = (JSONObject) new JSONTokener(response)
-					.nextValue();
+			JSONObject jsonObj = (JSONObject) new JSONTokener(response).nextValue();
 
 			JSONArray venues = (JSONArray) jsonObj.getJSONArray("results");
 

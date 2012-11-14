@@ -50,8 +50,8 @@ public class ProposedActivityActivity extends Activity {
 		comment.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				if (commentText.getText().toString() != "") {
-					ParseObject comment = new ParseObject("Comments");
-					ParseObject proposed = ParseObject.createWithoutData("ProposedActivity", getIntent().getStringExtra("ProposedActivityId"));
+					//ParseObject comment = new ParseObject("Comments");
+					//ParseObject proposed = ParseObject.createWithoutData("ProposedActivity", getIntent().getStringExtra("ProposedActivityId"));
 				}
 			}
 		});

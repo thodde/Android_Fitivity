@@ -6,12 +6,22 @@
     android:id="@+id/map"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:apiKey="AIzaSyAsh5BYpzSxUXX4a1xYqm6FZTQle52l3L4"
-    android:clickable="true" />
+    android:apiKey="0cFaOS5j44okdaIchN0i43JThF60jiSIUoRi_dw"
+    android:clickable="true"
+    android:enabled="true" />
    <ImageView android:id="@+id/drag"
+    android:contentDescription="Allows the user to drag a map view"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:src="@drawable/marker"
-    android:visibility="gone"/>         
+    android:visibility="gone"/>
+
+   <Button
+       android:id="@+id/doneButton"
+       android:layout_width="fill_parent"
+       android:layout_height="wrap_content"
+       android:layout_alignParentBottom="true"
+       android:layout_centerHorizontal="true"
+       android:text="DONE" />
   
 </RelativeLayout>

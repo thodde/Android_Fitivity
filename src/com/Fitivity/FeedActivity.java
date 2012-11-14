@@ -248,7 +248,7 @@ public class FeedActivity extends Activity {
 					picture.setImageResource(R.drawable.group_icon_large);
 				}
 				else {
-					description = "" + user.getUsername() + " created a Group";
+					description = "" + ParseUser.getCurrentUser().getUsername() + " created a Group";
 					try {
 						ParseFile profileData = (ParseFile) user.get("image");
 						profileData.getDataInBackground(new GetDataCallback() {

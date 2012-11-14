@@ -1,6 +1,9 @@
 package com.fitivity;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -11,9 +14,13 @@ import java.util.List;
 import android.graphics.Canvas;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
+import android.text.Editable;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
@@ -30,11 +37,15 @@ public class MapViewActivity extends MapActivity implements LocationListener {
 	private Location mostRecentLocation;
 	private MapView map;
 	private MyLocationOverlay me;
+	private Button btnDone;
+	String locationName;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.map_view);
+		
+		btnDone = (Button) findViewById(R.id.doneButton);
 		
 		//initialize the connection to parse
 		Parse.initialize(this, "MmUj6HxQcfLSOUs31lG7uNVx9sl5dZR6gv0FqGHq", "krpZsVM2UrU71NCxDbdAmbEMq1EXdpygkl251Wjl");
@@ -48,13 +59,42 @@ public class MapViewActivity extends MapActivity implements LocationListener {
 
 		Drawable marker = getResources().getDrawable(R.drawable.marker);
 
-		marker.setBounds(0, 0, marker.getIntrinsicWidth(),
-				marker.getIntrinsicHeight());
+		marker.setBounds(0, 0, marker.getIntrinsicWidth(), marker.getIntrinsicHeight());
 
 		map.getOverlays().add(new SitesOverlay(marker));
 
 		me = new MyLocationOverlay(this, map);
 		map.getOverlays().add(me);
+		
+		//when the done button is clicked on the map, ask the user what the name
+		//of the new location is. Then store all the info and pass it back
+		//to the LocationsActivity
+		btnDone.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				final EditText input = new EditText(MapViewActivity.this);
+				  new AlertDialog.Builder(MapViewActivity.this)
+				    .setTitle("Update Status")
+				    .setMessage("What is the name of this location?")
+				    .setView(input)
+				    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+				        public void onClick(DialogInterface dialog, int whichButton) {
+				            Editable value = input.getText();
+				            locationName = value.toString();
+				            Intent intent = new Intent();
+				            intent.putExtra("locationName", locationName);
+							intent.putExtra("latitude", mostRecentLocation.getLatitude());
+							intent.putExtra("longitude", mostRecentLocation.getLongitude());
+							setResult(123, intent);
+							finish();
+				        }
+				    }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+				        public void onClick(DialogInterface dialog, int whichButton) {
+				            locationName = "Choose Again";
+				        }
+				    }).show();
+			}
+		});
 	}
 
 	@Override
@@ -110,9 +150,7 @@ public class MapViewActivity extends MapActivity implements LocationListener {
 			xDragImageOffset = dragImage.getDrawable().getIntrinsicWidth() / 2;
 			yDragImageOffset = dragImage.getDrawable().getIntrinsicHeight();
 
-			items.add(new OverlayItem(getPoint(
-					mostRecentLocation.getLatitude(),
-					mostRecentLocation.getLongitude()), "Drag Me", "Location"));
+			items.add(new OverlayItem(getPoint(mostRecentLocation.getLatitude(),mostRecentLocation.getLongitude()), "Drag Me", "Location"));
 
 			populate();
 		}

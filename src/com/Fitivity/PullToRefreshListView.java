@@ -2,7 +2,6 @@ package com.fitivity;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.*;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.view.animation.*;
@@ -297,17 +296,16 @@ public class PullToRefreshListView extends ListView {
 			break;
 
 		case MotionEvent.ACTION_UP:
-			if (previousY != -1
-					&& (state == State.RELEASE_TO_REFRESH || getFirstVisiblePosition() == 0)) {
+			if (previousY != -1 && (state == State.RELEASE_TO_REFRESH || getFirstVisiblePosition() == 0)) {
 				switch (state) {
 				case RELEASE_TO_REFRESH:
 					setState(State.REFRESHING);
 					bounceBackHeader();
-
 					break;
-
 				case PULL_TO_REFRESH:
 					resetHeader();
+					break;
+				default:
 					break;
 				}
 			}
@@ -502,6 +500,7 @@ public class PullToRefreshListView extends ListView {
 
 	private class PTROnGlobalLayoutListener implements OnGlobalLayoutListener {
 
+		@SuppressWarnings("deprecation")
 		@Override
 		public void onGlobalLayout() {
 			int initialHeaderHeight = header.getHeight();

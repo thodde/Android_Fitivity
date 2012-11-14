@@ -23,8 +23,6 @@ import java.util.List;
 public class CustomPrefixesInCache implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	private static final String TAG = "CustomPrefixesInCache";
-
 	private List<String> customPrefixes;
 
 	public CustomPrefixesInCache() {

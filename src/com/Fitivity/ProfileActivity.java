@@ -64,7 +64,7 @@ public class ProfileActivity extends Activity {
 			//something went wrong
 			profilePic.setImageResource(R.drawable.feed_cell_profile_placeholder);
 		}
-		else {		
+		else {
 			//if there is an image, grab it
 			profileData.getDataInBackground(new GetDataCallback() {
 				public void done(byte[] data, ParseException e) {

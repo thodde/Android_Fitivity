@@ -265,7 +265,7 @@ public class CreateActivityActivity extends Activity {
 			if (resultCode == Activity.RESULT_OK) {
 				activityLocation = new Place();
 
-				activityLocation.name = data.getStringExtra("name");
+				activityLocation.name = data.getStringExtra("locationName");
 
 				Location location = new Location(
 						LocationManager.NETWORK_PROVIDER);
@@ -279,7 +279,7 @@ public class CreateActivityActivity extends Activity {
 				addLocation.setImageResource(R.drawable.choose_backplate);
 
 				if (activityLocation.name.length() > 16) {
-					String text = activityLocation.name.substring(0, 12);
+					String text = activityLocation.name.substring(0, Math.max(activityLocation.name.length(), 12));
 					text += "...";
 					locationText.setText(text);
 				} else {
