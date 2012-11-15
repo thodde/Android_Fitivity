@@ -67,8 +67,7 @@ public class FeedActivity extends Activity {
 		setContentView(R.layout.feed_view);
 
 		//initialize the connection to parse
-		Parse.initialize(this, "MmUj6HxQcfLSOUs31lG7uNVx9sl5dZR6gv0FqGHq",
-				"krpZsVM2UrU71NCxDbdAmbEMq1EXdpygkl251Wjl");
+		Parse.initialize(this, "MmUj6HxQcfLSOUs31lG7uNVx9sl5dZR6gv0FqGHq", "krpZsVM2UrU71NCxDbdAmbEMq1EXdpygkl251Wjl");
 
 		//subscribe the device to push notifications
 		PushService.subscribe(this, "Fitivity", FeedActivity.class);
@@ -251,19 +250,24 @@ public class FeedActivity extends Activity {
 					description = "" + ParseUser.getCurrentUser().getUsername() + " created a Group";
 					try {
 						ParseFile profileData = (ParseFile) user.get("image");
-						profileData.getDataInBackground(new GetDataCallback() {
-							public void done(byte[] data, ParseException e) {
-								if (e == null) {
-									// data has the bytes for the profilePicture
-									Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
-									picture.setImageBitmap(bitmap);
+						if(profileData != null) {
+							profileData.getDataInBackground(new GetDataCallback() {
+								public void done(byte[] data, ParseException e) {
+									if (e == null) {
+										// data has the bytes for the profilePicture
+										Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
+										picture.setImageBitmap(bitmap);
+									}
+									else {
+										// something went wrong
+										picture.setImageResource(R.drawable.feed_cell_profile_placeholder);
+									}
 								}
-								else {
-									// something went wrong
-									picture.setImageResource(R.drawable.feed_cell_profile_placeholder);
-								}
-							}
-						});
+							});
+						}
+						else {
+							picture.setImageResource(R.drawable.feed_cell_profile_placeholder);
+						}
 					}
 					catch (NullPointerException e) {
 						e.printStackTrace();

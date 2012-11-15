@@ -87,15 +87,12 @@ public class LoginActivity extends Activity {
 							user = ParseUser.logIn(username, password);
 							progressHandler.sendEmptyMessage(0);
 							if (user != null) {
-								successHandler.sendMessage(successHandler
-										.obtainMessage());
+								successHandler.sendMessage(successHandler.obtainMessage());
 								/*
 								 * Create an intent that will start the main
 								 * activity.
 								 */
-								Intent mainIntent = new Intent(
-										LoginActivity.this,
-										TabBarActivity.class);
+								Intent mainIntent = new Intent(LoginActivity.this, TabBarActivity.class);
 								LoginActivity.this.startActivity(mainIntent);
 
 								LoginActivity.this.finish();
@@ -152,7 +149,6 @@ public class LoginActivity extends Activity {
 				    }
 				    else {
 				        Log.i("Fitivity", "User logged in through Facebook!");
-				        getCredentials();
 				        Intent mainIntent = new Intent(LoginActivity.this, TabBarActivity.class);
 						LoginActivity.this.startActivity(mainIntent);
 						LoginActivity.this.finish();
@@ -184,17 +180,23 @@ public class LoginActivity extends Activity {
 			byte[] array = buffer.array();
 			file = new ParseFile("file", array);
 			file.saveInBackground(new SaveCallback() {
+				@Override
 				public void done(ParseException e) {
-					//TODO: Put all these items in an intent and pass them to the discover feed,
-					//there, we can update them and save them
 					//set the users username, email and ID number
 			        user = ParseUser.getCurrentUser();
+			        
 			        user.setUsername(name);
+			        user.put("username", name);
 			        strID = "Facebook: " + strID;
-			        user.put("authData", strID);
+			        //user.put("authData", strID);
 			        user.setEmail(userEmail);
+			        user.put("email", userEmail);
 			        user.put("image", file);
-			        user.saveEventually();
+			        try {
+						user.save();
+					} catch (ParseException e1) {
+						e1.printStackTrace();
+					}
 				}
 			});
         } 
