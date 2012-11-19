@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.fitivity.R;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseGeoPoint;

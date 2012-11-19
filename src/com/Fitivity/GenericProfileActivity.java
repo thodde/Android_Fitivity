@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.fitivity.R;
 import com.fitivity.PullToRefreshListView.*;
 import com.parse.FindCallback;
 import com.parse.GetCallback;

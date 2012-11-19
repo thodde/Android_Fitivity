@@ -2,6 +2,7 @@ package com.fitivity;
 
 import java.nio.ByteBuffer;
 
+import com.fitivity.R;
 import com.parse.GetDataCallback;
 import com.parse.Parse;
 import com.parse.ParseException;

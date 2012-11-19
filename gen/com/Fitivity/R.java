@@ -138,7 +138,7 @@ public final class R {
         public static final int white=0x7f020075;
     }
     public static final class id {
-        public static final int Button=0x7f06001d;
+        public static final int Button=0x7f06001c;
         public static final int ImageView01=0x7f060008;
         public static final int InnerRelativeLayout=0x7f060039;
         public static final int Join=0x7f060037;
@@ -161,7 +161,7 @@ public final class R {
         public static final int facebook_signup_button=0x7f060026;
         public static final int feed_cell_picture=0x7f06000d;
         public static final int groupList=0x7f060034;
-        public static final int group_activity=0x7f06001c;
+        public static final int group_activity=0x7f06001d;
         public static final int group_activity_name=0x7f060019;
         public static final int group_display_name=0x7f060017;
         public static final int group_join=0x7f060018;

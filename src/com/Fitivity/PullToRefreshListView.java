@@ -11,6 +11,8 @@ import android.widget.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import com.fitivity.R;
+
 /**
  * A generic, customizable Android ListView implementation that has 'Pull to
  * Refresh' functionality.

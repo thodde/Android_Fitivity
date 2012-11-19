@@ -2,6 +2,8 @@ package com.fitivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import com.fitivity.R;
 import com.parse.ParseObject;
 
 import android.app.ExpandableListActivity;

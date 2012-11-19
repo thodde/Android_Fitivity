@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.fitivity.R;
 import com.fitivity.PullToRefreshListView.*;
 import com.parse.FindCallback;
 import com.parse.Parse;
@@ -77,7 +78,7 @@ public class GroupActivity extends Activity {
 		activity.setText(getIntent().getStringExtra("activityText"));
 		groupID = getIntent().getStringExtra("GroupId");
 		
-		//make sure the user is under the daily limit for proposed activites
+		//make sure the user is under the daily limit for proposed activities
 		checkDailyCount();
 		today = checkTodaysDate();
 		
@@ -92,7 +93,7 @@ public class GroupActivity extends Activity {
 					if(groups.size() != 0) {    //make sure there are actually items in the list
 						if(groups.get(0) != null) {    //make sure the first item is real
 							//changes the text if the user is in the list and grab a reference to them
-							joinButton.setText("Unjoin");
+							joinButton.setHint("Unjoin");
 							currentMember = groups.get(0);
 						}
 					}
@@ -103,7 +104,7 @@ public class GroupActivity extends Activity {
 		joinButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
-				if(joinButton.getText().equals("Join")) {
+				if(joinButton.getHint().equals("Join")) {
 					try {
 						/* Create the group member */
 						ParseObject member = new ParseObject("GroupMembers");
@@ -115,7 +116,7 @@ public class GroupActivity extends Activity {
 					} catch (ParseException e) {
 						e.printStackTrace();
 					}
-					joinButton.setText("Unjoin");
+					joinButton.setHint("Unjoin");
 					AlertDialog.Builder dlgAlert  = new AlertDialog.Builder(GroupActivity.this);
 					dlgAlert.setMessage("You have joined the group!");
 					dlgAlert.setTitle("Fitivity");
@@ -126,7 +127,7 @@ public class GroupActivity extends Activity {
 				else {
 					/* Create the group member */
 					currentMember.deleteInBackground();
-					joinButton.setText("Join");
+					joinButton.setHint("Join");
 					AlertDialog.Builder dlgAlert  = new AlertDialog.Builder(GroupActivity.this);
 					dlgAlert.setMessage("You have left the group!");
 					dlgAlert.setTitle("Fitivity");
