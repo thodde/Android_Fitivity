@@ -1,8 +1,0 @@
-package Fitivity.copy;
-
-public class FitnessActivity {
-	
-	String FitivityFeedEntryItemActivityName;
-	String FitivityFeedEntryItemDescriptionText;
-
-}

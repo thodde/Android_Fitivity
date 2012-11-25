@@ -17,6 +17,7 @@ import com.parse.ParseFacebookUtils;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
+import com.parse.SignUpCallback;
 import com.parse.facebook.FacebookError;
 import com.parse.facebook.Util;
 
@@ -97,8 +98,7 @@ public class LoginActivity extends Activity {
 
 								LoginActivity.this.finish();
 							} else if (user == null) {
-								failHandler.sendMessage(failHandler
-										.obtainMessage());
+								failHandler.sendMessage(failHandler.obtainMessage());
 							}
 
 						} catch (ParseException e) {
@@ -108,8 +108,7 @@ public class LoginActivity extends Activity {
 					}
 				};
 
-				pd = ProgressDialog.show(LoginActivity.this, "", "Loading...",
-						true, false);
+				pd = ProgressDialog.show(LoginActivity.this, "", "Loading...", true, false);
 				loginThread.start();
 
 			}
@@ -132,41 +131,65 @@ public class LoginActivity extends Activity {
 	}
 	
 	public void setupFacebook() {
-		ParseFacebookUtils.initialize("119218824889348");
-		
+		ParseFacebookUtils.initialize("119218824889348", false);
+		pd = ProgressDialog.show(LoginActivity.this, "", "Loading...", true, false);
 		ParseFacebookUtils.logIn(this, new LogInCallback() {
 			  @Override
-			  public void done(ParseUser user, ParseException err) {
-				    if (user == null) {
-				      Log.i("Fitivity", "The user cancelled the Facebook login.");
-				    }
-				    else if (user.isNew()) {
-				    	Log.i("Fitivity", "User signed up and logged in through Facebook!");
-				    	getCredentials();
-				    	Intent mainIntent = new Intent(LoginActivity.this, TabBarActivity.class);
-						LoginActivity.this.startActivity(mainIntent);
-						LoginActivity.this.finish();
-				    }
-				    else {
-				        Log.i("Fitivity", "User logged in through Facebook!");
-				        Intent mainIntent = new Intent(LoginActivity.this, TabBarActivity.class);
-						LoginActivity.this.startActivity(mainIntent);
-						LoginActivity.this.finish();
-				  }
+			  public void done(ParseUser thisUser, ParseException err) {
+				  user = thisUser;
+				  new Thread() {
+					  public void run() {
+						  if (ParseUser.getCurrentUser() == null) {
+						    	failHandler.sendMessage(failHandler.obtainMessage());
+						    }
+						    else if (ParseUser.getCurrentUser().isNew()) {
+						    	successHandler.sendMessage(successHandler.obtainMessage());
+						    	try {
+						    		Bundle args = new Bundle();
+							        args.putString("fields", "username");
+							        JSONObject result = new JSONObject(ParseFacebookUtils.getFacebook().request("me", args));
+							        ParseUser.getCurrentUser().setUsername(result.optString("username"));
+							        
+							        args.putString("fields", "email");
+							        result = new JSONObject(ParseFacebookUtils.getFacebook().request("me", args));
+							        ParseUser.getCurrentUser().setEmail(result.optString("email"));
+							        
+							        progressHandler.sendEmptyMessage(0);
+							        ParseUser.getCurrentUser().saveInBackground();
+							        
+							        if (!ParseFacebookUtils.isLinked(ParseUser.getCurrentUser())) {
+							        	  ParseFacebookUtils.link(ParseUser.getCurrentUser(), LoginActivity.this, new SaveCallback() {
+							        	    @Override
+							        	    public void done(ParseException ex) {
+							        	      if (ParseFacebookUtils.isLinked(ParseUser.getCurrentUser())) {
+							        	        //User is now linked with facebook
+							        	      }
+							        	    }
+							        	  });
+							        	}
+						    	}
+						    	catch (Exception e) {
+						    		e.printStackTrace();
+						    	}
+						    	Intent mainIntent = new Intent(LoginActivity.this, TabBarActivity.class);
+								LoginActivity.this.startActivity(mainIntent);
+								LoginActivity.this.finish();
+						    }
+						    else {
+						    	if (ParseFacebookUtils.isLinked(ParseUser.getCurrentUser())) {
+						    		Intent mainIntent = new Intent(LoginActivity.this, TabBarActivity.class);
+									LoginActivity.this.startActivity(mainIntent);
+									LoginActivity.this.finish();
+						    	}
+						   }
+					  }
+				  }.start();
 			  }
 		});
 	}
 	
 	public void getCredentials() {
-        //grab the current users full name from facebook and store it
-        //in Parse as their username
-        try {
-            response = ParseFacebookUtils.getFacebook().request("me");
-            JSONObject json = Util.parseJson(response);
-            name = json.getString("username");
-            strID = json.getString("id");
-            userEmail = json.getString("email");
-            
+        	/*
             //get the profile picture
             url = new URL("http://graph.facebook.com/" + strID + "/picture?type=large");
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -182,36 +205,11 @@ public class LoginActivity extends Activity {
 			file.saveInBackground(new SaveCallback() {
 				@Override
 				public void done(ParseException e) {
-					//set the users username, email and ID number
 			        user = ParseUser.getCurrentUser();
-			        
-			        user.setUsername(name);
-			        user.put("username", name);
-			        strID = "Facebook: " + strID;
-			        //user.put("authData", strID);
-			        user.setEmail(userEmail);
-			        user.put("email", userEmail);
 			        user.put("image", file);
-			        try {
-						user.save();
-					} catch (ParseException e1) {
-						e1.printStackTrace();
-					}
 				}
 			});
-        } 
-        catch (MalformedURLException e) {
-            e.printStackTrace();
-        } 
-        catch (IOException e) {
-            e.printStackTrace();
-        } 
-        catch (FacebookError e) {
-            e.printStackTrace();
-        } 
-        catch (JSONException e) {
-            e.printStackTrace();
-        }
+        */
     }
 	
 	private Handler progressHandler = new Handler() {
