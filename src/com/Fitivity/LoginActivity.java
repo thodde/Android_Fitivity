@@ -1,12 +1,6 @@
 package com.fitivity;
 
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.nio.ByteBuffer;
-
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.fitivity.R;
@@ -16,21 +10,14 @@ import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
-import com.parse.SaveCallback;
-import com.parse.SignUpCallback;
-import com.parse.facebook.FacebookError;
-import com.parse.facebook.Util;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
@@ -156,17 +143,6 @@ public class LoginActivity extends Activity {
 							        
 							        progressHandler.sendEmptyMessage(0);
 							        ParseUser.getCurrentUser().saveInBackground();
-							        
-							        if (!ParseFacebookUtils.isLinked(ParseUser.getCurrentUser())) {
-							        	  ParseFacebookUtils.link(ParseUser.getCurrentUser(), LoginActivity.this, new SaveCallback() {
-							        	    @Override
-							        	    public void done(ParseException ex) {
-							        	      if (ParseFacebookUtils.isLinked(ParseUser.getCurrentUser())) {
-							        	        //User is now linked with facebook
-							        	      }
-							        	    }
-							        	  });
-							        	}
 						    	}
 						    	catch (Exception e) {
 						    		e.printStackTrace();
@@ -176,12 +152,10 @@ public class LoginActivity extends Activity {
 								LoginActivity.this.finish();
 						    }
 						    else {
-						    	if (ParseFacebookUtils.isLinked(ParseUser.getCurrentUser())) {
-						    		Intent mainIntent = new Intent(LoginActivity.this, TabBarActivity.class);
-									LoginActivity.this.startActivity(mainIntent);
-									LoginActivity.this.finish();
-						    	}
-						   }
+						    	Intent mainIntent = new Intent(LoginActivity.this, TabBarActivity.class);
+								LoginActivity.this.startActivity(mainIntent);
+								LoginActivity.this.finish();
+						  }
 					  }
 				  }.start();
 			  }

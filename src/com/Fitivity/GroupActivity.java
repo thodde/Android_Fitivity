@@ -32,6 +32,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -48,7 +49,7 @@ public class GroupActivity extends Activity {
 	ImageView groupActivity;
 	PullToRefreshListView proposedAcitivityList;
 	Button membersButton;
-	Button joinButton;
+	ImageButton joinButton;
 	Button mapButton;
 	ParseObject date;
 	boolean underDailyLimit;
@@ -57,6 +58,7 @@ public class GroupActivity extends Activity {
 	public String today;
 	public String groupID;
 	public ParseObject currentMember;
+	public boolean inGroup;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +73,7 @@ public class GroupActivity extends Activity {
 		activity = (TextView) findViewById(R.id.group_activity_name);
 		groupActivity = (ImageView) findViewById(R.id.group_activity);
 		membersButton = (Button) findViewById(R.id.Button);
-		joinButton = (Button) findViewById(R.id.group_join);
+		joinButton = (ImageButton) findViewById(R.id.group_join);
 		mapButton = (Button) findViewById(R.id.group_map);
 
 		location.setText(getIntent().getStringExtra("locationText"));
@@ -81,6 +83,7 @@ public class GroupActivity extends Activity {
 		//make sure the user is under the daily limit for proposed activities
 		checkDailyCount();
 		today = checkTodaysDate();
+		inGroup = false;
 		
 		//Quickly check to see if the user is already in the group or not
 		ParseQuery query = new ParseQuery("GroupMembers");
@@ -93,7 +96,8 @@ public class GroupActivity extends Activity {
 					if(groups.size() != 0) {    //make sure there are actually items in the list
 						if(groups.get(0) != null) {    //make sure the first item is real
 							//changes the text if the user is in the list and grab a reference to them
-							joinButton.setHint("Unjoin");
+							joinButton.setImageResource(R.drawable.b_leave_large);
+							inGroup = true;
 							currentMember = groups.get(0);
 						}
 					}
@@ -104,19 +108,17 @@ public class GroupActivity extends Activity {
 		joinButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
-				if(joinButton.getHint().equals("Join")) {
-					try {
-						/* Create the group member */
-						ParseObject member = new ParseObject("GroupMembers");
-						member.put("user", ParseUser.getCurrentUser());
-						member.put("activity", getIntent().getStringExtra("activityText"));
-						member.put("place", getIntent().getStringExtra("locationText"));
-						member.put("group", groupID);
-						member.save();
-					} catch (ParseException e) {
-						e.printStackTrace();
-					}
-					joinButton.setHint("Unjoin");
+				if(!inGroup) {
+					// Create the group member
+					ParseObject member = new ParseObject("GroupMembers");
+					member.put("user", ParseUser.getCurrentUser());
+					member.put("activity", getIntent().getStringExtra("activityText"));
+					member.put("place", getIntent().getStringExtra("locationText"));
+					member.put("group", groupID);
+					member.saveInBackground();
+					
+					inGroup = true;
+					joinButton.setImageResource(R.drawable.b_leave_large);
 					AlertDialog.Builder dlgAlert  = new AlertDialog.Builder(GroupActivity.this);
 					dlgAlert.setMessage("You have joined the group!");
 					dlgAlert.setTitle("Fitivity");
@@ -125,9 +127,16 @@ public class GroupActivity extends Activity {
 					dlgAlert.create().show();
 				}
 				else {
-					/* Create the group member */
-					currentMember.deleteInBackground();
-					joinButton.setHint("Join");
+					//TODO: Test this part - deleting doesn't always work yet
+					// remove the group member
+					try {
+						currentMember.delete();
+					}
+					catch (ParseException e) {
+						e.printStackTrace();
+					}
+					inGroup = false;
+					joinButton.setImageResource(R.drawable.b_join_large);
 					AlertDialog.Builder dlgAlert  = new AlertDialog.Builder(GroupActivity.this);
 					dlgAlert.setMessage("You have left the group!");
 					dlgAlert.setTitle("Fitivity");
