@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+   <!-- When pressed, use this -->
+    <item android:state_focused="false"
+    	  android:state_pressed="true"
+    	  android:drawable="@drawable/b_feed_down_large"/>
+    <!-- When selected, use this -->
+    <item android:drawable="@drawable/b_feed_active_large"
+          android:state_selected="true" />
+    <!-- When not selected, use this-->
+    <item android:drawable="@drawable/b_feed_inactive_large" />
+</selector>

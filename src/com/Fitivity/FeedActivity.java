@@ -57,6 +57,7 @@ public class FeedActivity extends Activity {
 	public final int cellTypeComment = 2;
 	PullToRefreshListView refreshList;
 	ImageButton sharingButton;
+	ImageButton sortButton;
 	String information = "";
 	String description = "";
 	ImageView picture;
@@ -77,6 +78,7 @@ public class FeedActivity extends Activity {
 		refreshList = (PullToRefreshListView) findViewById(R.id.refreshList);
 		sharingButton = (ImageButton) findViewById(R.id.shareButton);
 		todayLabel = (ImageView) findViewById(R.id.cell_indicator);
+		sortButton = (ImageButton) findViewById(R.id.sortButton);
 		
 		//set listener to the pull to refresh handler
 		refreshList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -96,6 +98,12 @@ public class FeedActivity extends Activity {
 		sharingButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				displayShareOptions();
+			}
+		});
+		
+		sortButton.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				sortFeed();
 			}
 		});
 
@@ -168,6 +176,10 @@ public class FeedActivity extends Activity {
 			}
 		});
 	}
+	
+	public void sortFeed() {
+		//TODO: Handle sorting the discover feed
+	}
 
 	protected void onListItemClick(View v, int pos, long id) {
 		ParseObject object = (ParseObject) refreshList.getItemAtPosition(pos+1);
@@ -188,9 +200,15 @@ public class FeedActivity extends Activity {
 		}
 		else if(type == 1) {
 			intent.setClass(FeedActivity.this, ProposedActivityActivity.class);
-			
 			ParseObject activityID = object.getParseObject("proposedActivity");
-			//bundle.putString("activityText", activityID.getString("group"));
+
+			bundle.putString("message", activityID.getString("activityMessage"));
+			bundle.putString("ActivityId", activityID.getObjectId());
+		}
+		else {
+			intent.setClass(FeedActivity.this, ProposedActivityActivity.class);
+			ParseObject activityID = object.getParseObject("proposedActivity");
+			
 			bundle.putString("message", activityID.getString("activityMessage"));
 			bundle.putString("ActivityId", activityID.getObjectId());
 		}
@@ -236,7 +254,7 @@ public class FeedActivity extends Activity {
 			
 			//Catch glitch in parse storage for now
 			//make sure that proposed activities are picked up
-			if(pa != null && type == 0) {
+			if((pa != null && type == 2) || (pa != null && type == 0)) {
 				type = 1;
 			}
 
@@ -244,11 +262,11 @@ public class FeedActivity extends Activity {
 				numberOfMembers = activity.getInt("number");
 
 				if (numberOfMembers > 1) {
-					description = "This group now has " + numberOfMembers + " members.";
+					description = "" + numberOfMembers + " people are doing";
 					picture.setImageResource(R.drawable.group_icon_large);
 				}
 				else {
-					description = "" + ParseUser.getCurrentUser().getUsername() + " created a Group";
+					description = "" + user.getUsername() + " is doing";
 					try {
 						ParseFile profileData = (ParseFile) user.get("image");
 						if(profileData != null) {
@@ -277,22 +295,13 @@ public class FeedActivity extends Activity {
 			}
 			else if(type == cellTypePA) {
 				picture.setImageResource(R.drawable.activity_icon_large);
-				description = "" + user.getUsername() + " proposed a group activity";
+				description = "" + user.getUsername() + " proposed an activity";
 			}
 
 			description_text.setText(description);
 
 			ParseObject group = activity.getParseObject("group");
-			information = group.getString("activity") + " @ "
-					+ group.getString("place");
-
-			if (type == cellTypeComment) {
-				// ParseObject comment = activity.getParseObject("comment");
-				// String message = comment.getString("message");
-				// description = "" + user.getUsername() + "made a comment";
-				// description_text.setText(description);
-				// group_location_text.setText(message);
-			}
+			information = group.getString("activity") + " at " + group.getString("place");
 
 			group_location_text.setText(information);
 			

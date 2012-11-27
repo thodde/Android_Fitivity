@@ -23,7 +23,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -83,27 +82,8 @@ public class GroupActivity extends Activity {
 		//make sure the user is under the daily limit for proposed activities
 		checkDailyCount();
 		today = checkTodaysDate();
-		inGroup = false;
 		
-		//Quickly check to see if the user is already in the group or not
-		ParseQuery query = new ParseQuery("GroupMembers");
-		query.whereEqualTo("user", ParseUser.getCurrentUser());
-		query.whereEqualTo("group", groupID);
-		query.findInBackground(new FindCallback() {
-			@Override
-			public void done(List<ParseObject> groups, ParseException e) {
-				if(e == null) {
-					if(groups.size() != 0) {    //make sure there are actually items in the list
-						if(groups.get(0) != null) {    //make sure the first item is real
-							//changes the text if the user is in the list and grab a reference to them
-							joinButton.setImageResource(R.drawable.b_leave_large);
-							inGroup = true;
-							currentMember = groups.get(0);
-						}
-					}
-				}
-			}
-		});
+		inGroup = checkIfGroupMember();
 		
 		joinButton.setOnClickListener(new OnClickListener() {
 			@Override
@@ -114,6 +94,10 @@ public class GroupActivity extends Activity {
 					member.put("user", ParseUser.getCurrentUser());
 					member.put("activity", getIntent().getStringExtra("activityText"));
 					member.put("place", getIntent().getStringExtra("locationText"));
+					ParseGeoPoint point = new ParseGeoPoint();
+					point.setLatitude(getIntent().getDoubleExtra("latitude", 0));
+					point.setLongitude(getIntent().getDoubleExtra("longitude", 0));
+					member.put("location", point);
 					member.put("group", groupID);
 					member.saveInBackground();
 					
@@ -127,14 +111,11 @@ public class GroupActivity extends Activity {
 					dlgAlert.create().show();
 				}
 				else {
-					//TODO: Test this part - deleting doesn't always work yet
 					// remove the group member
-					try {
-						currentMember.delete();
+					if(checkIfGroupMember()) {
+						currentMember.deleteInBackground();
 					}
-					catch (ParseException e) {
-						e.printStackTrace();
-					}
+					
 					inGroup = false;
 					joinButton.setImageResource(R.drawable.b_join_large);
 					AlertDialog.Builder dlgAlert  = new AlertDialog.Builder(GroupActivity.this);
@@ -214,19 +195,19 @@ public class GroupActivity extends Activity {
 								public void onClick(DialogInterface dialog, int which) {
 									ParseQuery query = new ParseQuery("Groups");
 									query.whereEqualTo("place", getIntent().getStringExtra("locationText"));
-									query.whereEqualTo("activity",getIntent().getStringExtra("activityText"));
+									query.whereEqualTo("activity", getIntent().getStringExtra("activityText"));
 	
 									ParseGeoPoint point = new ParseGeoPoint(
 											getIntent().getDoubleExtra("latitude", 0),
 											getIntent().getDoubleExtra("longitude", 0));
 	
-									query.whereWithinMiles("location",point, 0.1);
+									query.whereWithinMiles("location", point, 0.1);
 	
 									try {
 										ParseObject group = query.getFirst();
 										String value = input.getText().toString();
 										ParseObject groupActivity = new ParseObject("ProposedActivity");
-										groupActivity.put("group", group);
+										groupActivity.put("group", group.getObjectId());
 										groupActivity.put("creator", ParseUser.getCurrentUser());
 										groupActivity.put("activityMessage", value);
 										groupActivity.put("postType", 1);
@@ -291,6 +272,30 @@ public class GroupActivity extends Activity {
 		});
 		
 		findActivities();
+	}
+	
+	public boolean checkIfGroupMember() {
+		//Quickly check to see if the user is already in the group or not
+		ParseQuery query = new ParseQuery("GroupMembers");
+		query.whereEqualTo("user", ParseUser.getCurrentUser());
+		query.whereEqualTo("group", groupID);
+		query.findInBackground(new FindCallback() {
+			@Override
+			public void done(List<ParseObject> groups, ParseException e) {
+				if(e == null) {
+					if(groups.size() != 0) {    //make sure there are actually items in the list
+						if(groups.get(0) != null) {    //make sure the first item is real
+							//changes the text if the user is in the list and grab a reference to them
+							joinButton.setImageResource(R.drawable.b_leave_large);
+							inGroup = true;
+							currentMember = groups.get(0);
+						}
+					}
+				}
+			}
+		});
+		
+		return inGroup;
 	}
 	
 	/**
@@ -428,9 +433,6 @@ public class GroupActivity extends Activity {
 					else {
 						proposedAcitivityList.onRefreshComplete();
 					}
-				}
-				else {
-					Log.d("score", "Error: " + e.getMessage());
 				}
 			}
 		});

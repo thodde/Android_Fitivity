@@ -16,7 +16,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,6 +35,7 @@ public class ProposedActivityActivity extends Activity {
 	Button comment;
 	PullToRefreshListView commentList;
 	ParseObject proposedActivity;
+	String activityID;
 	ParseUser user;
 
 	@Override
@@ -71,23 +71,19 @@ public class ProposedActivityActivity extends Activity {
 		
 		Intent intent = getIntent();
 		Bundle bundle = intent.getExtras();
-		String activityID = bundle.getString("ProposedActivityId");
+		activityID = bundle.getString("ActivityId");
 		
 		ParseQuery query = new ParseQuery("ProposedActivity");
 		query.getInBackground(activityID, new GetCallback() {
 			public void done(ParseObject object, ParseException e) {
 			    if (object != null) {
 			    	proposedActivity = object;
-			    	setActivityObject(proposedActivity);
-			    }
-			    else {
-			    	e.printStackTrace();
 			    }
 			 }
 		});
 		
+		//TODO: Make title display correct activity text
 		title.setText("Proposed Activity");
-		//message.setText(proposedActivity.getString("activityMessage"));
 		findComments();
 		
 		commentList = (PullToRefreshListView) findViewById(R.id.commentList);
@@ -99,19 +95,10 @@ public class ProposedActivityActivity extends Activity {
 			}
 		});
 	}
-	
-	public void setActivityObject(ParseObject currentObject) {
-		proposedActivity = currentObject;
-	}
-	
-	public void setUser(ParseUser currentUser) {
-		user = currentUser;
-	}
 
 	public void findComments() {
 		ParseQuery query = new ParseQuery("Comments");
-		query.whereEqualTo("parent", proposedActivity);
-		query.include("user");
+		query.whereEqualTo("parent", activityID);
 		query.findInBackground(new FindCallback() {
 			public void done(List<ParseObject> activityList, ParseException e) {
 				if (e == null) {
@@ -123,18 +110,13 @@ public class ProposedActivityActivity extends Activity {
 					}
 
 					if (activities.size() > 0) {
-						PlaceListAdapter adapter = new PlaceListAdapter(
-								ProposedActivityActivity.this,
-								R.layout.group_view, activities);
+						PlaceListAdapter adapter = new PlaceListAdapter(ProposedActivityActivity.this, R.layout.proposed_view, activities);
 						commentList.setAdapter(adapter);
 						commentList.onRefreshComplete();
 					}
 					else {
 						commentList.onRefreshComplete();
 					}
-				}
-				else {
-					Log.d("score", "Error: " + e.getMessage());
 				}
 			}
 		});
@@ -161,12 +143,12 @@ public class ProposedActivityActivity extends Activity {
 			TextView description_text = (TextView) v.findViewById(R.id.description_text);
 			TextView group_location_text = (TextView) v.findViewById(R.id.group_location_text);
 
-			ParseUser user = activity.getParseUser("user");
+			ParseObject user = activity.getParseObject("user");
 			String type = activity.getString("message");
-			String place = user.getUsername();
+			//String username = ((ParseUser) user).getUsername();
 
 			description_text.setText(type);
-			group_location_text.setText(place);
+			group_location_text.setText("Name");
 
 			return v;
 		}

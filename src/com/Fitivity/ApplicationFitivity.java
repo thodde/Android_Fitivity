@@ -40,8 +40,7 @@ public class ApplicationFitivity extends Application {
 	public void onCreate() {
 		super.onCreate();
 
-		Parse.initialize(this, "MmUj6HxQcfLSOUs31lG7uNVx9sl5dZR6gv0FqGHq",
-				"krpZsVM2UrU71NCxDbdAmbEMq1EXdpygkl251Wjl");
+		Parse.initialize(this, "MmUj6HxQcfLSOUs31lG7uNVx9sl5dZR6gv0FqGHq", "krpZsVM2UrU71NCxDbdAmbEMq1EXdpygkl251Wjl");
 
 		// initialize CACHE once App is created, this does init/create only
 		// ONCE!

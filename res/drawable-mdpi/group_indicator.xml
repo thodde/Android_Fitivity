@@ -1,0 +1,5 @@
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    
+    <item android:state_expanded="true" android:drawable="@drawable/cell_expanded_icon"></item>
+    <item android:drawable="@drawable/cell_closed_icon"></item>
+</selector>
