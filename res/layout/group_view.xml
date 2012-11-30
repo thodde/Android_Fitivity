@@ -22,21 +22,16 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textStyle="bold" />
 
-        <ImageButton
+        <Button
             android:id="@+id/group_join"
-            android:layout_width="55dp"
+            android:layout_width="107dp"
+            android:hint="Join"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
             android:background="@drawable/b_join_large"
             android:gravity="center_vertical|center_horizontal|right"
-            android:paddingRight="5dp"
-            android:paddingTop="5dp" />
+            android:paddingRight="10dp" />
     </LinearLayout>
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
-    </FrameLayout>
 
     <TextView
         android:id="@+id/group_activity_name"
@@ -67,27 +62,28 @@
             android:layout_height="wrap_content"
             android:orientation="vertical" >
 
-            <Button
-                android:id="@+id/group_map"
-                android:layout_width="96dp"
-                android:layout_height="34dp"
-                android:background="@drawable/b_map_large"
-                android:paddingBottom="10dp"
-                android:paddingTop="3dp" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="10dp"
-                android:orientation="vertical" >
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical" >
-            </LinearLayout>
         </LinearLayout>
 
+        <Button
+            android:id="@+id/Button"
+            android:layout_width="120dp"
+            android:layout_height="70dp"
+            android:background="@drawable/b_members_large"
+            android:paddingLeft="10dp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+
+                <ImageView
+                    android:id="@+id/group_activity"
+                    android:layout_width="331dp"
+                    android:layout_height="132dp"
+                    android:src="@drawable/b_propose_activity_large" />
+          
+</LinearLayout>
+
+=======
         <Button
             android:id="@+id/Button"
             android:layout_width="200dp"
@@ -101,11 +97,13 @@
 
         <ImageView
             android:id="@+id/group_activity"
-            android:layout_width="300dp"
-            android:layout_height="110dp"
+            android:layout_width="350dp"
+            android:layout_height="132dp"
             android:layout_alignParentRight="true"
             android:layout_below="@+id/Button"
             android:src="@drawable/b_propose_activity_large" />
+
+>>>>>>> af766df2847208276229673eb29bf7404844ec9e
     </RelativeLayout>
 
     <LinearLayout

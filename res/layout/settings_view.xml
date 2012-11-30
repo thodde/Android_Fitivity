@@ -2,14 +2,14 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@drawable/fitivity_application_backplate"
+    android:background="@drawable/bg_main_choose_large"
     android:orientation="vertical" >
 
     <ImageView
         android:id="@+id/imageView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/fitivity_navigation_bar_backplate" />
+        android:src="@drawable/fitivity_logo_large" />
 
     <Button
         android:id="@+id/sign_out_button"

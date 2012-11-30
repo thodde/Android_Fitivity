@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  android:orientation="vertical"
-  android:layout_width="fill_parent"
-  android:layout_height="fill_parent"
-  android:background="@drawable/fitivity_application_backplate">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/bg_main_group_large"
+    android:orientation="vertical" >
   
   <TextView android:gravity="center" android:layout_height="wrap_content" android:layout_width="fill_parent"
  android:textStyle="bold" android:text="TextView" android:id="@+id/proposed_display_name" 
@@ -23,9 +22,13 @@
   
   </LinearLayout> 
   
-   <Button android:text="I'm in"
-            android:layout_height="45dp" android:layout_width="fill_parent"
-            android:id="@+id/Join"></Button>
+   <Button
+       android:id="@+id/Join"
+       android:layout_width="fill_parent"
+       android:layout_height="45dp"
+       android:background="@drawable/b_iam_in_large"
+       android:text="I&apos;m in" >
+</Button>
   
    <com.fitivity.PullToRefreshListView
     	android:cacheColorHint="#00000000"
@@ -54,7 +57,6 @@
         <EditText 
             android:id="@+id/commentText" 
             android:layout_width="fill_parent"
-            android:layout_toLeftOf="@id/Button"
             android:layout_height="wrap_content"
             android:imeOptions="actionDone">
         </EditText>

@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  android:orientation="vertical"
-   android:layout_width="fill_parent"
-  android:layout_height="fill_parent">  
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/bg_main_choose_large"
+    android:orientation="vertical" >
   
   <RelativeLayout android:layout_width="wrap_content" android:layout_height="wrap_content">
+
   <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/fitivity_navigation_bar_backplate" />
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:src="@drawable/fitivity_logo_large" />
+
   </RelativeLayout>
   
   <RelativeLayout android:layout_width="wrap_content" android:layout_height="wrap_content"
@@ -17,11 +19,11 @@
   			 android:paddingRight="20dp"
   			 android:paddingBottom="10dp">
   
-  <ImageView android:src="@drawable/choose_activity" 
-  			 android:layout_width="wrap_content" 
-  			 android:layout_height="wrap_content"		
-  			 android:id="@+id/add_activity"
-  			 />
+  <ImageView
+      android:id="@+id/add_activity"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:src="@drawable/b_choose_activity_large" />
    
    <TextView android:layout_width="wrap_content" 
   			android:layout_height="wrap_content"
@@ -39,11 +41,11 @@
   			 android:paddingRight="20dp"
   			 android:paddingBottom="10dp">
   
-  <ImageView android:src="@drawable/choose_location" 
-  			 android:layout_width="wrap_content" 
-  			 android:layout_height="wrap_content"		
-  			 android:id="@+id/add_location"
-  			 />
+  <ImageView
+      android:id="@+id/add_location"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:src="@drawable/b_choose_location_large" />
   
   <TextView android:layout_width="wrap_content" 
   			android:layout_height="wrap_content"
