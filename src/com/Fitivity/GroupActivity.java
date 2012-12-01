@@ -29,7 +29,6 @@ import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -47,10 +46,11 @@ public class GroupActivity extends Activity {
 	TextView activity;
 	ImageView groupActivity;
 	PullToRefreshListView proposedAcitivityList;
-	Button membersButton;
+	ImageButton membersButton;
 	ImageButton joinButton;
-	Button mapButton;
+	ImageButton mapButton;
 	ParseObject date;
+	ImageButton challengeButton;
 	boolean underDailyLimit;
 	public ParseObject firstDate;
 	public ParseObject secondDate;
@@ -71,9 +71,10 @@ public class GroupActivity extends Activity {
 		location = (TextView) findViewById(R.id.group_display_name);
 		activity = (TextView) findViewById(R.id.group_activity_name);
 		groupActivity = (ImageView) findViewById(R.id.group_activity);
-		membersButton = (Button) findViewById(R.id.Button);
+		membersButton = (ImageButton) findViewById(R.id.Button);
 		joinButton = (ImageButton) findViewById(R.id.group_join);
-		mapButton = (Button) findViewById(R.id.group_map);
+		//mapButton = (ImageButton) findViewById(R.id.group_map);
+		challengeButton = (ImageButton) findViewById(R.id.button1);
 
 		location.setText(getIntent().getStringExtra("locationText"));
 		activity.setText(getIntent().getStringExtra("activityText"));
@@ -84,6 +85,18 @@ public class GroupActivity extends Activity {
 		today = checkTodaysDate();
 		
 		inGroup = checkIfGroupMember();
+		
+		challengeButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				AlertDialog.Builder dlgAlert  = new AlertDialog.Builder(GroupActivity.this);
+				dlgAlert.setMessage("Challenges feature coming soon!");
+				dlgAlert.setTitle("Fitivity");
+				dlgAlert.setPositiveButton("OK", null);
+				dlgAlert.setCancelable(true);
+				dlgAlert.create().show();
+			}
+		});
 		
 		joinButton.setOnClickListener(new OnClickListener() {
 			@Override
@@ -140,6 +153,7 @@ public class GroupActivity extends Activity {
 			}
 		});
 		
+		/*
 		//show the location of the group on the map
 		mapButton.setOnClickListener(new OnClickListener() {
 			@Override
@@ -147,6 +161,7 @@ public class GroupActivity extends Activity {
 				//TODO: LOAD MAP LOCATION
 			}
 		});
+		*/
 
 		//click to propose a group activity
 		groupActivity.setOnClickListener(new OnClickListener() {

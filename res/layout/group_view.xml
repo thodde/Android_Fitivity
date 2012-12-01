@@ -22,14 +22,14 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textStyle="bold" />
 
-        <Button
+        <ImageButton
             android:id="@+id/group_join"
             android:layout_width="107dp"
-            android:hint="Join"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
             android:background="@drawable/b_join_large"
             android:gravity="center_vertical|center_horizontal|right"
+            android:hint="Join"
             android:paddingRight="10dp" />
     </LinearLayout>
 
@@ -61,10 +61,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical" >
-
         </LinearLayout>
 
-        <Button
+        <ImageButton
             android:id="@+id/Button"
             android:layout_width="120dp"
             android:layout_height="70dp"
@@ -74,16 +73,8 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" >
+        </LinearLayout>
 
-                <ImageView
-                    android:id="@+id/group_activity"
-                    android:layout_width="331dp"
-                    android:layout_height="132dp"
-                    android:src="@drawable/b_propose_activity_large" />
-          
-</LinearLayout>
-
-=======
         <Button
             android:id="@+id/Button"
             android:layout_width="200dp"
@@ -94,16 +85,6 @@
             android:background="@drawable/b_members_large"
             android:paddingLeft="10dp"
             android:paddingTop="10dp" />
-
-        <ImageView
-            android:id="@+id/group_activity"
-            android:layout_width="350dp"
-            android:layout_height="132dp"
-            android:layout_alignParentRight="true"
-            android:layout_below="@+id/Button"
-            android:src="@drawable/b_propose_activity_large" />
-
->>>>>>> af766df2847208276229673eb29bf7404844ec9e
     </RelativeLayout>
 
     <LinearLayout
@@ -112,6 +93,12 @@
         android:orientation="vertical" >
     </LinearLayout>
 
+    <ImageButton
+        android:id="@+id/group_activity"
+        android:layout_width="210dp"
+        android:layout_height="90dp"
+        android:src="@drawable/b_propose_activity_large" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -119,7 +106,7 @@
         android:paddingLeft="20dp"
         android:paddingRight="20dp" >
 
-        <Button
+        <ImageButton
             android:id="@+id/button1"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"

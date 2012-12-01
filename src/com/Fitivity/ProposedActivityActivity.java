@@ -24,15 +24,16 @@ import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 public class ProposedActivityActivity extends Activity {
 	TextView title;
 	TextView message;
 	EditText commentText;
-	Button comment;
+	ImageButton comment;
+	ImageButton joinButton;
 	PullToRefreshListView commentList;
 	ParseObject proposedActivity;
 	String activityID;
@@ -46,9 +47,19 @@ public class ProposedActivityActivity extends Activity {
 		title = (TextView) findViewById(R.id.proposed_display_name);
 		message = (TextView) findViewById(R.id.proposed_message_txt);
 		commentText = (EditText) findViewById(R.id.commentText);
-		comment = (Button) findViewById(R.id.commentButton);
+		comment = (ImageButton) findViewById(R.id.commentButton);
+		joinButton = (ImageButton) findViewById(R.id.Join);
 
 		comment.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				if (commentText.getText().toString() != "") {
+					//ParseObject comment = new ParseObject("Comments");
+					//ParseObject proposed = ParseObject.createWithoutData("ProposedActivity", getIntent().getStringExtra("ProposedActivityId"));
+				}
+			}
+		});
+		
+		joinButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				if (commentText.getText().toString() != "") {
 					//ParseObject comment = new ParseObject("Comments");

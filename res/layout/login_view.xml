@@ -50,7 +50,7 @@
 	    android:layout_marginTop="25dp" >
 
 
-	<Button
+	<ImageButton
 	    android:id="@+id/signup_button"
 	    android:layout_width="120dp"
 	    android:layout_height="33dp"
@@ -92,7 +92,7 @@
 
 
 
-		<Button
+		<ImageButton
 		    android:id="@+id/facebook_signup_button"
 		    android:layout_width="fill_parent"
 		    android:layout_height="33dp"

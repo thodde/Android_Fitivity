@@ -22,8 +22,8 @@ import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 @SuppressLint("HandlerLeak")
@@ -31,9 +31,9 @@ public class LoginActivity extends Activity {
 
 	private EditText etUsername;
 	private EditText etPassword;
-	private Button btnLogin;
-	private Button btnJoin;
-	private Button btnFacebook;
+	private ImageButton btnLogin;
+	private ImageButton btnJoin;
+	private ImageButton btnFacebook;
 	private ProgressDialog pd;
 	ParseUser user;
 	final String facebookAppID = "119218824889348";
@@ -56,9 +56,9 @@ public class LoginActivity extends Activity {
 		// Get the EditText and Button References
 		etUsername = (EditText) findViewById(R.id.username);
 		etPassword = (EditText) findViewById(R.id.password);
-		btnLogin = (Button) findViewById(R.id.login_button);
-		btnJoin = (Button) findViewById(R.id.signup_button);
-		btnFacebook = (Button) findViewById(R.id.facebook_signup_button);
+		btnLogin = (ImageButton) findViewById(R.id.login_button);
+		btnJoin = (ImageButton) findViewById(R.id.signup_button);
+		btnFacebook = (ImageButton) findViewById(R.id.facebook_signup_button);
 
 		// Set Click Listeners
 		btnLogin.setOnClickListener(new OnClickListener() {

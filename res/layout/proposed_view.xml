@@ -22,13 +22,12 @@
   
   </LinearLayout> 
   
-   <Button
+   <ImageButton
        android:id="@+id/Join"
        android:layout_width="fill_parent"
        android:layout_height="45dp"
        android:background="@drawable/b_iam_in_large"
-       android:text="I&apos;m in" >
-</Button>
+       android:text="I&apos;m in" />
   
    <com.fitivity.PullToRefreshListView
     	android:cacheColorHint="#00000000"
@@ -46,13 +45,12 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true" >
 
-        <Button 
+        <ImageButton 
             android:text="Comment" 
             android:id="@+id/commentButton"
             android:layout_alignParentRight="true" 
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-        </Button>
+            android:layout_height="wrap_content"/>
 
         <EditText 
             android:id="@+id/commentText" 

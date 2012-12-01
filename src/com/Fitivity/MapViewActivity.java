@@ -54,7 +54,11 @@ public class MapViewActivity extends MapActivity implements LocationListener {
 		getLocation();
 		map = (MapView)findViewById(R.id.map);
 
-		map.getController().setCenter(getPoint(mostRecentLocation.getLatitude(), mostRecentLocation.getLongitude()));
+		if(mostRecentLocation != null)
+			map.getController().setCenter(getPoint(mostRecentLocation.getLatitude(), mostRecentLocation.getLongitude()));
+		else
+			map.getController().setCenter(getPoint(42.2510, 71.8232));
+		
 		map.getController().setZoom(17);
 		map.setBuiltInZoomControls(true);
 

@@ -17,6 +17,7 @@ import com.fitivity.R;
 import com.parse.Parse;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -35,8 +36,8 @@ import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -59,7 +60,7 @@ public class LocationsActivity extends Activity implements LocationListener {
 	private ArrayList<Place> mNearbyList;
 	private ProgressDialog mProgress;
 	private EditText filterText;
-	private Button addLocation;
+	private ImageButton addLocation;
 	int requestCode = 123;
 
 	@Override
@@ -72,14 +73,21 @@ public class LocationsActivity extends Activity implements LocationListener {
 		
 		mListView = (ListView) findViewById(R.id.lv_places);
 		filterText = (EditText) findViewById(R.id.search_box);
-		addLocation = (Button) findViewById(R.id.add_location);
+		addLocation = (ImageButton) findViewById(R.id.add_location);
 
 		//This button allows the user to add a location
 		addLocation.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				Intent intent = new Intent();
-				intent.setClass(LocationsActivity.this, MapViewActivity.class);
-				startActivityForResult(intent, requestCode);
+				AlertDialog.Builder dlgAlert  = new AlertDialog.Builder(LocationsActivity.this);
+				dlgAlert.setMessage("Add a custom location feature coming soon!");
+				dlgAlert.setTitle("Fitivity");
+				dlgAlert.setPositiveButton("OK", null);
+				dlgAlert.setCancelable(true);
+				dlgAlert.create().show();
+				
+				//Intent intent = new Intent();
+				//intent.setClass(LocationsActivity.this, MapViewActivity.class);
+				//startActivityForResult(intent, requestCode);
 			}
 		});
 

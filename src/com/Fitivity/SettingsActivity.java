@@ -22,15 +22,15 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ToggleButton;
 
 public class SettingsActivity extends Activity {
 	ParseUser user;
-	Button logout;
+	ImageButton logout;
 	EditText email;
 	EditText username;
 	EditText password;
@@ -50,7 +50,7 @@ public class SettingsActivity extends Activity {
 
 		setContentView(R.layout.settings_view);
 
-		logout = (Button) findViewById(R.id.sign_out_button);
+		logout = (ImageButton) findViewById(R.id.sign_out_button);
 		email = (EditText) findViewById(R.id.emailText);
 		username = (EditText) findViewById(R.id.usernameText);
 		password = (EditText) findViewById(R.id.passwordText);
